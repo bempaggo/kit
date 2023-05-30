@@ -56,7 +56,7 @@ describe("Charge Entity", () => {
       assertType<BempaggoCardHolderRequest>(charge.card!.holder);
       assertType<BempaggoCardExpirationRequest>(charge.card!.expiration);
 
-      expect(Object.keys(charge).length).toBe(6);
+      expect(Object.keys(charge).length).toBe(7);
       expect(charge.value).toBe(1000);
       expect(charge.installments).toBe(1);
       expect(charge.yourReferenceId).toBe(123456);
