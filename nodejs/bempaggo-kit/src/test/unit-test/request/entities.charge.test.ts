@@ -88,8 +88,6 @@ describe("Charge Entity", () => {
       expect(Object.keys(charge.card!.expiration).length).toBe(2);
       expect(charge.card!.expiration.year).toBe(2035);
       expect(charge.card!.expiration.month).toBe(1);
-
-
     });
 
 
