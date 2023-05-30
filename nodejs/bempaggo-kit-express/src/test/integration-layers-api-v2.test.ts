@@ -106,7 +106,8 @@ const cardLayers: BemPaggoCustomerPaymentMethod = {
   brand: "MASTERCARD",
   
 }
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDcwIiwidGVuYW50IjoiYmVtcGFnZ29fZW1wcmVzYWV4ZW1wbG9sdGRhXzEwMjAiLCJpYXQiOjE2ODU0NTA4MTIsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.IY6iDldxuD9Msh32A1weaTxVSDDsLldy1Rma3bVnLZyIM-qhwE-GdrUBXLDFAJvhn5ZKqqzGPu1FsdtbbAJv_g";
+
+const token = "toke";
 
 describe("How use it", () => {
   describe("create", () => {
