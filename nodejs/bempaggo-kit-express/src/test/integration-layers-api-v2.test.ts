@@ -107,7 +107,8 @@ const cardLayers: BemPaggoCustomerPaymentMethod = {
   
 }
 
-const token = "toke";
+const token = "https://sandbox.bempaggo.io/#/configurations/token"; // needs to generate a token in portal
+
 
 describe("How use it", () => {
   describe("create", () => {
@@ -145,6 +146,7 @@ describe("How use it", () => {
       const response: BemPaggoTransaction = await layers.createTransaction(requestLayersStyle);
       expect(response.payment.recipient_id).not.toBeNull();
       expect(JSON.stringify(response)).contains("AUTHORIZED");
+      console.log("capture",response.payment.recipient_id);
     });
     test("create authorize and capture", async () => {
       const layers: BemPaggoSdk = new BemPaggoSdk("https://api-sandbox.bempaggo.io/api", token);
@@ -157,6 +159,7 @@ describe("How use it", () => {
       expect(response.payment.recipient_id).not.toBeNull();
       expect(JSON.stringify(responseCapture)).contains("PAY");
     });
+    
 
   });
 });
