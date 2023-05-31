@@ -74,48 +74,53 @@ app.post('/charges/:id/refund', (req: Request, res: Response) => {
         .catch((e) => errorHandler(e, res));
 });
 
-app.post('/customers', (req: Request, res: Response) => {
-    const customer: BempaggoCustomerRequest = req.body;
-    gateway(req).createCustomer(customer)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-app.post('/addresses/:document', (req: Request, res: Response) => {
-    gateway(req).createAddress(req.params.document, req.body)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-app.post('/customers/:document', async (req: Request, res: Response) => {
-    gateway(req).findCustomerByDocument(req.params.document)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-app.put('/customers/:document', async (req: Request, res: Response) => {
-    gateway(req).updateCustomer(req.params.document, req.body)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-app.get('/customers/:document/cards', (req: Request, res: Response) => {
-    gateway(req).findCustomerPaymentMethod(req.params.document)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-app.post('/customers/:document/cards', (req: Request, res: Response) => {
-    gateway(req).createCustomerPaymentMethod(req.params.document, req.body)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-
-
 app.post('/charges/authorize', (req: Request, res: Response) => {
     const charge: BempaggoChargeRequest = req.body;
     cardService(req).createCharge(charge)
         .then(value => send(value, res))
         .catch((e) => errorHandler(e, res));
 });
+
 app.post('/charges/:id/capture', (req: Request, res: Response) => {
     const charge: BempaggoChargeRequest = req.body;
     cardService(req).captureCharge(Number(req.params.id))
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
+app.post('/customers', (req: Request, res: Response) => {
+    const customer: BempaggoCustomerRequest = req.body;
+    gateway(req).createCustomer(customer)
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
+app.get('/customers/:document', async (req: Request, res: Response) => {
+    gateway(req).findCustomerByDocument(req.params.document)
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
+app.put('/customers/:document', async (req: Request, res: Response) => {
+    gateway(req).updateCustomer(req.params.document, req.body)
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
+app.get('/customers/:document/cards', (req: Request, res: Response) => {
+    gateway(req).findCustomerPaymentMethod(req.params.document)
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
+app.post('/customers/:document/cards', (req: Request, res: Response) => {
+    gateway(req).createCustomerPaymentMethod(req.params.document, req.body)
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
+app.post('/addresses/:document', (req: Request, res: Response) => {
+    gateway(req).createAddress(req.params.document, req.body)
         .then(value => send(value, res))
         .catch((e) => errorHandler(e, res));
 });
