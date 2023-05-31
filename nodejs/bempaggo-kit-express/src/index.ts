@@ -56,7 +56,7 @@ app.post('/charges', (req: Request, res: Response) => {
     const charge: BempaggoChargeRequest = req.body;
     cardService(req).createChargeAndCapture(charge)
         .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));;
+        .catch((e) => errorHandler(e, res));
 });
 
 app.get('/charges/:id', (req: Request, res: Response) => {
@@ -111,13 +111,13 @@ app.post('/charges/authorize', (req: Request, res: Response) => {
     const charge: BempaggoChargeRequest = req.body;
     cardService(req).createCharge(charge)
         .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));;
+        .catch((e) => errorHandler(e, res));
 });
 app.post('/charges/:id/capture', (req: Request, res: Response) => {
     const charge: BempaggoChargeRequest = req.body;
     cardService(req).captureCharge(Number(req.params.id))
         .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));;
+        .catch((e) => errorHandler(e, res));
 });
 
 app.listen(3000, () => {
