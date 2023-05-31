@@ -106,7 +106,9 @@ const cardLayers: BemPaggoCustomerPaymentMethod = {
   brand: "MASTERCARD",
   
 }
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDcwIiwidGVuYW50IjoiYmVtcGFnZ29fZW1wcmVzYWV4ZW1wbG9sdGRhXzEwMjAiLCJpYXQiOjE2ODU0NTA4MTIsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.IY6iDldxuD9Msh32A1weaTxVSDDsLldy1Rma3bVnLZyIM-qhwE-GdrUBXLDFAJvhn5ZKqqzGPu1FsdtbbAJv_g";
+
+const token = "https://sandbox.bempaggo.io/#/configurations/token"; // needs to generate a token in portal
+
 
 describe("How use it", () => {
   describe("create", () => {
@@ -144,6 +146,7 @@ describe("How use it", () => {
       const response: BemPaggoTransaction = await layers.createTransaction(requestLayersStyle);
       expect(response.payment.recipient_id).not.toBeNull();
       expect(JSON.stringify(response)).contains("AUTHORIZED");
+      console.log("capture",response.payment.recipient_id);
     });
     test("create authorize and capture", async () => {
       const layers: BemPaggoSdk = new BemPaggoSdk("https://api-sandbox.bempaggo.io/api", token);
@@ -156,6 +159,7 @@ describe("How use it", () => {
       expect(response.payment.recipient_id).not.toBeNull();
       expect(JSON.stringify(responseCapture)).contains("PAY");
     });
+    
 
   });
 });
