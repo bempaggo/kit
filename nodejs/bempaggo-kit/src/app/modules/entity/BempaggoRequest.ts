@@ -1,4 +1,3 @@
-import { RefundReasonTypes } from "./Enum";
 
 interface BempaggoCardRequest {
   cardNumber: string;
@@ -54,11 +53,6 @@ interface BempaggoChargeRequest {
   affiliateId: number;
 }
 
-interface BempaggoRefundRequest {
-  reason: RefundReasonTypes;
-  amount?: number|undefined;
-}
-
 export {
   BempaggoAddressRequest,
   BempaggoCardExpirationRequest,
@@ -67,7 +61,6 @@ export {
   BempaggoChargeRequest,
   BempaggoCustomerRequest,
   BempaggoPhoneRequest,
-  BempaggoRefundRequest,
   BempaggoTokenCardRequest
 };
 

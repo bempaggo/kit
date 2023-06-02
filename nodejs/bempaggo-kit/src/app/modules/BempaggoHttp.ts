@@ -20,6 +20,16 @@ class BempaggoHttp {
       headers: this.headers,
     });
   }
+  public httpGetBy(path: string, query:{name:string, value:any}[] ): Promise<Response> {
+    const url: URL = this.toUrl(path);
+    for (const {name, value} of query) {
+      url.searchParams.set(name, value);
+    }
+    return fetch(url, {
+      method: "GET",
+      headers: this.headers,
+    });
+  }
   public httpPut(path: string, body: unknown): Promise<Response> {
     const url: URL = this.toUrl(path);
     return fetch(url, {

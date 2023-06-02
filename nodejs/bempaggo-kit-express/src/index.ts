@@ -51,39 +51,35 @@ const cardService = (req: Request): CreditCardOperable => {
     return transactor(req).getCreditCardServiceable();
 }
 
-app.post('/charges', (req: Request, res: Response) => {
-    console.log("body ", JSON.stringify(req.body));
-    const charge: BempaggoChargeRequest = req.body;
-    cardService(req).createChargeAndCapture(charge)
-        .then(value => send(value, res))
-        .catch((e) => errorHandler(e, res));
-});
-
-app.get('/charges/:id', (req: Request, res: Response) => {
+app.get('/sellers/:sellerId/orders/:id', (req: Request, res: Response) => {
     const id = req.params.id;
-    cardService(req).findChargeById(Number(id))
+    const sellerId = req.params.sellerId;
+    cardService(req).findChargeById(Number(sellerId) ,Number(id))
         .then(value => send(value, res))
         .catch((e) => errorHandler(e, res));
 });
 
-app.post('/charges/:id/refund', (req: Request, res: Response) => {
+app.post('/sellers/:sellerId/orders/:id/multi-credit-card/refund', (req: Request, res: Response) => {
     const refund: BempaggoRefundRequest = req.body;
     const id = req.params.id;
-    cardService(req).refundCharge(Number(id), refund)
+    const sellerId = req.params.sellerId;
+    cardService(req).refundCharge(Number(sellerId), Number(id), refund)
         .then(value => send(value, res))
         .catch((e) => errorHandler(e, res));
 });
 
-app.post('/charges/authorize', (req: Request, res: Response) => {
-    const charge: BempaggoChargeRequest = req.body;
-    cardService(req).createCharge(charge)
+app.post('/sellers/:sellerId/orders/:id/multi-credit-card/capture', (req: Request, res: Response) => {
+    const id = req.params.id;
+    const sellerId = req.params.sellerId;
+    cardService(req).captureCharge(Number(sellerId), Number(id))
         .then(value => send(value, res))
         .catch((e) => errorHandler(e, res));
 });
 
-app.post('/charges/:id/capture', (req: Request, res: Response) => {
+app.post('/sellers/:sellerId/orders/multi-credit-card/authorize', (req: Request, res: Response) => {
     const charge: BempaggoChargeRequest = req.body;
-    cardService(req).captureCharge(Number(req.params.id))
+    const sellerId = req.params.sellerId;
+    cardService(req).createCharge(Number(sellerId), charge)
         .then(value => send(value, res))
         .catch((e) => errorHandler(e, res));
 });
