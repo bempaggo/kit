@@ -115,6 +115,12 @@ app.post('/customers/:document/cards', (req: Request, res: Response) => {
         .catch((e) => errorHandler(e, res));
 });
 
+app.post('/tokens', (req: Request, res: Response) => {
+    gateway(req).tokenizeCard(req.body)
+        .then(value => send(value, res))
+        .catch((e) => errorHandler(e, res));
+});
+
 app.post('/addresses/:document', (req: Request, res: Response) => {
     gateway(req).createAddress(req.params.document, req.body)
         .then(value => send(value, res))

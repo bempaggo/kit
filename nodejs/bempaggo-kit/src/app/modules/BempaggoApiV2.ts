@@ -61,6 +61,7 @@ class BempaggoApiV2 implements Bempaggo {
     }
     return await this.findCustomerByDocument(document);
   }
+  
   async tokenizeCard(card: BempaggoCardRequest): Promise<BempaggoCardTokenResponse> {
     const response: Response = await this.http.httpPost("/v2/cards/tokens", card);
     return await getByUrlResponse(response, this.http);
