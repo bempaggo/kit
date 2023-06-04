@@ -7,7 +7,6 @@ import {
 } from "./entity/BempaggoRequest";
 import {
 	BempaggoCardResponse,
-	BempaggoCardTokenResponse,
 	BempaggoCustomerResponse
 } from "./entity/BempaggoResponse";
 import { Environments } from "./entity/Enum";
@@ -46,7 +45,7 @@ interface Bempaggo {
 	updateAddress(document: string, address: BempaggoAddressRequest): Promise<void>;
 	findCustomerPaymentMethod(document: string): Promise<BempaggoCardResponse>;
 	createCustomerPaymentMethod(document: string, paymentMethod: BempaggoCardRequest): Promise<BempaggoCardResponse>;
-	tokenizeCard(card: BempaggoCardRequest, hash: string): Promise<BempaggoCardTokenResponse>;
+	tokenizeCard(card: BempaggoCardRequest, hash: string): Promise<BempaggoCardResponse>;
 }
 
 interface BempaggoTransactionServiceable {

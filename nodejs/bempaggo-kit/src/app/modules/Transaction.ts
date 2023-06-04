@@ -1,20 +1,20 @@
-import { BempaggoChargeRequest } from "./entity/BempaggoRequest";
+import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
 
 
 interface BempaggoTransactionServiceable {
-  getCreditCardServiceable(): CreditCardOperable;
+	getCreditCardServiceable(): CreditCardOperable;
 }
 interface CreditCardOperable {
-  findChargeById(sellerId: number, orderId: number): Promise<BempaggoChargeResponse>;
+	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
 
-  findChargesByReferenceId(sellerId: number, orderReferenceId: number): Promise<BempaggoChargeResponse>;
+	findChargesByOrderReferenceId(orderReferenceId: number): Promise<BempaggoChargeResponse[]>;
 
-  createCharge(sellerId:number, order: BempaggoChargeRequest): Promise<BempaggoChargeResponse>;
+	createCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
 
-  captureCharge(sellerId: number, orderId: number): Promise<BempaggoChargeResponse>;
+	captureCharge(chargeId: number): Promise<BempaggoChargeResponse>;
 
-  refundCharge(sellerId: number, orderId: number): Promise<BempaggoChargeResponse>;
+	refundCharge(chargeId: number): Promise<BempaggoChargeResponse>;
 
 }
 

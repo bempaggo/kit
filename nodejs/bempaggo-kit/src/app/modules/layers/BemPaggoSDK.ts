@@ -1,6 +1,6 @@
 import { Bempaggo, BempaggoFactory } from "../Bempaggo";
 import { CreditCardOperable } from "../Transaction";
-import { BempaggoCardResponse, BempaggoCardTokenResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
+import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
 import { RefundReasonTypes } from "../entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
 import { BaseSdk } from './BaseSDK';
@@ -34,226 +34,219 @@ import { TransactionGroup } from './transactionGroup';
  * @static @var availableMethods - Get available methods.
  */
 class BemPaggoSdk extends BaseSdk<BemPaggoCustomer, BemPaggoTransaction, BemPaggoCustomerPaymentMethod, never> {
-  private bempaggo: Bempaggo | null = null;
-  constructor(baseURL: string, auth: string) {
-    super(baseURL, 'bempaggo', auth);
-    const factory: BempaggoFactory = new BempaggoFactory();
-    this.bempaggo = factory.createByUrl(baseURL, auth);
-  }
+	private bempaggo: Bempaggo | null = null;
+	constructor(baseURL: string, auth: string) {
+		super(baseURL, 'bempaggo', auth);
+		const factory: BempaggoFactory = new BempaggoFactory();
+		this.bempaggo = factory.createByUrl(baseURL, auth);
+	}
 
-  /**
-   *  Find Customer passing the document(cpf, cnpj) at BemPaggo API.
-   * @param {string} document - The document number.
-   * @return {Promise<BemPaggoCustomer>}
-   */
-  async findCustomerByDocument(document: string): Promise<BemPaggoCustomer> {
-    const customer: BempaggoCustomerResponse = await this.bempaggo!.findCustomerByDocument(document);
-    return Layers.from(customer);
-  }
+	/**
+	 *  Find Customer passing the document(cpf, cnpj) at BemPaggo API.
+	 * @param {string} document - The document number.
+	 * @return {Promise<BemPaggoCustomer>}
+	 */
+	async findCustomerByDocument(document: string): Promise<BemPaggoCustomer> {
+		const customer: BempaggoCustomerResponse = await this.bempaggo!.findCustomerByDocument(document);
+		return Layers.from(customer);
+	}
 
-  /**
-   *  Create a customer at BemPaggo API.
-   * @param {BemPaggoCustomer} customer - The customer object.
-   * @return {Promise<BemPaggoCustomer>}
-   */
-  async createCustomer(customer: BemPaggoCustomer): Promise<BemPaggoCustomer> {
-    const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.createCustomer(Layers.toCustomer(customer));
-    return Layers.from(bempaggoCustomer);
-  }
+	/**
+	 *  Create a customer at BemPaggo API.
+	 * @param {BemPaggoCustomer} customer - The customer object.
+	 * @return {Promise<BemPaggoCustomer>}
+	 */
+	async createCustomer(customer: BemPaggoCustomer): Promise<BemPaggoCustomer> {
+		const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.createCustomer(Layers.toCustomer(customer));
+		return Layers.from(bempaggoCustomer);
+	}
 
-  /**
-   *  Update a customer at BemPaggo API.
-   * @param {BemPaggoCustomer} customer - The External customer object.
-   * @return {Promise<BemPaggoCustomer>}
-   */
-  async updateCustomer(customer: BemPaggoCustomer): Promise<BemPaggoCustomer> {
-    const request = Layers.toCustomer(customer);
-    const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.updateCustomer(request.document, request);
-    return Layers.from(bempaggoCustomer);
-  }
+	/**
+	 *  Update a customer at BemPaggo API.
+	 * @param {BemPaggoCustomer} customer - The External customer object.
+	 * @return {Promise<BemPaggoCustomer>}
+	 */
+	async updateCustomer(customer: BemPaggoCustomer): Promise<BemPaggoCustomer> {
+		const request = Layers.toCustomer(customer);
+		const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.updateCustomer(request.document, request);
+		return Layers.from(bempaggoCustomer);
+	}
 
-  /**
-   * Gets a customer's payment methods
-   * @param customerId // cpf/cnpj?
-   * @returns BemPaggoPaymentMethod
-   */
-  async findCustomerPaymentMethod(customerId: string): Promise<BemPaggoCustomerPaymentMethod> {
-    const bempaggoCustomer: BempaggoCardResponse = await this.bempaggo!.findCustomerPaymentMethod(customerId);
-    return Layers.fromCards(bempaggoCustomer);
-  }
+	/**
+	 * Gets a customer's payment methods
+	 * @param customerId // cpf/cnpj? 06219385993 ok 
+	 * @returns BemPaggoPaymentMethod
+	 */
+	async findCustomerPaymentMethod(customerId: string): Promise<BemPaggoCustomerPaymentMethod> {
+		const bempaggoCustomer: BempaggoCardResponse = await this.bempaggo!.findCustomerPaymentMethod(customerId);
+		return Layers.fromCards(bempaggoCustomer);
+	}
 
-  /**
-   *  Add a new payment method to a customer at BemPaggo API.
-   * @param {string} customerId
-   * @param {BemPaggoPaymentMethod} paymentMethod -
-   * @returns {Promise<any>}
-   */
-  async createCustomerPaymentMethod(
-    customerId: string,  // cpf/cnpj?
-    paymentMethod: BemPaggoCustomerPaymentMethod
-  ): Promise<BemPaggoCustomerPaymentMethod> {
-    const bempaggoCard: BempaggoCardResponse = await this.bempaggo!.createCustomerPaymentMethod(customerId, Layers.toCard(paymentMethod));
-    return Layers.fromCards(bempaggoCard);
-  }
+	/**
+	 *  Add a new payment method to a customer at BemPaggo API.
+	 * @param {string} customerId
+	 * @param {BemPaggoPaymentMethod} paymentMethod -
+	 * @returns {Promise<any>}
+	 */
+	async createCustomerPaymentMethod(
+		customerId: string,  // cpf/cnpj?
+		paymentMethod: BemPaggoCustomerPaymentMethod
+	): Promise<BemPaggoCustomerPaymentMethod> {
+		const bempaggoCard: BempaggoCardResponse = await this.bempaggo!.createCustomerPaymentMethod(customerId, Layers.toCard(paymentMethod));
+		return Layers.fromCards(bempaggoCard);
+	}
 
-  /**
-   * Find a transaction by a reference id we send to bem paggo on creation
-   * @param {string} referenceId Id sent by our backend on creation
-   * @returns { Promise<BemPaggoTransaction> }
-   */
-  async findTransactionsByReferenceId(referenceId: string): Promise<BemPaggoTransaction> {
-    const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-    const response: BempaggoChargeResponse[] = await creditCardService.findChargesByReferenceId(Number(referenceId));
-    return Layers.fromCharge(response[0]);
-  }
+	/**
+	 * Find a transaction by a reference id we send to bem paggo on creation
+	 * @param {string} referenceId Id sent by our backend on creation // orderReference
+	 * @returns { Promise<BemPaggoTransaction> }
+	 */
+	async findTransactionsByReferenceId(referenceId: string): Promise<BemPaggoTransaction> {
+		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+		const response: BempaggoChargeResponse[] = await creditCardService.findChargesByOrderReferenceId(Number(referenceId));
+		return Layers.fromCharge(response[0]);
+	}
 
-  /**
-   * Find a charge by id received from bempaggo on creation
-   * @param {number} id get from bempaggo on creation
-   * @returns { Promise<BemPaggoTransaction> }
-   */
-  async findChargeById(id: number): Promise<BemPaggoTransaction> {
-    const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-    const response: BempaggoChargeResponse = await creditCardService.findChargeById(id);
-    return Layers.fromCharge(response);
-  }
-
-
-  /**
-   * Gets html for customized bank slip of a transaction
-   * @param {string} transactionId
-   * @returns { Promise<BankSlipRenderingData> }
-   */
-  async getBankSlipRenderingData(transactionId: string): Promise<BankSlipRenderingData> {
-    throw new Error('not implemented')
-  }
-  
-/**
-   *
-   * @param {TransactionGroup} transactionGroup
-   * @returns { BemPaggoTransaction }
-   */
-async createTransactionTryingToCaptureInJustOneStep(transactionGroup: TransactionGroup): Promise<BemPaggoTransaction> {
-  if (transactionGroup.paymentMethod.method === "credit_card") {
-    const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-    const response: BempaggoChargeResponse = await creditCardService.createChargeAndCapture(Layers.toCharge(transactionGroup));
-    return Layers.fromCharge(response);
-  }
-  throw new Error("not implemented yet");
-}
+	/**
+	 * Find a charge by id received from bempaggo on creation
+	 * @param {number} id get from bempaggo on creation
+	 * @returns { Promise<BemPaggoTransaction> }
+	 */
+	async findChargeById(id: number): Promise<BemPaggoTransaction> {
+		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+		const response: BempaggoChargeResponse = await creditCardService.findChargeById(id);
+		return Layers.fromCharge(response);
+	}
 
 
-  /**
-   *
-   * @param {TransactionGroup} transactionGroup
-   * @returns { BemPaggoTransaction }
-   */
-  async createTransaction(transactionGroup: TransactionGroup): Promise<BemPaggoTransaction> {
-    if (transactionGroup.paymentMethod.method === "credit_card") {
-      const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-      const response: BempaggoChargeResponse = await creditCardService.createCharge(Layers.toCharge(transactionGroup));
-      return Layers.fromCharge(response);
-    }
-    throw new Error("not implemented yet");
-  }
+	/**
+	 * Gets html for customized bank slip of a transaction
+	 * @param {string} transactionId
+	 * @returns { Promise<BankSlipRenderingData> }
+	 */
+	async getBankSlipRenderingData(transactionId: string): Promise<BankSlipRenderingData> {
+		throw new Error(`not implemented ${transactionId}`)
+	}
 
-  /**
-   * Bem paggo does not implement charges. So this method should just throw
-   */
-  async getOrderCharges(_: never): Promise<never> {
-    throw new Error('Bem paggo does not implement charges')
-  }
 
-  /**
-   * Captures the transaction given an id
-   * @param { string } transactionId
-   * @returns { BemPaggoTransaction }
-   */
-  async chargeTransaction(transactionId: string): Promise<BemPaggoTransaction> {
-    const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-    const response: BempaggoChargeResponse = await creditCardService.captureCharge(Number(transactionId));
-    return Layers.fromCharge(response);
-  }
+	/**
+	 *
+	 * @param {TransactionGroup} transactionGroup
+	 * @returns { BemPaggoTransaction }
+	 */
+	async createTransaction(transactionGroup: TransactionGroup): Promise<BemPaggoTransaction> {
+		const sellerId: number = transactionGroup.sourceId as number;
+		if (this.isOnlyCreditCard(transactionGroup.paymentMethods)) {
+			const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+			const response: BempaggoChargeResponse = await creditCardService.createCharge(sellerId, Layers.toOrder(transactionGroup));
+			return Layers.fromCharge(response);
+		}
+		throw new Error("not implemented yet");
+	}
+	isOnlyCreditCard(paymentMethods: { method: "credit_card" }[]): boolean {
+		if (paymentMethods.filter(menthod => menthod.method != "credit_card").length > 0) {
+			throw new Error('Only credit card implemented')
+		}
+		return true;
+	}
 
-  /**
-   * Refunds a given transaction
-   * @param { string } transactionId
-   * @returns { Promise<BemPaggoTransaction> }
-   */
-  async refundTransaction(transactionId: string): Promise<BemPaggoTransaction> {
-    const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-    const response: BempaggoChargeResponse = await creditCardService.refundCharge(Number(transactionId), { reason: RefundReasonTypes.OTHERS });
-    return Layers.fromCharge(response);
-  }
-  /**
-   * Tokenize the card data.
-   * @param card - The card data.
-   * @param hash - The card hash.
-   * @returns {Promise<any>}
-   */
-  async tokenizeCard(card: any, hash: string): Promise<any> {
-    const typedCard: BemPaggoCustomerPaymentMethod = card as BemPaggoCustomerPaymentMethod;
-    const cardResponse: BempaggoCardTokenResponse | undefined = await this.bempaggo?.tokenizeCard(Layers.toCard(typedCard), hash)
-    return cardResponse?.token;
-  }
+	/**
+	 * Bem paggo does not implement charges. So this method should just throw
+	 */
+	async getOrderCharges(_: never): Promise<never> {
+		throw new Error('Bem paggo does not implement charges')
+	}
 
-  /**
-   * Returns wether we should query for a customer before updating it
-   */
-  shouldFindCustomerBeforeCreating() {
-    throw new Error('not implemented')
-  }
+	/**
+	 * Captures the transaction given an id
+	 * @param { string } transactionId //TODO charge.id
+	 * @returns { BemPaggoTransaction }
+	 */
+	async chargeTransaction(transactionId: string): Promise<BemPaggoTransaction> {
+		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+		const response: BempaggoChargeResponse = await creditCardService.captureCharge(Number(transactionId));
+		return Layers.fromCharge(response);
+	}
 
-  /**
-   * Returns an url to a transaction's Qr code, if it is a pix
-   * @param {BemPaggoTransaction} transaction
-   * @returns
-   */
-  getExternalQrCode(transaction: BemPaggoTransaction): string {
-    throw new Error('not implemented')
-  }
+	/**
+	 * Refunds a given transaction
+	 * @param { string } transactionId  // TODO charge.id ?
+	 * @returns { Promise<BemPaggoTransaction> }
+	 */
+	async refundTransaction(transactionId: string): Promise<BemPaggoTransaction> {
+		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+		const response: BempaggoChargeResponse = await creditCardService.refundCharge(Number(transactionId));
+		return Layers.fromCharge(response);
+	}
+	/**
+	 * Tokenize the card data.
+	 * @param card - The card data.
+	 * @param hash - The card hash.
+	 * @returns {Promise<any>}
+	 */
+	async tokenizeCard(card: any, hash: string): Promise<any> {
+		const typedCard: BemPaggoCustomerPaymentMethod = card as BemPaggoCustomerPaymentMethod;
+		const cardResponse: BempaggoCardResponse | undefined = await this.bempaggo?.tokenizeCard(Layers.toCard(typedCard), hash)
+		return cardResponse?.token;
+	}
 
-  /**
-   * Returns a string describing the payment type
-   * @throws if no payment type is found
-   * @param {BemPaggoTransaction} transaction
-   * @returns { 'bank_slip' | 'pix' | 'credit_card'}
-   */
-  getExternalPaymentType(transaction: BemPaggoTransaction): 'bank_slip' | 'pix' | 'credit_card' | undefined {
-    throw new Error('not implemented')
-  }
+	/**
+	 * Returns wether we should query for a customer before updating it
+	 */
+	shouldFindCustomerBeforeCreating() {
+		throw new Error('not implemented')
+	}
 
-  /**
-   * Cancels a bank slip transaction, if it can be cancelled
-   * @param {BemPaggoTransaction} transaction
-   */
-  async cancelBankSlipTransaction(transaction: BemPaggoTransaction): Promise<void> {
-    throw new Error('not implemented')
-  }
+	/**
+	 * Returns an url to a transaction's Qr code, if it is a pix
+	 * @param {BemPaggoTransaction} transaction
+	 * @returns
+	 */
+	getExternalQrCode(transaction: BemPaggoTransaction): string {
+		throw new Error('not implemented')
+	}
 
-  /**
-   * Just an example
-   * We need this static attribute, to map BemPaggo's name to our names
-   *  */
-  static ExternalPaymentType = {
-    boleto: 'bank_slip',
-    pix: 'pix',
-    credit_card: 'credit_card',
-  } as const
+	/**
+	 * Returns a string describing the payment type
+	 * @throws if no payment type is found
+	 * @param {BemPaggoTransaction} transaction
+	 * @returns { 'bank_slip' | 'pix' | 'credit_card'}
+	 */
+	getExternalPaymentType(transaction: BemPaggoTransaction): 'bank_slip' | 'pix' | 'credit_card' | undefined {
+		throw new Error('not implemented')
+	}
 
-  /**
-   * Another example
-   * We need to know all available card brands on BemPaggo
-   */
-  static availableCardBrands = [
-    'mastercard',
-    'visa',
-    'elo',
-    'american-express',
-    'diners-club',
-    'jcb',
-    'hipercard',
-  ] as const
+	/**
+	 * Cancels a bank slip transaction, if it can be cancelled
+	 * @param {BemPaggoTransaction} transaction
+	 */
+	async cancelBankSlipTransaction(transaction: BemPaggoTransaction): Promise<void> {
+		throw new Error('not implemented')
+	}
+
+	/**
+	 * Just an example
+	 * We need this static attribute, to map BemPaggo's name to our names
+	 *  */
+	static ExternalPaymentType = {
+		//    boleto: 'bank_slip',
+		//    pix: 'pix',
+		credit_card: 'credit_card',
+	} as const
+
+	/**
+	 * Another example
+	 * We need to know all available card brands on BemPaggo
+	 */
+	static availableCardBrands = [
+		'mastercard',
+		'visa',
+		'elo',
+		'american-express',
+		'diners-club',
+		'jcb',
+		'hipercard',
+	] as const
 }
 
 export type BemPaggoCardBrands = typeof BemPaggoSdk.availableCardBrands[number]

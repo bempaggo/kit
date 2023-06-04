@@ -1,178 +1,179 @@
 // The model we use to store info to create gateway transactions
 // With some internal data ommited for simplicity
-type ObjectId = unknown
+type ObjectId = /*unknown*/ number
 export interface TransactionGroup {
-  // The transaction group code, following the pattern: saleGroup:${saleGroup}:${kind}:${paymentMethod}:${installment}:${paymentIndex}
-  code: string
-  saleKind: 'order' | 'recurrence'
+	// The transaction group code, following the pattern: saleGroup:${saleGroup}:${kind}:${paymentMethod}:${installment}:${paymentIndex}
+	code: string
+	//	saleKind: 'order' // | 'recurrence'
 
-  // Transaction group total price
-  price: {
-    amount: number
-    currency: 'BRL'
-  }
+	// Transaction group total price
+	price: {
+		amount: number
+		currency: 'BRL'
+	}
 
-  /**
-   * Payment Method used in this transaction group
-   */
-  paymentMethod: {
-    key: string
+	// Source for the transaction main seller
+	sourceId: ObjectId
 
-    custom: boolean
+	urlNotification: string | undefined;// TODO Bempaggo 
+	/**
+	 * Payment Method used in this transaction group
+	 */
+	paymentMethods: {
+		//key: string 
 
-    // The recipient of this transaction group's source
-    sourceId: ObjectId
+		// custom: boolean
 
-    gateway: string
+		//   gateway: string
 
-    method: 'credit_card' | 'bank_slip' | 'pix' | 'multi_card'
+		method: 'credit_card' //| 'bank_slip' | 'pix' | 'multi_card'
 
-    // Strategy for this payment
-    strategy: 'installment' | 'recurrence'
+		// Strategy for this payment
+		//  strategy: 'installment' //| 'recurrence'
 
-    // How many installments this transaction should have on the gateway
-    installments: number
+		// How many installments this transaction should have on the gateway
+		installments: number
 
-    discounts: {
-      kind: 'percent' | 'fixed'
-      percent: number
-      fixed: {
-        amount: number
-        currency: 'BRL'
-      }
+		//    discounts: {
+		//      kind: 'percent' | 'fixed'
+		//      percent: number
+		//      fixed: {
+		//        amount: number
+		//        currency: 'BRL'
+		//      }
+		//
+		//      discountedAmount: {
+		//        amount: number
+		//        currency: 'BRL'
+		//      }
+		//    }[]
+		//
+		//    taxes: {
+		//      kind: 'percent' | 'fixed'
+		//      percent: number
+		//      fixed: {
+		//        amount: number
+		//        currency: 'BRL'
+		//      }
+		//      type: 'interest'
+		//      addedAmount: {
+		//        amount: number
+		//        currency: 'BRL'
+		//      }
+		//    }[]
 
-      discountedAmount: {
-        amount: number
-        currency: 'BRL'
-      }
-    }[]
+		card: {
+			//      name: string
+			token: string
+			//      tokenValidUntil: Date
+			//      hash: string
+			//      last_digits: string
+			//      first_digits: string
+			//      brand: string
+			//      brandPretty: string
+			//      expirationMonth: number | null
+			//      expirationYear: number | null
+			securityCode: string //| null
+		}
+		//    bank_slip: {
+		//      url: string
+		//      dueDays: number | null
+		//      lateFee: number | null
+		//      lateInterestRate: number | null
+		//    }
 
-    taxes: {
-      kind: 'percent' | 'fixed'
-      percent: number
-      fixed: {
-        amount: number
-        currency: 'BRL'
-      }
-      type: 'interest'
-      addedAmount: {
-        amount: number
-        currency: 'BRL'
-      }
-    }[]
+		recipients: [
+			{
+				sourceId: ObjectId
+				total: {
+					amount: number
+					currency: 'BRL'
+				}
+			}
+		]
 
-    card: {
-      name: string
-      token: string
-      tokenValidUntil: Date
-      hash: string
-      last_digits: string
-      first_digits: string
-      brand: string
-      brandPretty: string
-      expirationMonth: number | null
-      expirationYear: number | null
-      securityCode: string | null
-    }
-    bank_slip: {
-      url: string
-      dueDays: number | null
-      lateFee: number | null
-      lateInterestRate: number | null
-    }
-  }
+	}[]
 
-  /*
-   * Transaction group status
-   * - pending: waiting for the flushTransactionGroup process to create the transactions
-   * - ready: the transaction group is ready to be created(flush process has finished)
-   * - created: the transaction group was created on the gateway
-   * - failed: the transaction group creation failed on the gateway
-   */
-  status: 'pending' | 'ready' | 'created' | 'failed'
+	/*
+	 * Transaction group status
+	 * - pending: waiting for the flushTransactionGroup process to create the transactions
+	 * - ready: the transaction group is ready to be created(flush process has finished)
+	 * - created: the transaction group was created on the gateway
+	 * - failed: the transaction group creation failed on the gateway
+	 */
+	//	status: 'pending' | 'ready' | 'created' | 'failed'
 
-  /*
-   * The currency used in this transactionGroup
-   */
-  currency: 'BRL'
+	/*
+	 * The currency used in this transactionGroup
+	 */
+	//	currency: 'BRL'
 
-  /*
-   * Transaction group recipients
-   */
-  recipients: [
-    {
-      // Each recipient's source, for sales with split
-      sourceId: ObjectId
-      total: {
-        amount: number
-        currency: 'BRL'
-      }
-    }
-  ]
+	/*
+	 * Transaction group recipients
+	 */
 
-  // The external transaction payload
-  externalTransactionPayload: any
+	// The external transaction payload
+	// externalTransactionPayload: any
 
-  // The error returned by the gateway
-  error: any
+	// The error returned by the gateway
+	//error: any
 
-  // The gateway used to create the transaction group
-  gateway: 'pagarme' | 'zoop' | 'iugu' | 'maxipago' | 'bempaggo'
+	// The gateway used to create the transaction group
+	// gateway: 'pagarme' | 'zoop' | 'iugu' | 'maxipago' | 'bempaggo'
 
-  // Source for the transaction main seller
-  sourceId: ObjectId
 
-  // The amount of installments
-  totalInstallments: number
 
-  // Customer data at the time of the purchase
-  customerPayload: {
-    name: string
-    email: string
-    phone: string
-    birth: Date
-    document: {
-      kind: 'cpf' | 'cnpj'
-      value: string
-    }
-    active: boolean
+	// The amount of installments
+	//  totalInstallments: number
 
-    token: string
+	// Customer data at the time of the purchase
+	customerPayload: {
+		name: string
+		email: string
+		phone:/*string*/ { areaCode: number, countryCode: number, phoneNumber: number }
+		birth: Date
+		document: {
+			kind: 'cpf' | 'cnpj'
+			value: string //TODO only numbers
+		}
+		//    active: boolean
 
-    // array containing user payment methods
-    paymentMethods: {
-      alias: string
-      sourceId: ObjectId
-      // exact snapshot of the payload that exists inside source
-      payload: any
-      kind: 'credit_card' | 'bank_slip' | 'pix' | 'multi_card'
-      title: string
-      hash: string
-    }[]
+		//    token: string
 
-    // list of addresses associated with this user
-    addresses: {
-      code: string
-      state: string
-      city: string
-      district: string
-      address: string
-      address2: string
-      number: string
-      country: string
-      title: string
-    }[]
+		// array containing user payment methods
+		//    paymentMethods: {
+		//      alias: string
+		//      sourceId: ObjectId
+		//      // exact snapshot of the payload that exists inside source
+		//      payload: any
+		//      kind: 'credit_card' | 'bank_slip' | 'pix' | 'multi_card'
+		//      title: string
+		//      hash: string
+		//    }[]
 
-    // map this customer to account on external sources
-    sources: {
-      alias: string
-      sourceId: ObjectId
-      // exact snapshot of the payload that exists inside source
-      payload: any
-      kind: 'credit_card' | 'bank_slip' | 'pix' | 'multi_card'
-    }[]
-  }
+		// list of addresses associated with this user
+		addresses: {
+			code: string
+			state: string
+			city: string
+			district: string
+			address: string
+			address2: string
+			number: string
+			country: string
+			title: string
+		}[]
 
-  // Due date for the transaction
-  dueAt: Date
+		// map this customer to account on external sources
+		//		sources: {
+		//			alias: string
+		//			sourceId: ObjectId
+		//			// exact snapshot of the payload that exists inside source
+		//			payload: any
+		//			kind: 'credit_card' | 'bank_slip' | 'pix' | 'multi_card'
+		//		}[]
+	}
+
+	// Due date for the transaction
+	//  dueAt: Date
 }

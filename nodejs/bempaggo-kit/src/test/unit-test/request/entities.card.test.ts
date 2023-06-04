@@ -33,7 +33,6 @@ describe("Card Entity", () => {
     test("card", async () => {
       const card: BempaggoCardRequest = {
         cardNumber: "5448280000000007",
-        cvv: "123",
         holder: {
           name: "Tony Stark",
           document: "51190844001",
@@ -50,7 +49,6 @@ describe("Card Entity", () => {
       assertType<BempaggoCardExpirationRequest>(card.expiration);
       expect(Object.keys(card).length).toBe(4);
       expect(card.cardNumber).toBe("5448280000000007");
-      expect(card.cvv).toBe("123");
       expect(Object.keys(card.holder).length).toBe(2);
       expect(card.holder.name).toBe("Tony Stark");
       expect(card.holder.document).toBe("51190844001");
