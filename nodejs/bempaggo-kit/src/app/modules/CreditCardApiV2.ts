@@ -31,7 +31,7 @@ class CreditCardApiV2 implements CreditCardOperable {
 	}
 
 	async refundCharge(chargeId: number): Promise<BempaggoChargeResponse> {
-		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit/card/refund/refund`, { reason: "OTHERS" });
+		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit/card/refund`, { reason: "OTHERS" });
 		return await getByUrlResponse(response, this.http);
 	}
 }
