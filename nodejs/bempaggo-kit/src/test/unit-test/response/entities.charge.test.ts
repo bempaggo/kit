@@ -44,7 +44,8 @@ describe("Charge Entity", () => {
 					},
 					brand: CardBrandTypes.MASTERCARD,
 				},
-				installments: 1, splits: []
+				installments: 1, 
+				splits: []
 
 			}];
 
@@ -71,7 +72,7 @@ describe("Charge Entity", () => {
 
 			expect(chargeResponse).not.toBeNull();
 			assertType<BempaggoChargeResponse>(chargeResponse);
-			expect(Object.keys(chargeResponse.transactions[0]).length).toBe(25);
+			expect(Object.keys(chargeResponse.transactions[0]).length).toBe(18);
 			expect(chargeResponse.id).toBe(1);
 			expect(chargeResponse.transactions[0].id).toBe(1);
 			expect(chargeResponse.transactions[0].returnCode).toBe("00");
@@ -109,7 +110,15 @@ describe("Charge Entity", () => {
 			expect(chargeResponse.transactions[0].card!.expiration.year).toBe(2035);
 			expect(chargeResponse.transactions[0].card!.expiration.month).toBe(1);
 			expect(chargeResponse.transactions[0].card!.brand).toBe("MASTERCARD");
-
+			expect(chargeResponse.transactions[0].splits).toStrictEqual([]);
+			expect(chargeResponse.transactions[0].installments).toBe(1);
+			expect(chargeResponse.customer.id).toBe(1);
+			expect(chargeResponse.customer.document).toBe("51190844001");
+			assertType<ChargeStatusTypes>(chargeResponse.status);
+			expect(chargeResponse.status).toBe("AUTHORIZED");
+			expect(chargeResponse.value).toBe(1000);
+			expect(chargeResponse.refundedAmount).toBe(0);
+			expect(chargeResponse.order.id).toBe(123);
 		});
 		test("charge response with only required fields", async () => {
 
@@ -127,7 +136,8 @@ describe("Charge Entity", () => {
 				establishment: {
 					id: 1
 				},
-				installments: 1, splits: []
+				installments: 1,
+				splits: []
 
 			}];
 
@@ -152,7 +162,7 @@ describe("Charge Entity", () => {
 
 			expect(chargeResponse).not.toBeNull();
 			assertType<BempaggoChargeResponse>(chargeResponse);
-			expect(Object.keys(chargeResponse.transactions[0]).length).toBe(19);
+			expect(Object.keys(chargeResponse.transactions[0]).length).toBe(13);
 			expect(chargeResponse.id).toBe(1);
 			expect(chargeResponse.transactions[0].id).toBe(1);
 			expect(chargeResponse.transactions[0].returnCode).toBe("00");
@@ -175,7 +185,18 @@ describe("Charge Entity", () => {
 			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
 			expect(Object.keys(chargeResponse.transactions[0].establishment).length).toBe(1);
 			expect(chargeResponse.transactions[0].establishment.id).toBe(1);
+			expect(chargeResponse.transactions[0].splits).toStrictEqual([]);
 			assertType<BempaggoCardResponse>(chargeResponse.transactions[0].card!);
+			expect(chargeResponse.transactions[0].card!).toBeUndefined();
+			expect(chargeResponse.transactions[0].installments).toBe(1);
+			expect(chargeResponse.customer.id).toBe(1);
+			expect(chargeResponse.customer.document).toBe("51190844001");
+			assertType<ChargeStatusTypes>(chargeResponse.status);
+			expect(chargeResponse.status).toBe("AUTHORIZED");
+			expect(chargeResponse.value).toBe(1000);
+			expect(chargeResponse.refundedAmount).toBeUndefined();
+			expect(chargeResponse.order.id).toBe(123);
+
 		});
 
 	});

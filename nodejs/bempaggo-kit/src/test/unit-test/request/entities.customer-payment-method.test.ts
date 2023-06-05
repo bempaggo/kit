@@ -20,7 +20,7 @@ describe("Customer", () => {
       assertType<BempaggoCardRequest>(card);
       assertType<BempaggoCardHolderRequest>(card.holder);
       assertType<BempaggoCardExpirationRequest>(card.expiration);
-      expect(Object.keys(card).length).toBe(4);
+      expect(Object.keys(card).length).toBe(3);
       expect(card.cardNumber).toBe("5448280000000007");
       expect(Object.keys(card.holder).length).toBe(2);
       expect(card.holder.name).toBe("Tony Stark");

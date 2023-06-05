@@ -1,6 +1,4 @@
 import { BempaggoCardExpirationRequest, BempaggoCardHolderRequest, BempaggoCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse,BempaggoCardResponse  } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes } from "@/app/modules/entity/Enum";
 import { assertType, describe, expect, test } from "vitest";
 
 describe("Card Entity", () => {
@@ -15,6 +13,7 @@ describe("Card Entity", () => {
       expect(Object.keys(cardHolder).length).toBe(2);
       expect(cardHolder.name).toBe("Tony Stark");
       expect(cardHolder.document).toBe("51190844001");
+      
     });
 
     test("cardExpiration", async () => {
@@ -28,6 +27,7 @@ describe("Card Entity", () => {
       expect(Object.keys(cardExpiration).length).toBe(2);
       expect(cardExpiration.year).toBe(2025);
       expect(cardExpiration.month).toBe(3);
+
     });
 
     test("card", async () => {
@@ -47,7 +47,7 @@ describe("Card Entity", () => {
       assertType<BempaggoCardRequest>(card);
       assertType<BempaggoCardHolderRequest>(card.holder);
       assertType<BempaggoCardExpirationRequest>(card.expiration);
-      expect(Object.keys(card).length).toBe(4);
+      expect(Object.keys(card).length).toBe(3);
       expect(card.cardNumber).toBe("5448280000000007");
       expect(Object.keys(card.holder).length).toBe(2);
       expect(card.holder.name).toBe("Tony Stark");
@@ -55,6 +55,7 @@ describe("Card Entity", () => {
       expect(Object.keys(card.expiration).length).toBe(2);
       expect(card.expiration.year).toBe(2025);
       expect(card.expiration.month).toBe(3);
+
     });
   });
 

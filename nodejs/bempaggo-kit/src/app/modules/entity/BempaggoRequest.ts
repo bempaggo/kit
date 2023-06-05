@@ -52,7 +52,9 @@ interface BempaggoOrderRequest {
 }
 
 interface BempaggoSplitPaymentRequest {
-	// this value is in cents.
+	/**
+	 *This value is in cents.
+	 * */
 	amount: number; 
 	sellerId: number;
 }
