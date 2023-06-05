@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bempaggo-kit": "^1.0.7",
+    "bempaggo-kit": "^1.0.8",
     "express": "^4.18.2"
   },
   "devDependencies": {
