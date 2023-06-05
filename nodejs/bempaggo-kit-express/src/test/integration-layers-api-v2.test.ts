@@ -1,8 +1,8 @@
 
 import BemPaggoSdk from "bempaggo-kit/lib/app/modules/layers/BemPaggoSDK";
+import { LayersCustomerPaymentMethod, LayersTransaction } from "bempaggo-kit/lib/app/modules/layers/interfaces";
 import { LayersTransactionGroup } from "bempaggo-kit/lib/app/modules/layers/transactionGroup";
 import { describe, expect, test } from "vitest";
-import { LayersCustomerPaymentMethod, LayersTransaction } from "bempaggo-kit/lib/app/modules/layers/interfaces";
 
 const requestLayersStyle: LayersTransactionGroup = {
 	code: "",
@@ -18,7 +18,10 @@ const requestLayersStyle: LayersTransactionGroup = {
 			token: "aot",
 			securityCode: "123"
 		},
+		total: { amount: 1035, currency: "BRL" }
+
 	}],
+
 	sourceId: 1,
 	customerPayload: {
 		name: "Douglas Hiuara Longo Customer",
@@ -44,35 +47,37 @@ const cardLayers: LayersCustomerPaymentMethod = {
 	brand: "MASTERCARD",
 }
 
-const token = "https://sandbox.bempaggo.io/#/configurations/token"; // needs to generate a token in portal
-
+const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODU5OTAwMjYsImV4cCI6MTY4NjA1MDAyNn0.NGxRcs7TqGMXHT3LoI86dhnJQCkl4n0RDYZAZMdtLk5rnGZqDUW5p-6RTlgB3_B_NxkV3bNMLI2QnWNbHd0mQA"; // needs to generate a token in portal
+const url = "http://localhost:5000/api";//"https://api-sandbox.bempaggo.io/api"
+const layers: BemPaggoSdk = new BemPaggoSdk(url, token);
 
 describe("How use it", () => {
 	describe("create layers style", () => {
 		test("create token from card", async () => {
-			const layers: BemPaggoSdk = new BemPaggoSdk("https://api-sandbox.bempaggo.io/api", token);
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			expect(cardToken).not.toBeNull();
 		});
 		test("create authorize", async () => {
-			const layers: BemPaggoSdk = new BemPaggoSdk("https://api-sandbox.bempaggo.io/api", token);
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			requestLayersStyle.paymentMethods[0].card.token = cardToken;
 			requestLayersStyle.code = new Date().getTime().toString();
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 			expect(response.referenceId).not.toBeNull();
-			expect(response.payments[0].payment_method).toBe("credit_card");
 			expect(JSON.stringify(response.payments[0])).contains(cardToken);
+			expect(JSON.stringify(response.payments[0])).contains("AUTHORIZED");
+			expect(JSON.stringify(response.payments[0])).contains("credit_card");
 			expect(JSON.stringify(response)).contains("AUTHORIZED");
 		});
 		test("create authorize and capture", async () => {
-			const layers: BemPaggoSdk = new BemPaggoSdk("https://api-sandbox.bempaggo.io/api", token);
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			requestLayersStyle.paymentMethods[0].card.token = cardToken;
 			requestLayersStyle.code = new Date().getTime().toString();
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-			console.log(response.referenceId);
 			const responseCapture: LayersTransaction = await layers.chargeTransaction(response.referenceId);
+			console.log(JSON.stringify(responseCapture));
+			expect(JSON.stringify(responseCapture.payments[0])).contains(cardToken);
+			expect(JSON.stringify(responseCapture.payments[0])).contains("APPROVED");
+			expect(JSON.stringify(responseCapture.payments[0])).contains("credit_card");
 			expect(JSON.stringify(responseCapture)).contains("PAY");
 		});
 

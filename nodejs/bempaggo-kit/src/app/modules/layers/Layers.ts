@@ -1,8 +1,7 @@
-import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest, BempaggoPaymentRequest } from "../entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "../entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
-import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, BemPaggoTransactionPaymentMethod } from "./interfaces";
+import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
-
 class Util {
 
 	static getDateAsString(data: Date): string | undefined {
@@ -29,12 +28,24 @@ class Layers {
 		const address: BempaggoAddressRequest | undefined = this.toAddress(transactionGroup.customerPayload.addresses[0]);
 		const birthday: string | undefined = Util.getDateAsString(transactionGroup.customerPayload.birth);
 		const payments: BempaggoPaymentRequest[] = []
-		for (const payment of payments) {
+		for (const payment of transactionGroup.paymentMethods) {
+			const splits: BempaggoSplitPaymentRequest[] = [];
+			for (const split of payment.recipients) {
+				splits.push({
+					amount: split.total.amount,
+					sellerId: split.sourceId
+				});
+			}
 			const request: BempaggoPaymentRequest = {
-				amount: payment.amount,
-				cardToken: payment.cardToken,
+				amount: payment.total.amount,
+				cardToken: {
+					token: payment.card.token,
+					cvv: payment.card.securityCode
+				}
+				,
 				installments: payment.installments,
-				splits: payment.splits
+
+				splits: splits
 			};
 			payments.push(request);
 		}
@@ -47,17 +58,16 @@ class Layers {
 				address: address,
 				birthdate: birthday
 			},
-			value: transactionGroup.price.amount, // is this in cents?
+			amount: transactionGroup.price.amount, // is this in cents?
 			payments: payments,
 			orderReference: transactionGroup.code
 
 		};
 	}
 	static fromCharge(response: BempaggoChargeResponse): LayersTransaction {
-		const payments: BemPaggoTransactionPaymentMethod[] = [];
-
+		const payments: LayersTransactionPaymentMethod[] = [];
 		for (const transaction of response.transactions) {
-			const payment: BemPaggoTransactionPaymentMethod = {
+			const payment: LayersTransactionPaymentMethod = {
 				payment_method: 'credit_card',
 				amount: transaction.value,
 				recipient_id: response.order.affiliate ? response.order.affiliate.id.toString() : "-",
@@ -78,7 +88,8 @@ class Layers {
 			customer_id: response.customer.document,
 			referenceId: response.id.toString(),
 			items: [],
-			payments: payments
+			payments: payments,
+			status: response.status,
 		};
 	}
 	static toCard(paymentMethod: LayersCustomerPaymentMethod): BempaggoCardRequest {

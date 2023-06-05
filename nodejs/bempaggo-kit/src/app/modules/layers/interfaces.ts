@@ -1,11 +1,11 @@
-import {  TransactionStatusTypes } from "../entity/Enum";
+import { ChargeStatusTypes, TransactionStatusTypes } from "../entity/Enum";
 
 export interface LayersTransaction {
 	items: LayersTransactionItem[];
-	payments: BemPaggoTransactionPaymentMethod[];
+	payments: LayersTransactionPaymentMethod[];
 	referenceId: string;
 	customer_id: string;
-
+	status:ChargeStatusTypes
 }
 
 interface LayersTransactionItem {
@@ -14,7 +14,7 @@ interface LayersTransactionItem {
 	quantity: number
 }
 
-export type BemPaggoTransactionPaymentMethod =
+export type LayersTransactionPaymentMethod =
 	| LayersCreditCardPaymentMethod
 	| LayersPixPaymentMethod
 	| LayersBankSlipPaymentMethod

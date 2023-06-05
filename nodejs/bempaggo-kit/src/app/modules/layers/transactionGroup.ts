@@ -81,7 +81,10 @@ export interface LayersTransactionGroup {
 		//      lateFee: number | null
 		//      lateInterestRate: number | null
 		//    }
-
+		total: {
+					amount: number
+					currency: 'BRL'
+				}
 		recipients: [
 			{
 				sourceId: ObjectId

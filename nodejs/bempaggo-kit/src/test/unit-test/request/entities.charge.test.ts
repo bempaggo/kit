@@ -1,7 +1,6 @@
 
 
-import { BempaggoAddressRequest, BempaggoCardExpirationRequest, BempaggoCardHolderRequest, BempaggoCardRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { BempaggoChargeResponse } from "@/app/modules/entity/BempaggoResponse";
+import { BempaggoAddressRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
 import { assertType, describe, expect, test } from "vitest";
 
 describe("Charge Entity", () => {
@@ -41,7 +40,7 @@ describe("Charge Entity", () => {
 						installments: 1, splits: [{ amount: 1000, sellerId: 1 }]
 					}
 				],
-				value: 1000,
+				amount: 1000,
 				notificationUrl: "https://meusite.com.br/events",
 			};
 
@@ -53,7 +52,7 @@ describe("Charge Entity", () => {
 			assertType<BempaggoTokenCardRequest>(charge.payments[0].cardToken!);
 
 			expect(Object.keys(charge).length).toBe(7);
-			expect(charge.value).toBe(1000);
+			expect(charge.amount).toBe(1000);
 			expect(charge.payments[0].installments).toBe(1);
 			expect(charge.orderReference).toBe(123456);
 			expect(charge.notificationUrl).toBe("https://meusite.com.br/events");

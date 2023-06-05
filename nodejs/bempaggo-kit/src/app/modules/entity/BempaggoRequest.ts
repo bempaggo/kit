@@ -44,14 +44,14 @@ interface BempaggoOrderRequest {
 	customer: BempaggoCustomerRequest;
 	payments: BempaggoPaymentRequest[];
 	// this value is in cents of order.
-	value: number;
+	amount: number;
 	// orderReference is to tracker the order at Bempaggo.
 	orderReference: string;
 	// notificationUrl is the url that Bempaggo sends HTTP POST when the order has updates. The body of request is filled with "Bempaggo"
 	notificationUrl?: string | undefined;
 }
 
-interface SplitPaymentRequest {
+interface BempaggoSplitPaymentRequest {
 	// this value is in cents.
 	amount: number; 
 	sellerId: number;
@@ -66,12 +66,12 @@ interface BempaggoPaymentRequest {
 	 * However, the amounts are not sent to the affiliate acquirer's account.
 	 * The amounts are only sent to the acquirer's account for the affiliate (seller informed in the order authorization, in the order URL).
 	 * */
-	splits: SplitPaymentRequest[];
+	splits: BempaggoSplitPaymentRequest[];
 
 }
 
 export {
-	SplitPaymentRequest,
+	BempaggoSplitPaymentRequest,
 	BempaggoPaymentRequest,
 	BempaggoAddressRequest,
 	BempaggoCardExpirationRequest,
