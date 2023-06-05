@@ -6,7 +6,7 @@ describe("Customer", () => {
   describe("Response", () => {
     test("customerPaymentMethod", async () => {
       const paymentMethod: BempaggoCardResponse = {
-        id: 1,
+        token: "skksks",
         holder: {
           name: "Tony Stark",
           document: "51190844001"
@@ -31,7 +31,7 @@ describe("Customer", () => {
       expect(Object.keys(paymentMethod.expiration).length).toBe(2);
       expect(paymentMethod.expiration.year).toBe(2035);
       expect(paymentMethod.expiration.month).toBe(1);
-      expect(paymentMethod.id).toBe(1);
+      expect(paymentMethod.token).toBe("skksks");
       expect(paymentMethod.brand).toBe("MASTERCARD");
     });
   });

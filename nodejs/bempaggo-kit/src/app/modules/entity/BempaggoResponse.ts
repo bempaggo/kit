@@ -48,7 +48,6 @@ interface BempaggoCardExpirationResponse {
 	month: number;
 }
 interface BempaggoCardResponse {
-	id?: number | undefined;
 	token?: string | undefined;
 	holder: BempaggoCardHolderResponse;
 	bin: string;

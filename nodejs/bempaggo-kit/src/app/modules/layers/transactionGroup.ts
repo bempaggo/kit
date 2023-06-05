@@ -1,7 +1,7 @@
 // The model we use to store info to create gateway transactions
 // With some internal data ommited for simplicity
 type ObjectId = /*unknown*/ number
-export interface TransactionGroup {
+export interface LayersTransactionGroup {
 	// The transaction group code, following the pattern: saleGroup:${saleGroup}:${kind}:${paymentMethod}:${installment}:${paymentIndex}
 	code: string
 	//	saleKind: 'order' // | 'recurrence'
@@ -15,7 +15,7 @@ export interface TransactionGroup {
 	// Source for the transaction main seller
 	sourceId: ObjectId
 
-	urlNotification: string | undefined;// TODO Bempaggo 
+	urlNotification: string | null;// TODO Bempaggo 
 	/**
 	 * Payment Method used in this transaction group
 	 */

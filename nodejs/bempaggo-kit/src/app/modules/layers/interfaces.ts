@@ -1,28 +1,29 @@
-import { ChargeStatusTypes, TransactionStatusTypes } from "../entity/Enum";
+import {  TransactionStatusTypes } from "../entity/Enum";
 
-export interface BemPaggoTransaction {
-	items: BemPaggoTransactionItem[];
+export interface LayersTransaction {
+	items: LayersTransactionItem[];
 	payments: BemPaggoTransactionPaymentMethod[];
 	referenceId: string;
 	customer_id: string;
 
 }
 
-interface BemPaggoTransactionItem {
+interface LayersTransactionItem {
 	amount: number
 	description: string
 	quantity: number
 }
 
 export type BemPaggoTransactionPaymentMethod =
-	| BemPaggoCreditCardPaymentMethod
-	| BemPaggoPixPaymentMethod
-	| BemPaggoBankSlipPaymentMethod
+	| LayersCreditCardPaymentMethod
+	| LayersPixPaymentMethod
+	| LayersBankSlipPaymentMethod
 
-interface BemPaggoCreditCardPaymentMethod {
+interface LayersCreditCardPaymentMethod {
 	payment_method: 'credit_card';
 	amount: number;
 	recipient_id: string;
+	
 	credit_card: {
 		card_id: string;
 		token: string;// --Bempaggo adding this field; "PAY"
@@ -34,7 +35,7 @@ interface BemPaggoCreditCardPaymentMethod {
 	status?: TransactionStatusTypes; // --Bempaggo adding this field; "PAY"
 }
 
-interface BemPaggoPixPaymentMethod {
+interface LayersPixPaymentMethod {
 	payment_method: 'pix'
 	amount: number
 	recipient_id: string
@@ -43,7 +44,7 @@ interface BemPaggoPixPaymentMethod {
 	}
 }
 
-interface BemPaggoBankSlipPaymentMethod {
+interface LayersBankSlipPaymentMethod {
 	payment_method: 'boleto'
 	recipient_id: string
 	boleto: {
@@ -51,7 +52,7 @@ interface BemPaggoBankSlipPaymentMethod {
 	}
 }
 
-export interface BemPaggoCustomer {
+export interface LayersCustomer {
 	name: string
 	alias: string
 	email: string
@@ -64,12 +65,12 @@ export interface BemPaggoCustomer {
 			area_code: string
 		}
 	}
-	address: Address,
+	address: LayersAddress,
 
 	birthdate?: string // YYYY-MM-DD --Bempaggo adding this field
 }
 
-export interface Address {
+export interface LayersAddress {
 	address: string
 	address2: string
 	city: string
@@ -80,7 +81,7 @@ export interface Address {
 	state: string
 }
 
-export interface BemPaggoCustomerPaymentMethod {
+export interface LayersCustomerPaymentMethod {
 	title: string
 	name: string
 	month: number

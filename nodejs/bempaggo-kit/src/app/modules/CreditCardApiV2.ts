@@ -8,7 +8,7 @@ class CreditCardApiV2 implements CreditCardOperable {
 	constructor(private http: BempaggoHttp) {
 	}
 
-	async findChargesByOrderReferenceId(orderReferenceId: number): Promise<BempaggoChargeResponse[]> {
+	async findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]> {
 		const response: Response = await this.http.httpGetBy(`/v2/charges`, [{ name: "orderReference", value: orderReferenceId }]);
 		await assertNotError(response);
 		return await response.json();

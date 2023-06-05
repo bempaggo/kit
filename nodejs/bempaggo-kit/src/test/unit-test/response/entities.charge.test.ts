@@ -31,7 +31,7 @@ describe("Charge Entity", () => {
 					id: 1
 				},
 				card: {
-					id: 1,
+					token:"token-01",
 					holder: {
 						name: "Tony Stark",
 						document: "51190844001"

@@ -1,7 +1,7 @@
 import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest, BempaggoPaymentRequest } from "../entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
-import { Address, BemPaggoCustomer, BemPaggoCustomerPaymentMethod, BemPaggoTransaction, BemPaggoTransactionPaymentMethod } from "./interfaces";
-import { TransactionGroup } from "./transactionGroup";
+import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, BemPaggoTransactionPaymentMethod } from "./interfaces";
+import { LayersTransactionGroup } from "./transactionGroup";
 
 class Util {
 
@@ -19,7 +19,7 @@ class Util {
 
 class Layers {
 
-	static toOrder(transactionGroup: TransactionGroup): BempaggoOrderRequest {
+	static toOrder(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
 		const phoneLayers = transactionGroup.customerPayload.phone;
 		const phone: BempaggoPhoneRequest = {
 			areaCode: phoneLayers.areaCode,
@@ -53,28 +53,27 @@ class Layers {
 
 		};
 	}
-	static fromCharge(response: BempaggoChargeResponse): BemPaggoTransaction {
+	static fromCharge(response: BempaggoChargeResponse): LayersTransaction {
 		const payments: BemPaggoTransactionPaymentMethod[] = [];
 
 		for (const transaction of response.transactions) {
-			payments.push({
+			const payment: BemPaggoTransactionPaymentMethod = {
 				payment_method: 'credit_card',
 				amount: transaction.value,
-				recipient_id: response.order.affiliate ? response.order.id.toString() : "-",
+				recipient_id: response.order.affiliate ? response.order.affiliate.id.toString() : "-",
 				credit_card: {
 					token: transaction.card?.token ? transaction.card.token : "",
-					card_id: transaction.card?.id ? transaction.card.id.toString() : "",
+					card_id: transaction.card?.token ? transaction.card.token : "",
 					operation_type: 'auth_only',
 					installments: transaction.installments,
 					statement_descriptor: "?need setup in gateway?"
 				},
 				refundedValue: response.refundedAmount ? response.refundedAmount : 0,
 				status: transaction.status
-			});
+			};
+			payments.push(payment);
 
 		}
-
-
 		return {
 			customer_id: response.customer.document,
 			referenceId: response.id.toString(),
@@ -82,7 +81,7 @@ class Layers {
 			payments: payments
 		};
 	}
-	static toCard(paymentMethod: BemPaggoCustomerPaymentMethod): BempaggoCardRequest {
+	static toCard(paymentMethod: LayersCustomerPaymentMethod): BempaggoCardRequest {
 		return {
 			cardNumber: paymentMethod.number,
 			holder: {
@@ -106,7 +105,7 @@ class Layers {
 	}
 
 
-	static toAddress(address: Address): BempaggoAddressRequest | undefined {
+	static toAddress(address: LayersAddress): BempaggoAddressRequest | undefined {
 		if (!address) return undefined;
 		return {
 			city: address.city,
@@ -119,7 +118,7 @@ class Layers {
 		}
 	}
 
-	static toCustomer(customer: BemPaggoCustomer): BempaggoCustomerRequest {
+	static toCustomer(customer: LayersCustomer): BempaggoCustomerRequest {
 		const address: BempaggoAddressRequest | undefined = this.toAddress(customer.address);
 		const bempaggo: BempaggoCustomerRequest = {
 			name: customer.name,
@@ -135,7 +134,7 @@ class Layers {
 		}
 		return bempaggo;
 	}
-	static fromCards(card: BempaggoCardResponse): BemPaggoCustomerPaymentMethod {
+	static fromCards(card: BempaggoCardResponse): LayersCustomerPaymentMethod {
 		return {
 			title: card.holder.name,
 			name: card.holder.name,
@@ -145,8 +144,8 @@ class Layers {
 			brand: card.brand
 		};
 	}
-	static from(customer: BempaggoCustomerResponse): BemPaggoCustomer {
-		const layer: BemPaggoCustomer = {
+	static from(customer: BempaggoCustomerResponse): LayersCustomer {
+		const layer: LayersCustomer = {
 			name: customer.name,
 			alias: customer.name,
 			email: customer.email ? customer.email : "",

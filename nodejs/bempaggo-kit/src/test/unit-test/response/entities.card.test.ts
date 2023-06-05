@@ -43,7 +43,7 @@ describe("Card Entity", () => {
 
     test("cardResponse", async () => {
       const card: BempaggoCardResponse = {
-        id: 1,
+        token: "token-1",
         holder: {
           name: "Tony Stark",
           document: "51190844001",
@@ -63,6 +63,7 @@ describe("Card Entity", () => {
       assertType<BempaggoCardHolderResponse>(card.holder);
       expect(Object.keys(card.holder).length).toBe(2);
       expect(card.holder.name).toBe("Tony Stark");
+      expect(card.token).toBe("token-1");
       expect(card.holder.document).toBe("51190844001");
       assertType<BempaggoCardExpirationResponse>(card.expiration);
       expect(Object.keys(card.expiration).length).toBe(2);

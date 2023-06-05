@@ -8,7 +8,7 @@ interface BempaggoTransactionServiceable {
 interface CreditCardOperable {
 	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
 
-	findChargesByOrderReferenceId(orderReferenceId: number): Promise<BempaggoChargeResponse[]>;
+	findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]>;
 
 	createCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
 
