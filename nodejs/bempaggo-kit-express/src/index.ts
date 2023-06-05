@@ -58,7 +58,7 @@ app.get('/orders/:id', (req: Request, res: Response) => {
 		.catch((e) => errorHandler(e, res));
 });
 
-app.post('/orders/:id/multi-credit-card/refund', (req: Request, res: Response) => {
+app.post('/charges/:id/multi-credit-card/refund', (req: Request, res: Response) => {
 	const id = req.params.id;
 	cardService(req).refundCharge(Number(id))
 		.then(value => send(value, res))
