@@ -47,8 +47,8 @@ const cardLayers: LayersCustomerPaymentMethod = {
 	brand: "MASTERCARD",
 }
 
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODU5OTAwMjYsImV4cCI6MTY4NjA1MDAyNn0.NGxRcs7TqGMXHT3LoI86dhnJQCkl4n0RDYZAZMdtLk5rnGZqDUW5p-6RTlgB3_B_NxkV3bNMLI2QnWNbHd0mQA"; // needs to generate a token in portal
-const url = "http://localhost:5000/api";//"https://api-sandbox.bempaggo.io/api"
+const token = "generates in portal"; // needs to generate a token in portal
+const url = "https://api-sandbox.bempaggo.io/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(url, token);
 
 describe("How use it", () => {
