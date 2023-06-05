@@ -1,7 +1,7 @@
 import bempaggo from "bempaggo-kit";
 import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoTransactionServiceable, CreditCardOperable } from "bempaggo-kit/lib/app/modules/Transaction";
-import { BempaggoOrderRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
+import { BempaggoCustomerRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { Environments } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BempaggoError } from "bempaggo-kit/lib/app/modules/entity/Exceptions";
 import bodyParser from 'body-parser';
@@ -11,7 +11,6 @@ console.log(BempaggoFactory === bempaggo.BempaggoModule.BempaggoFactory);
 const app: Express = express();
 app.use(bodyParser.json());
 const errorHandler = (e: any, res: Response) => {
-	console.log("error ", JSON.stringify(e));
 	if (e instanceof BempaggoError) {
 		res.status(e.getStatus());
 		try {
@@ -24,7 +23,6 @@ const errorHandler = (e: any, res: Response) => {
 			}
 		}
 	} else {
-		console.log("error ", JSON.stringify(e));
 		res.status(500);
 		res.end();
 	}
