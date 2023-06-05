@@ -74,7 +74,6 @@ describe("How use it", () => {
 			requestLayersStyle.code = new Date().getTime().toString();
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 			const responseCapture: LayersTransaction = await layers.chargeTransaction(response.referenceId);
-			console.log(JSON.stringify(responseCapture));
 			expect(JSON.stringify(responseCapture.payments[0])).contains(cardToken);
 			expect(JSON.stringify(responseCapture.payments[0])).contains("APPROVED");
 			expect(JSON.stringify(responseCapture.payments[0])).contains("credit_card");
