@@ -1,6 +1,6 @@
 import bempaggo from "bempaggo-kit";
 import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
-import { BempaggoTransactionServiceable, CreditCardOperable } from "bempaggo-kit/lib/app/modules/Transaction";
+import { BankSlipOperable, BempaggoTransactionServiceable, CreditCardOperable } from "bempaggo-kit/lib/app/modules/Transaction";
 import { BempaggoCustomerRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { Environments } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BempaggoError } from "bempaggo-kit/lib/app/modules/entity/Exceptions";
@@ -48,6 +48,9 @@ const transactor = (req: Request): BempaggoTransactionServiceable => {
 const cardService = (req: Request): CreditCardOperable => {
 	return transactor(req).getCreditCardServiceable();
 }
+const bankSlipService = (req: Request): BankSlipOperable => {
+	return transactor(req).getBankSlipServiceable();
+}
 
 app.get('/orders/:id', (req: Request, res: Response) => {
 	const id = req.params.id;
@@ -74,6 +77,14 @@ app.post('/sellers/:sellerId/orders/multi-credit-card/authorize', (req: Request,
 	const charge: BempaggoOrderRequest = req.body;
 	const sellerId = req.params.sellerId;
 	cardService(req).createCharge(Number(sellerId), charge)
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
+
+app.post('/sellers/:sellerId/orders/bankslip', (req: Request, res: Response) => {
+	const charge: BempaggoOrderRequest = req.body;
+	const sellerId = req.params.sellerId;
+	bankSlipService(req).createCharge(Number(sellerId), charge)
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
