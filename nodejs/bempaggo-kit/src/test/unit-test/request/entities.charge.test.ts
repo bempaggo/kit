@@ -1,13 +1,13 @@
 
 
-import { BempaggoAddressRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest, BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import { assertType, describe, expect, test } from "vitest";
 
 describe("Charge Entity", () => {
 	describe("Request", () => {
 
 		test("charge", async () => {
-
 
 			const charge: BempaggoOrderRequest = {
 				customer: {
@@ -33,13 +33,18 @@ describe("Charge Entity", () => {
 				orderReference: "order-1",
 				payments: [
 					{
-						amount: 1000,
+						paymentMethod: PaymentMethodTypes.CREDIT_CARD,
+						installments: 1,
 						cardToken: {
-							cvv: "123", token: "asas-car-toke"
+							cvv: "123",
+							token: "123",
 						},
-						installments: 1, 
-						splits: [{ amount: 1000, sellerId: 1 }]
-					}
+						amount: 1000,
+						splits: [{
+							amount: 1000,
+							sellerId: 1
+						}],
+					} as BempaggoCreditCardPaymentRequest
 				],
 				amount: 1000,
 				notificationUrl: "https://meusite.com.br/events",
@@ -50,11 +55,11 @@ describe("Charge Entity", () => {
 			assertType<BempaggoOrderRequest>(charge);
 			assertType<BempaggoAddressRequest | undefined>(charge.customer.address);
 			assertType<BempaggoPhoneRequest | undefined>(charge.customer.phone);
-			assertType<BempaggoTokenCardRequest>(charge.payments[0].cardToken!);
+			assertType<BempaggoTokenCardRequest>((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!);
 
 			expect(Object.keys(charge).length).toBe(5);
 			expect(charge.amount).toBe(1000);
-			expect(charge.payments[0].installments).toBe(1);
+			expect((charge.payments[0] as BempaggoCreditCardPaymentRequest).installments).toBe(1);
 			expect(charge.orderReference).toBe("order-1");
 			expect(charge.notificationUrl).toBe("https://meusite.com.br/events");
 
@@ -75,9 +80,9 @@ describe("Charge Entity", () => {
 			expect(charge.customer.phone?.countryCode).toBe(55);
 			expect(charge.customer.phone?.areaCode).toBe(48);
 			expect(charge.customer.phone?.number).toBe(999999999);
-			expect(Object.keys(charge.payments[0].cardToken!).length).toBe(2);
-			expect(charge.payments[0].cardToken!.cvv).toBe("123");
-			expect(charge.payments[0].cardToken!.token).toBe("asas-car-toke");
+			expect(Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length).toBe(2);
+			expect((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv).toBe("123");
+			expect((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token).toBe("123");
 			expect(charge.payments[0].splits[0].amount).toBe(1000);
 			expect(charge.payments[0].splits[0].sellerId).toBe(1);
 		});
