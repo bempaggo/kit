@@ -79,20 +79,20 @@ interface BempaggoMinimalCustomerResponse {
 	id: number;
 	document: string;
 }
-interface BempaggoBank {
+interface BempaggoBankResponse {
 	code: string;
 	agency: string;
 	account: string;
 }
 
-interface BempaggoBankSlipSource {
+interface BempaggoBankSlipSourceResponse {
 	kind: string;
 	name: string;
 }
 
 interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactionResponse {
 	paymentMethod: PaymentMethodTypes.BANK_SLIP;
-	bank: BempaggoBank;
+	bank: BempaggoBankResponse;
 	/**
 	 * expirationDate is the timestamp. This is the deadline receive the payment.
 	 */
@@ -103,7 +103,7 @@ interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactio
 	ourNumber: string;
 	customer: BempaggoCustomerResponse;
 	digitableLine: string;
-	source: BempaggoBankSlipSource;
+	source: BempaggoBankSlipSourceResponse;
 }
 interface BempaggoPixTransactionResponse extends BempaggoAbstractTransactionResponse {
 	paymentMethod: PaymentMethodTypes.PIX;
@@ -182,8 +182,8 @@ interface BempaggoSplitResponse {
 	amount: number
 }
 export {
-	BempaggoBank,
-	BempaggoBankSlipSource,
+	BempaggoBankResponse,
+	BempaggoBankSlipSourceResponse,
 	BempaggoPixTransactionResponse,
 	BempaggoBankSlipTransactionResponse,
 	BempaggoCreditCardTransactionResponse,
