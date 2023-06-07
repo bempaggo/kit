@@ -101,7 +101,7 @@ interface BempaggoCreditCardPaymentRequest extends BempaggoAbstractPaymentReques
 	paymentMethod: PaymentMethodTypes.CREDIT_CARD;
 	/**
 	 * min = 1
-	 * max = 12 or inline to card brand
+	 * max = 12 or according to card brand
 	 * 
 	 */
 	installments: number;
@@ -113,10 +113,10 @@ interface BempaggoPixPaymentRequest extends BempaggoAbstractPaymentRequest {
 	 * Desired expiration date is the timestamp. This is the deadline receive the payment.
 	 * Please check the billing transaction for the available payment deadline.
 	 *
-	 * Example: The value 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
+	 * Example: The desiredExpirationDate 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
 	 * 
 	 *  
-	 * Note: This value is ***NOT added*** on the current date.
+	 * Note: The desiredExpirationDate is ***NOT added*** on the current date.
 	 * 
 	 * @TIMESTEMP
 	 */ 
@@ -133,6 +133,10 @@ interface BempaggoSplitPaymentRequest {
 }
 export {
 	BempaggoSplitPaymentRequest,
+	BempaggoPixPaymentRequest,
+	BempaggoCreditCardPaymentRequest,
+	BempaggoBankSlipPaymentRequest,
+	BempaggoAbstractPaymentRequest,
 	BempaggoPaymentRequest,
 	BempaggoAddressRequest,
 	BempaggoCardExpirationRequest,

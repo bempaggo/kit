@@ -1,5 +1,6 @@
-import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "../entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "../entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
+import { PaymentMethodTypes } from "../entity/Enum";
 import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
 class Util {
@@ -17,8 +18,29 @@ class Util {
 }
 
 class Layers {
+	request: RequestsToBempaggo;
+	response: ResponsesFromBempaggo;
+	constructor() {
+		this.response = new ResponsesFromBempaggo();
+		this.request = new RequestsToBempaggo();
+	}
+}
 
-	static toOrder(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
+
+class RequestsToBempaggo {
+	toAddress(address: LayersAddress): BempaggoAddressRequest | undefined {
+		if (!address) return undefined;
+		return {
+			city: address.city,
+			zipCode: address.code,
+			street: address.address,
+			streetNumber: address.address,
+			lineTwo: address.address2,
+			neighborhood: address.country,
+			state: address.state,
+		}
+	}
+	toOrder(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
 		const phoneLayers = transactionGroup.customerPayload.phone;
 		const phone: BempaggoPhoneRequest = {
 			areaCode: phoneLayers.areaCode,
@@ -36,17 +58,7 @@ class Layers {
 					sellerId: split.sourceId
 				});
 			}
-			const request: BempaggoPaymentRequest = {
-				amount: payment.total.amount,
-				cardToken: {
-					token: payment.card.token,
-					cvv: payment.card.securityCode
-				}
-				,
-				installments: payment.installments,
-
-				splits: splits
-			};
+			const request: BempaggoCreditCardPaymentRequest = this.createCreditCard(splits, payment);
 			payments.push(request);
 		}
 		return {
@@ -64,72 +76,30 @@ class Layers {
 
 		};
 	}
-	static fromCharge(response: BempaggoChargeResponse): LayersTransaction {
-		const payments: LayersTransactionPaymentMethod[] = [];
-		for (const transaction of response.transactions) {
-			const payment: LayersTransactionPaymentMethod = {
-				payment_method: 'credit_card',
-				amount: transaction.value,
-				recipient_id: response.order.affiliate ? response.order.affiliate.id.toString() : "-",
-				credit_card: {
-					token: transaction.card?.token ? transaction.card.token : "",
-					card_id: transaction.card?.token ? transaction.card.token : "",
-					operation_type: 'auth_only',
-					installments: transaction.installments,
-					statement_descriptor: "?need setup in gateway?"
-				},
-				refundedValue: response.refundedAmount ? response.refundedAmount : 0,
-				status: transaction.status
-			};
-			payments.push(payment);
-
+	createCreditCard(splits: BempaggoSplitPaymentRequest[], payment:
+		{
+			total: {
+				amount: number
+			},
+			card: {
+				token: string
+				securityCode: string
+			},
+			installments: number
 		}
+	): BempaggoCreditCardPaymentRequest {
 		return {
-			customer_id: response.customer.document,
-			referenceId: response.id.toString(),
-			items: [],
-			payments: payments,
-			status: response.status,
+			paymentMethod: PaymentMethodTypes.CREDIT_CARD,
+			amount: payment.total.amount,
+			cardToken: {
+				token: payment.card.token,
+				cvv: payment.card.securityCode
+			},
+			installments: payment.installments,
+			splits: splits
 		};
 	}
-	static toCard(paymentMethod: LayersCustomerPaymentMethod): BempaggoCardRequest {
-		return {
-			cardNumber: paymentMethod.number,
-			holder: {
-				name: paymentMethod.name,
-				document: paymentMethod.document
-			},
-			expiration: {
-				month: paymentMethod.month,
-				year: paymentMethod.year
-			}
-		}
-	}
-	static toCardTransaction(card: {
-		token: string
-		securityCode: string
-	}): BempaggoTokenCardRequest {
-		return {
-			token: card.token,
-			cvv: card.securityCode,
-		}
-	}
-
-
-	static toAddress(address: LayersAddress): BempaggoAddressRequest | undefined {
-		if (!address) return undefined;
-		return {
-			city: address.city,
-			zipCode: address.code,
-			street: address.address,
-			streetNumber: address.address,
-			lineTwo: address.address2,
-			neighborhood: address.country,
-			state: address.state,
-		}
-	}
-
-	static toCustomer(customer: LayersCustomer): BempaggoCustomerRequest {
+	toCustomer(customer: LayersCustomer): BempaggoCustomerRequest {
 		const address: BempaggoAddressRequest | undefined = this.toAddress(customer.address);
 		const bempaggo: BempaggoCustomerRequest = {
 			name: customer.name,
@@ -145,7 +115,73 @@ class Layers {
 		}
 		return bempaggo;
 	}
-	static fromCards(card: BempaggoCardResponse): LayersCustomerPaymentMethod {
+
+}
+
+
+
+
+class ResponsesFromBempaggo {
+
+	fromCharge(response: BempaggoChargeResponse): LayersTransaction {
+		const payments: LayersTransactionPaymentMethod[] = [];
+		for (const transaction of response.transactions) {
+			if (PaymentMethodTypes.CREDIT_CARD == transaction.paymentMethod) {
+				const payment: LayersTransactionPaymentMethod = {
+					payment_method: 'credit_card',
+					amount: transaction.value,
+					recipient_id: response.order.affiliate ? response.order.affiliate.id.toString() : "-",
+					credit_card: {
+						token: transaction.card?.token ? transaction.card.token : "",
+						card_id: transaction.card?.token ? transaction.card.token : "",
+						operation_type: 'auth_only',
+						installments: transaction.installments,
+						statement_descriptor: "?need setup in gateway?"
+					},
+					refundedValue: response.refundedAmount ? response.refundedAmount : 0,
+					status: transaction.status
+				};
+				payments.push(payment);
+			} else if (PaymentMethodTypes.PIX == transaction.paymentMethod) {
+
+			}
+		}
+		return {
+			customer_id: response.customer.document,
+			referenceId: response.id.toString(),
+			items: [],
+			payments: payments,
+			status: response.status,
+		};
+	}
+	toCard(paymentMethod: LayersCustomerPaymentMethod): BempaggoCardRequest {
+		return {
+			cardNumber: paymentMethod.number,
+			holder: {
+				name: paymentMethod.name,
+				document: paymentMethod.document
+			},
+			expiration: {
+				month: paymentMethod.month,
+				year: paymentMethod.year
+			}
+		}
+	}
+	toCardTransaction(card: {
+		token: string
+		securityCode: string
+	}): BempaggoTokenCardRequest {
+		return {
+			token: card.token,
+			cvv: card.securityCode,
+		}
+	}
+
+
+
+
+
+	fromCards(card: BempaggoCardResponse): LayersCustomerPaymentMethod {
 		return {
 			title: card.holder.name,
 			name: card.holder.name,
@@ -155,7 +191,7 @@ class Layers {
 			brand: card.brand
 		};
 	}
-	static from(customer: BempaggoCustomerResponse): LayersCustomer {
+	from(customer: BempaggoCustomerResponse): LayersCustomer {
 		const layer: LayersCustomer = {
 			name: customer.name,
 			alias: customer.name,
@@ -182,7 +218,8 @@ class Layers {
 		};
 		return layer
 	}
+
 }
 
-export { Layers };
+export { Layers, RequestsToBempaggo, ResponsesFromBempaggo };
 

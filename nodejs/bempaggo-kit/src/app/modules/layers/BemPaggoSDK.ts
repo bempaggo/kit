@@ -6,6 +6,7 @@ import { BaseSdk } from './BaseSDK';
 import { Layers } from "./Layers";
 import { LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction } from './interfaces';
 import { LayersTransactionGroup } from './transactionGroup';
+import { BempaggoCardRequest, BempaggoCustomerRequest } from "../entity/BempaggoRequest";
 
 /**
  * @class BemPaggoSdk
@@ -34,8 +35,10 @@ import { LayersTransactionGroup } from './transactionGroup';
  */
 class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCustomerPaymentMethod, never> {
 	private bempaggo: Bempaggo | null = null;
+	private layers: Layers;
 	constructor(baseURL: string, auth: string) {
 		super(baseURL, 'bempaggo', auth);
+		this.layers = new Layers();
 		const factory: BempaggoFactory = new BempaggoFactory();
 		this.bempaggo = factory.createByUrl(baseURL, auth);
 	}
@@ -47,7 +50,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	async findCustomerByDocument(document: string): Promise<LayersCustomer> {
 		const customer: BempaggoCustomerResponse = await this.bempaggo!.findCustomerByDocument(document);
-		return Layers.from(customer);
+		return this.layers.response.from(customer);
 	}
 
 	/**
@@ -56,8 +59,9 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @return {Promise<BemPaggoCustomer>}
 	 */
 	async createCustomer(customer: LayersCustomer): Promise<LayersCustomer> {
-		const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.createCustomer(Layers.toCustomer(customer));
-		return Layers.from(bempaggoCustomer);
+		const customerRequest: BempaggoCustomerRequest = this.layers.request.toCustomer(customer);
+		const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.createCustomer(customerRequest);
+		return this.layers.response.from(bempaggoCustomer);
 	}
 
 	/**
@@ -66,9 +70,9 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @return {Promise<BemPaggoCustomer>}
 	 */
 	async updateCustomer(customer: LayersCustomer): Promise<LayersCustomer> {
-		const request = Layers.toCustomer(customer);
+		const request = this.layers.request.toCustomer(customer);
 		const bempaggoCustomer: BempaggoCustomerResponse = await this.bempaggo!.updateCustomer(request.document, request);
-		return Layers.from(bempaggoCustomer);
+		return this.layers.response.from(bempaggoCustomer);
 	}
 
 	/**
@@ -78,7 +82,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	async findCustomerPaymentMethod(customerId: string): Promise<LayersCustomerPaymentMethod> {
 		const bempaggoCustomer: BempaggoCardResponse = await this.bempaggo!.findCustomerPaymentMethod(customerId);
-		return Layers.fromCards(bempaggoCustomer);
+		return this.layers.response.fromCards(bempaggoCustomer);
 	}
 
 	/**
@@ -91,8 +95,9 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 		customerId: string,  // cpf/cnpj?
 		paymentMethod: LayersCustomerPaymentMethod
 	): Promise<LayersCustomerPaymentMethod> {
-		const bempaggoCard: BempaggoCardResponse = await this.bempaggo!.createCustomerPaymentMethod(customerId, Layers.toCard(paymentMethod));
-		return Layers.fromCards(bempaggoCard);
+		const cardRequest: BempaggoCardRequest = this.layers.response.toCard(paymentMethod);
+		const bempaggoCard: BempaggoCardResponse = await this.bempaggo!.createCustomerPaymentMethod(customerId, cardRequest);
+		return this.layers.response.fromCards(bempaggoCard);
 	}
 
 	/**
@@ -103,7 +108,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	async findTransactionsByReferenceId(referenceId: string): Promise<LayersTransaction> {
 		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
 		const response: BempaggoChargeResponse[] = await creditCardService.findChargesByOrderReferenceId(referenceId);
-		return Layers.fromCharge(response[0]);
+		return this.layers.response.fromCharge(response[0]);
 	}
 
 	/**
@@ -114,7 +119,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	async findChargeById(id: number): Promise<LayersTransaction> {
 		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
 		const response: BempaggoChargeResponse = await creditCardService.findChargeById(id);
-		return Layers.fromCharge(response);
+		return this.layers.response.fromCharge(response);
 	}
 
 
@@ -137,8 +142,8 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 		const sellerId: number = transactionGroup.sourceId as number;
 		if (this.isOnlyCreditCard(transactionGroup.paymentMethods)) {
 			const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-			const response: BempaggoChargeResponse = await creditCardService.createCharge(sellerId, Layers.toOrder(transactionGroup));
-			return Layers.fromCharge(response);
+			const response: BempaggoChargeResponse = await creditCardService.createCharge(sellerId, this.layers.request.toOrder(transactionGroup));
+			return this.layers.response.fromCharge(response);
 		}
 		throw new Error("not implemented yet");
 	}
@@ -164,7 +169,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	async chargeTransaction(transactionId: string): Promise<LayersTransaction> {
 		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
 		const response: BempaggoChargeResponse = await creditCardService.captureCharge(Number(transactionId));
-		return Layers.fromCharge(response);
+		return this.layers.response.fromCharge(response);
 	}
 
 	/**
@@ -175,7 +180,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	async refundTransaction(transactionId: string): Promise<LayersTransaction> {
 		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
 		const response: BempaggoChargeResponse = await creditCardService.refundCharge(Number(transactionId));
-		return Layers.fromCharge(response);
+		return this.layers.response.fromCharge(response);
 	}
 	/**
 	 * Tokenize the card data.
@@ -185,7 +190,8 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	async tokenizeCard(card: any, hash: string): Promise<any> {
 		const typedCard: LayersCustomerPaymentMethod = card as LayersCustomerPaymentMethod;
-		const cardResponse: BempaggoCardResponse | undefined = await this.bempaggo?.tokenizeCard(Layers.toCard(typedCard), hash)
+		const request: BempaggoCardRequest = this.layers.response.toCard(typedCard);
+		const cardResponse: BempaggoCardResponse | undefined = await this.bempaggo?.tokenizeCard(request, hash)
 		return cardResponse?.token;
 	}
 
