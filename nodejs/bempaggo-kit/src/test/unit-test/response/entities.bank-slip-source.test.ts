@@ -1,11 +1,11 @@
-import { BempaggoAffiliateMinimalResponse, BempaggoBank, BempaggoBankSlipSource } from "@/app/modules/entity/BempaggoResponse";
+import { BempaggoBankSlipSourceResponse } from "@/app/modules/entity/BempaggoResponse";
 import { assertType, describe, expect, test } from "vitest";
 
 describe("Slip", () => {
 
   describe("Response", () => {
     test("BempaggoBankSlipSource", async () => {
-      const slip: BempaggoBankSlipSource = {
+      const slip: BempaggoBankSlipSourceResponse = {
         kind: "BANK_SLIP",
         name: "Banco do Brasil",
       };
@@ -14,7 +14,7 @@ describe("Slip", () => {
       expect(slip).not.toBeUndefined();
       expect(slip).not.toBeNaN();
 
-      assertType<BempaggoBankSlipSource>(slip);
+      assertType<BempaggoBankSlipSourceResponse>(slip);
 
       expect(slip.kind).not.toBeNull();
       expect(slip.kind).not.toBeUndefined();

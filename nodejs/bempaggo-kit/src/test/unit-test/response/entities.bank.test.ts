@@ -1,11 +1,11 @@
-import { BempaggoAffiliateMinimalResponse, BempaggoBank } from "@/app/modules/entity/BempaggoResponse";
+import { BempaggoBankResponse } from "@/app/modules/entity/BempaggoResponse";
 import { assertType, describe, expect, test } from "vitest";
 
 describe("Bank entity", () => {
 
   describe("Response", () => {
     test("BempaggoBank", async () => {
-      const bank: BempaggoBank = {
+      const bank: BempaggoBankResponse = {
         code: "001",
         agency: "1234",
         account: "123456"
@@ -15,7 +15,7 @@ describe("Bank entity", () => {
       expect(bank).not.toBeUndefined();
       expect(bank).not.toBeNaN();
 
-      assertType<BempaggoBank>(bank);
+      assertType<BempaggoBankResponse>(bank);
 
       expect(bank.code).not.toBeNull();
       expect(bank.code).not.toBeUndefined();
