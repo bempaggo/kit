@@ -96,21 +96,21 @@ app.get('/charges/pix/qrcode/:orderRefence', (req: Request, res: Response) => {
 });
 
 
-app.post('/charges/:id/multi-credit-card/refund', (req: Request, res: Response) => {
+app.post('/charges/:id/credit-card/refund', (req: Request, res: Response) => {
 	const id = req.params.id;
 	cardService(req).refundCreditCardCharge(Number(id))
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
 
-app.post('/orders/:chargeId/multi-credit-card/capture', (req: Request, res: Response) => {
+app.post('/orders/:chargeId/credit-card/capture', (req: Request, res: Response) => {
 	const chargeId = req.params.chargeId;
 	cardService(req).captureCreditCardCharge(Number(chargeId))
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
 
-app.post('/sellers/:sellerId/orders/multi-credit-card/authorize', (req: Request, res: Response) => {
+app.post('/sellers/:sellerId/orders/credit-card/authorize', (req: Request, res: Response) => {
 	const charge: BempaggoOrderRequest = req.body;
 	const sellerId = req.params.sellerId;
 	cardService(req).createCreditCardCharge(Number(sellerId), charge)
