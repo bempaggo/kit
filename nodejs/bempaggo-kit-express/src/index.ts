@@ -118,7 +118,7 @@ app.post('/sellers/:sellerId/orders/credit-card/authorize', (req: Request, res: 
 		.catch((e) => errorHandler(e, res));
 });
 
-app.post('/sellers/:sellerId/orders/bankslip', (req: Request, res: Response) => {
+app.post('/sellers/:sellerId/orders/bank-slip', (req: Request, res: Response) => {
 	const charge: BempaggoOrderRequest = req.body;
 	const sellerId = req.params.sellerId;
 	bankSlipService(req).createBankSlipCharge(Number(sellerId), charge)
