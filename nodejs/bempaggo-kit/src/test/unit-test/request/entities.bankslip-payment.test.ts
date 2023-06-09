@@ -1,6 +1,6 @@
 import { BempaggoBankSlipPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, expect, test } from "vitest";
 
 describe("Bankslip Payment", () => {
   describe("Request", () => {
@@ -42,26 +42,17 @@ describe("Bankslip Payment", () => {
         }],
       };
 
-      expect(bankslipPayment).not.toBeNull();
-      expect(bankslipPayment).not.toBeUndefined();
-      expect(bankslipPayment).not.toBeNaN();
-
+      expect(PaymentMethodTypes.BOLETO).toBe(bankslipPayment.paymentMethod);
+      assert.equal(1000, bankslipPayment.amount);
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
-
-      expect(bankslipPayment.paymentMethod).toBe(PaymentMethodTypes.BOLETO);
+      assert.equal(PaymentMethodTypes.BOLETO, bankslipPayment.paymentMethod);
       expect(bankslipPayment.expirationDate).toBeGreaterThan(0);
-      expect(bankslipPayment.amount).toBeGreaterThan(0);
-      expect(bankslipPayment.splits).not.toBeNull();
-      expect(bankslipPayment.splits).not.toBeUndefined();
-      expect(bankslipPayment.splits).not.toBeNaN();
       expect(bankslipPayment.splits).toHaveLength(2);
-
       expect(bankslipPayment.splits[0].amount).toBeGreaterThan(0);
+      assert.equal(1000, bankslipPayment.splits[0].amount);
       expect(bankslipPayment.splits[0].sellerId).toBeGreaterThan(0);
-
       expect(bankslipPayment.splits[1].amount).toBeGreaterThan(0);
       expect(bankslipPayment.splits[1].sellerId).toBeGreaterThan(0);
-
     });
   });
 
