@@ -4,35 +4,36 @@ interface BempaggoTransactionServiceable {
 	getCreditCardServiceable(): CreditCardOperable;
 	getBankSlipServiceable(): BankSlipOperable;
 	getPixServiceable(): PixOperable;
-}
-interface CreditCardOperable {
-	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
-	findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]>;
-	createCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
-	captureCharge(chargeId: number): Promise<BempaggoChargeResponse>;
-	refundCharge(chargeId: number): Promise<BempaggoChargeResponse>;
-}
-interface BankSlipOperable {
-	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
-	findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]>;
-	createCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
-	captureCharge(chargeId: number): Promise<BempaggoChargeResponse>;
-	refundCharge(chargeId: number): Promise<BempaggoChargeResponse>;
-}
-interface PixOperable {
-	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
-	findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]>;
-	createCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
-	captureCharge(chargeId: number): Promise<BempaggoChargeResponse>;
-	refundCharge(chargeId: number): Promise<BempaggoChargeResponse>;
+	getChargeFinder(): ChargeFindable;
 }
 
+interface ChargeFindable {
+	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
+	findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]>;
+}
 
+interface CreditCardOperable extends ChargeFindable {
+	createCreditCardCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
+	captureCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse>;
+	refundCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse>;
+}
 
-export { 
+interface BankSlipOperable extends ChargeFindable {
+	createBankSlipCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
+	cancelBankSlip(chargeId: number): Promise<BempaggoChargeResponse>;
+}
+
+interface PixOperable extends ChargeFindable {
+	createPixCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
+	cancelPix(chargeId: number): Promise<BempaggoChargeResponse>;
+	createQuickResponseCodeUrlByOrderReference(orderReference: string): URL;
+}
+
+export {
+	ChargeFindable,
 	CreditCardOperable,
 	BankSlipOperable,
-	PixOperable, 
-	BempaggoTransactionServiceable 
+	PixOperable,
+	BempaggoTransactionServiceable
 };
 

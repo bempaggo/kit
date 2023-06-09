@@ -1,6 +1,6 @@
 import bempaggo from "bempaggo-kit";
 import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
-import { BankSlipOperable, BempaggoTransactionServiceable, CreditCardOperable } from "bempaggo-kit/lib/app/modules/Transaction";
+import { BankSlipOperable, BempaggoTransactionServiceable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
 import { BempaggoCustomerRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { Environments } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BempaggoError } from "bempaggo-kit/lib/app/modules/entity/Exceptions";
@@ -52,23 +52,60 @@ const bankSlipService = (req: Request): BankSlipOperable => {
 	return transactor(req).getBankSlipServiceable();
 }
 
-app.get('/orders/:id', (req: Request, res: Response) => {
-	const id = req.params.id;
-	cardService(req).findChargeById(Number(id))
+const pix = (req: Request): PixOperable => {
+	return transactor(req).getPixServiceable();
+}
+
+
+app.get('/orders/:chargeId', (req: Request, res: Response) => {
+	const chargeId = req.params.chargeId;
+	cardService(req).findChargeById(Number(chargeId))
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
+// TODO testar
+app.post('/charges/:id/bank-slip/cancel', (req: Request, res: Response) => {
+	const id = req.params.id;
+	bankSlipService(req).cancelBankSlip(Number(id))
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
+// TODO testar
+app.post('/charges/:id/pix/cancel', (req: Request, res: Response) => {
+	const id = req.params.id;
+	pix(req).cancelPix(Number(id))
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
+
+// TODO testar
+app.post('/sellers/:sellerId/orders/pix', (req: Request, res: Response) => {
+	const charge: BempaggoOrderRequest = req.body;
+	const sellerId = req.params.sellerId;
+	pix(req).createPixCharge(Number(sellerId), charge)
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
+// TODO testar
+app.get('/charges/pix/qrcode/:orderRefence', (req: Request, res: Response) => {
+	const orderRefence = req.params.orderRefence;
+	const url = pix(req).createQuickResponseCodeUrlByOrderReference(orderRefence);
+	fetch(url, { method: "GET" })
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
+
 
 app.post('/charges/:id/multi-credit-card/refund', (req: Request, res: Response) => {
 	const id = req.params.id;
-	cardService(req).refundCharge(Number(id))
+	cardService(req).refundCreditCardCharge(Number(id))
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
 
-app.post('/orders/:id/multi-credit-card/capture', (req: Request, res: Response) => {
-	const id = req.params.id;
-	cardService(req).captureCharge(Number(id))
+app.post('/orders/:chargeId/multi-credit-card/capture', (req: Request, res: Response) => {
+	const chargeId = req.params.chargeId;
+	cardService(req).captureCreditCardCharge(Number(chargeId))
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
@@ -76,7 +113,7 @@ app.post('/orders/:id/multi-credit-card/capture', (req: Request, res: Response) 
 app.post('/sellers/:sellerId/orders/multi-credit-card/authorize', (req: Request, res: Response) => {
 	const charge: BempaggoOrderRequest = req.body;
 	const sellerId = req.params.sellerId;
-	cardService(req).createCharge(Number(sellerId), charge)
+	cardService(req).createCreditCardCharge(Number(sellerId), charge)
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
@@ -84,7 +121,7 @@ app.post('/sellers/:sellerId/orders/multi-credit-card/authorize', (req: Request,
 app.post('/sellers/:sellerId/orders/bankslip', (req: Request, res: Response) => {
 	const charge: BempaggoOrderRequest = req.body;
 	const sellerId = req.params.sellerId;
-	bankSlipService(req).createCharge(Number(sellerId), charge)
+	bankSlipService(req).createBankSlipCharge(Number(sellerId), charge)
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
@@ -108,7 +145,7 @@ app.put('/customers/:document', async (req: Request, res: Response) => {
 		.catch((e) => errorHandler(e, res));
 });
 
-app.get('/customers/:document/cards', (req: Request, res: Response) => {
+app.get('/customers/:document/cards/best', (req: Request, res: Response) => {
 	gateway(req).findCustomerPaymentMethod(req.params.document)
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
@@ -126,11 +163,6 @@ app.post('/tokens', (req: Request, res: Response) => {
 		.catch((e) => errorHandler(e, res));
 });
 
-app.post('/addresses/:document', (req: Request, res: Response) => {
-	gateway(req).createAddress(req.params.document, req.body)
-		.then(value => send(value, res))
-		.catch((e) => errorHandler(e, res));
-});
 
 app.listen(3000, () => {
 	console.log('Server is running on port 3000');

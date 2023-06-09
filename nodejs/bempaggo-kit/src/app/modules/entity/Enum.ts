@@ -1,7 +1,7 @@
 enum PaymentMethodTypes {
 	CREDIT_CARD = "CREDIT_CARD",
 	PIX = "PIX",
-	BANK_SLIP = "BANK_SLIP",
+	BOLETO = "BOLETO" /* Boleto is a common payment method in Brazil.*/,
 	TRANSFER = "TRANSFER"
 }
 
@@ -78,9 +78,7 @@ enum CardBrandTypes {
 	CABAL = "CABAL",
 	CREDSYSTEM = "CREDSYSTEM",
 	BANESCARD = "BANESCARD",
-	CREDZ = "CREDZ",
-	OTHER = "OTHER"
-
+	CREDZ = "CREDZ"
 }
 
 export {

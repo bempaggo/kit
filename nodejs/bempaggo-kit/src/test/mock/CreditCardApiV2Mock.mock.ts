@@ -136,7 +136,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 
 		return chargeResponse;
 	}
-	async createCharge(sellerId:number,	order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> {
+	async createCreditCardCharge(sellerId:number,	order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> {
 		const transaction: BempaggoTransactionResponse = {
 			id: 1,
 			returnCode: "00",
@@ -200,7 +200,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 
 		return chargeResponse;
 	}
-	async captureCharge(chargeId: number): Promise<BempaggoChargeResponse> {
+	async captureCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse> {
 		const transaction: BempaggoTransactionResponse = {
 			id: 1,
 			returnCode: "00",
@@ -264,7 +264,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 
 		return chargeResponse;
 	}
-	async refundCharge(chargeId: number): Promise<BempaggoChargeResponse> {
+	async refundCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse> {
 		const transaction: BempaggoTransactionResponse = {
 			id: 1,
 			returnCode: "00",

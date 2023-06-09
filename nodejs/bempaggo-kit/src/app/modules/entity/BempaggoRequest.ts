@@ -80,7 +80,7 @@ interface BempaggoAbstractPaymentRequest {
 }
 
 interface BempaggoBankSlipPaymentRequest extends BempaggoAbstractPaymentRequest {
-	paymentMethod: PaymentMethodTypes.BANK_SLIP;
+	paymentMethod: PaymentMethodTypes.BOLETO;
 	/**
 	 * 
 	 * Desired expiration date is the timestamp. This is the deadline receive the payment.

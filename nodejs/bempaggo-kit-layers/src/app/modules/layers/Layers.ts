@@ -1,8 +1,12 @@
-import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "../entity/BempaggoRequest";
-import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
-import { PaymentMethodTypes } from "../entity/Enum";
+import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
+import { BankSlipOperable, BempaggoTransactionServiceable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
+import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
+import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { BempaggoError } from "bempaggo-kit/lib/app/modules/entity/Exceptions";
+import { BankSlipRenderingData } from "./BankSlipRenderinData";
 import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
+import { BempaggoBankSlipTransactionResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 class Util {
 
 	static getDateAsString(data: Date): string | undefined {
@@ -122,6 +126,35 @@ class RequestsToBempaggo {
 
 
 class ResponsesFromBempaggo {
+	toBankSlipRenderingData(bempaggoCharge: BempaggoChargeResponse): BankSlipRenderingData {
+		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
+			const transaction: BempaggoBankSlipTransactionResponse = bempaggoCharge.transactions[0];
+			return {
+				bank_account: transaction.bank.account,
+				bank_agency: transaction.bank.agency,
+				bank_code: transaction.bank.code,
+				community_legal_document: "?",//TODO let me know 
+				community_legal_name: "TODO let me know ",
+				creation_date: new Date(transaction.transactionDate).toDateString(),
+				customer_address_1: transaction.customer.address?.street ? transaction.customer.address?.street : "",
+				customer_address_2: transaction.customer.address?.lineTwo ? transaction.customer.address?.lineTwo : "",
+				customer_document: transaction.customer.document ? transaction.customer.document : "",
+				customer_name: transaction.customer.name,
+				digitable_line: transaction.digitableLine,
+				document_number: transaction.documentNumber,
+				expiration_date: new Date(transaction.expirationDate).toDateString(),
+				our_number: transaction.ourNumber,
+				payment_instructions: transaction.customer.address?.street ? transaction.customer.address?.street : "",
+				source: {
+					kind: "?????TODO let me know ",
+					name: " TODO let me know "
+				},
+				total_value: transaction.value.toString()
+			}
+		} else {
+			throw Error("Try in another way");
+		}
+	}
 
 	fromCharge(response: BempaggoChargeResponse): LayersTransaction {
 		const payments: LayersTransactionPaymentMethod[] = [];
@@ -176,10 +209,6 @@ class ResponsesFromBempaggo {
 			cvv: card.securityCode,
 		}
 	}
-
-
-
-
 
 	fromCards(card: BempaggoCardResponse): LayersCustomerPaymentMethod {
 		return {

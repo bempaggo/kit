@@ -6,7 +6,7 @@ describe("Enums", () => {
 	test("Paymen tMethod Types", async () => {
 		expect(PaymentMethodTypes.CREDIT_CARD).toBe("CREDIT_CARD");
 		expect(PaymentMethodTypes.PIX).toBe("PIX");
-		expect(PaymentMethodTypes.BANK_SLIP).toBe("BANK_SLIP");
+		expect(PaymentMethodTypes.BOLETO).toBe("BOLETO");
 		expect(PaymentMethodTypes.TRANSFER).toBe("TRANSFER");
 	});
 	test("Charge Status Types", async () => {
@@ -82,7 +82,6 @@ describe("Enums", () => {
 		expect(CardBrandTypes.BANESCARD).toBe("BANESCARD");
 		expect(CardBrandTypes.CREDSYSTEM).toBe("CREDSYSTEM");
 		expect(CardBrandTypes.CREDZ).toBe("CREDZ");
-		expect(CardBrandTypes.OTHER).toBe("OTHER");
 	});
 
 });

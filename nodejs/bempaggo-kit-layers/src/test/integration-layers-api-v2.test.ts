@@ -1,7 +1,7 @@
 
-import BemPaggoSdk from "bempaggo-kit/lib/app/modules/layers/BemPaggoSDK";
-import { LayersCustomerPaymentMethod, LayersTransaction } from "bempaggo-kit/lib/app/modules/layers/interfaces";
-import { LayersTransactionGroup } from "bempaggo-kit/lib/app/modules/layers/transactionGroup";
+import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
+import { LayersCustomerPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
+import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { describe, expect, test } from "vitest";
 
 const requestLayersStyle: LayersTransactionGroup = {
@@ -60,7 +60,7 @@ describe("How use it", () => {
 		test("create authorize", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			requestLayersStyle.paymentMethods[0].card.token = cardToken;
-			requestLayersStyle.code = new Date().getTime().toString();
+			requestLayersStyle.code = `order-${new Date().getTime().toString()}`;
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 			expect(response.referenceId).not.toBeNull();
 			expect(JSON.stringify(response.payments[0])).contains(cardToken);
@@ -74,6 +74,19 @@ describe("How use it", () => {
 			requestLayersStyle.code = new Date().getTime().toString();
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 			const responseCapture: LayersTransaction = await layers.chargeTransaction(response.referenceId);
+			expect(JSON.stringify(responseCapture.payments[0])).contains(cardToken);
+			expect(JSON.stringify(responseCapture.payments[0])).contains("APPROVED");
+			expect(JSON.stringify(responseCapture.payments[0])).contains("credit_card");
+			expect(JSON.stringify(responseCapture)).contains("PAY");
+		});
+		
+		test("create authorize and capture and refund", async () => {
+			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
+			requestLayersStyle.paymentMethods[0].card.token = cardToken;
+			requestLayersStyle.code = new Date().getTime().toString();
+			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
+			const responseCapture: LayersTransaction = await layers.chargeTransaction(response.referenceId);
+			const refund = await layers.refundTransaction(response.referenceId)
 			expect(JSON.stringify(responseCapture.payments[0])).contains(cardToken);
 			expect(JSON.stringify(responseCapture.payments[0])).contains("APPROVED");
 			expect(JSON.stringify(responseCapture.payments[0])).contains("credit_card");

@@ -85,25 +85,28 @@ interface BempaggoBankResponse {
 	account: string;
 }
 
-interface BempaggoBankSlipSourceResponse {
-	kind: string;
-	name: string;
-}
 
 interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactionResponse {
-	paymentMethod: PaymentMethodTypes.BANK_SLIP;
+	paymentMethod: PaymentMethodTypes.BOLETO;
 	bank: BempaggoBankResponse;
 	/**
 	 * expirationDate is the timestamp. This is the deadline receive the payment.
+	 * 	 
+	 * Example: The value 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
+	 * 
+	 *  
+	 * Note: This value is ***NOT added*** on the current date.
+	 * 
+	 * @TIMESTEMP
 	 */
 	expirationDate: number;
 	paymentInstructions: string;
 	communityLegalName: string;
 	communityLegalDocument: string;
 	ourNumber: string;
+	documentNumber: string;
 	customer: BempaggoCustomerResponse;
 	digitableLine: string;
-	source: BempaggoBankSlipSourceResponse;
 }
 interface BempaggoPixTransactionResponse extends BempaggoAbstractTransactionResponse {
 	paymentMethod: PaymentMethodTypes.PIX;
@@ -143,7 +146,7 @@ interface BempaggoAbstractTransactionResponse {
 	* This value is generally used to reconcile the transaction, or to trace
 	*/
 	transactionReference?: string;
-	
+
 	returnCode: string;
 	value: number;
 	paidValue?: number;
@@ -183,7 +186,6 @@ interface BempaggoSplitResponse {
 }
 export {
 	BempaggoBankResponse,
-	BempaggoBankSlipSourceResponse,
 	BempaggoPixTransactionResponse,
 	BempaggoBankSlipTransactionResponse,
 	BempaggoCreditCardTransactionResponse,

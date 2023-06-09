@@ -1,5 +1,5 @@
 import { BempaggoApiV2 } from "./BempaggoApiV2";
-import { BempaggoTransactionServiceable, CreditCardOperable } from "./Transaction";
+import { BempaggoTransactionServiceable } from "./Transaction";
 import {
 	BempaggoAddressRequest,
 	BempaggoCardRequest,
@@ -41,8 +41,6 @@ interface Bempaggo {
 	findCustomerByDocument(document: string): Promise<BempaggoCustomerResponse>;
 	createCustomer(customer: BempaggoCustomerRequest): Promise<BempaggoCustomerResponse>;
 	updateCustomer(document: string, customer: BempaggoCustomerRequest): Promise<BempaggoCustomerResponse>;
-	createAddress(document: string, address: BempaggoAddressRequest): Promise<void>;
-	updateAddress(document: string, address: BempaggoAddressRequest): Promise<void>;
 	findCustomerPaymentMethod(document: string): Promise<BempaggoCardResponse>;
 	createCustomerPaymentMethod(document: string, paymentMethod: BempaggoCardRequest): Promise<BempaggoCardResponse>;
 	tokenizeCard(card: BempaggoCardRequest, hash: string): Promise<BempaggoCardResponse>;

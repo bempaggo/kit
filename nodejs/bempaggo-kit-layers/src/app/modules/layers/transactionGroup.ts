@@ -26,7 +26,7 @@ export interface LayersTransactionGroup {
 
 		//   gateway: string
 
-		method: 'credit_card' //| 'bank_slip' | 'pix' | 'multi_card'
+		method: 'credit_card' | 'bank_slip' | 'pix' //| 'multi_card'
 
 		// Strategy for this payment
 		//  strategy: 'installment' //| 'recurrence'

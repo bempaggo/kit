@@ -1,4 +1,4 @@
-import { ChargeStatusTypes, TransactionStatusTypes } from "../entity/Enum";
+import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 
 export interface LayersTransaction {
 	items: LayersTransactionItem[];

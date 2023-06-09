@@ -6,7 +6,7 @@ describe("Abstract Payment", () => {
   describe("Request", () => {
     test("Valid request", async () => {
       const abstractPayment: BempaggoAbstractPaymentRequest = {
-        paymentMethod: PaymentMethodTypes.BANK_SLIP,
+        paymentMethod: PaymentMethodTypes.BOLETO,
         amount: 1000,
         splits: [],
       };
@@ -17,7 +17,7 @@ describe("Abstract Payment", () => {
 
       assertType<BempaggoAbstractPaymentRequest>(abstractPayment);
 
-      expect(abstractPayment.paymentMethod).toBe(PaymentMethodTypes.BANK_SLIP);
+      expect(abstractPayment.paymentMethod).toBe(PaymentMethodTypes.BOLETO);
       expect(abstractPayment.amount).toBeGreaterThan(0);
       expect(abstractPayment.splits).not.toBeNull();
       expect(abstractPayment.splits).not.toBeUndefined();
@@ -27,7 +27,7 @@ describe("Abstract Payment", () => {
     });
     test("Valid request with splits", async () => {
       const abstractPayment: BempaggoAbstractPaymentRequest = {
-        paymentMethod: PaymentMethodTypes.BANK_SLIP,
+        paymentMethod: PaymentMethodTypes.BOLETO,
         amount: 1000,
         splits: [{
           amount: 1000,
@@ -45,7 +45,7 @@ describe("Abstract Payment", () => {
 
       assertType<BempaggoAbstractPaymentRequest>(abstractPayment);
 
-      expect(abstractPayment.paymentMethod).toBe(PaymentMethodTypes.BANK_SLIP);
+      expect(abstractPayment.paymentMethod).toBe(PaymentMethodTypes.BOLETO);
       expect(abstractPayment.amount).toBeGreaterThan(0);
       expect(abstractPayment.splits).not.toBeNull();
       expect(abstractPayment.splits).not.toBeUndefined();

@@ -8,8 +8,7 @@ import * as BempaggoRequestEntity from "./app/modules/entity/BempaggoRequest";
 import * as BempaggoResponseEntity from "./app/modules/entity/BempaggoResponse";
 import * as EnumEntity from "./app/modules/entity/Enum";
 import * as ExceptionsEntity from "./app/modules/entity/Exceptions";
-import * as BemPaggoSdk from "./app/modules/layers/BemPaggoSDK";
-export default { BempaggoModule, BempaggoApiV2Module, BempaggoTransactionApiV2Module, CreditCardApiV2Module, BempaggoRequestEntity, BempaggoResponseEntity, EnumEntity, ExceptionsEntity, BempaggoInterfaces ,BemPaggoSdk};
+export default { BempaggoModule, BempaggoApiV2Module, BempaggoTransactionApiV2Module, CreditCardApiV2Module, BempaggoRequestEntity, BempaggoResponseEntity, EnumEntity, ExceptionsEntity, BempaggoInterfaces };
 
 
 

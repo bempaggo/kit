@@ -1,37 +1,29 @@
+import { BempaggoChargeFinderV2 } from "./BempaggoChargeFinder";
 import { BempaggoHttp } from "./BempaggoHttp";
 import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
-import { assertNotError, getByUrlResponse } from "./entity/Exceptions";
+import { getByUrlResponse } from "./entity/Exceptions";
 import { PixOperable } from "./Transaction";
 
-class PixApiV2 implements PixOperable {
-	constructor(private http: BempaggoHttp) {
-	}
-	async findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]> {
-		const response: Response = await this.http.httpGetBy(`/v2/charges`, [{ name: "orderReference", value: orderReferenceId }]);
-		await assertNotError(response);
-		return await response.json();
+class PixApiV2 extends BempaggoChargeFinderV2 implements PixOperable {
+	constructor(http: BempaggoHttp) {
+		super(http);
 	}
 
-	async findChargeById(chargeId: number): Promise<BempaggoChargeResponse> {
-		const response: Response = await this.http.httpGet(`/v2/charges/${chargeId}/credit/card`);
-		await assertNotError(response);
-		return await response.json();
+	async createPixCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> { //OK
+		const response = await this.http.httpPost(`/v2/sellers/${sellerId}/orders/pix`, order);
+		return await getByUrlResponse(response, this.http); // /v2/charges/${chargeId} //OK
 	}
 
-	async createCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> {
-		const response = await this.http.httpPost(`/v2/sellers/${sellerId}/orders/multi-credit-card/authorize`, order);
-		return await getByUrlResponse(response, this.http);
+	async cancelPix(chargeId: number): Promise<BempaggoChargeResponse> { // OK
+		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/pix/cancel`, {});
+		return await getByUrlResponse(response, this.http);// /v2/charges/${chargeId} //OK
 	}
 
-	async captureCharge(chargeId: number): Promise<BempaggoChargeResponse> {
-		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/multi-credit-card/capture`, {});
-		return await getByUrlResponse(response, this.http);;
-	}
-
-	async refundCharge(chargeId: number): Promise<BempaggoChargeResponse> {
-		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit/card/refund`, { reason: "OTHERS" });
-		return await getByUrlResponse(response, this.http);
+	createQuickResponseCodeUrlByOrderReference(orderReference: string): URL {
+		const url = new URL(`${this.http.getUrl()}/v2/charges/qrcode`);
+		url.searchParams.set("orderReference", orderReference);
+		return url;
 	}
 }
 

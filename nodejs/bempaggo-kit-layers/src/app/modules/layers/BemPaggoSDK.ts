@@ -1,12 +1,13 @@
-import { Bempaggo, BempaggoFactory } from "../Bempaggo";
-import { CreditCardOperable } from "../Transaction";
-import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "../entity/BempaggoResponse";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
 import { BaseSdk } from './BaseSDK';
 import { Layers } from "./Layers";
 import { LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction } from './interfaces';
 import { LayersTransactionGroup } from './transactionGroup';
-import { BempaggoCardRequest, BempaggoCustomerRequest } from "../entity/BempaggoRequest";
+import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
+import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
+import { BankSlipOperable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
+import { CardBrandTypes, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 
 /**
  * @class BemPaggoSdk
@@ -102,7 +103,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 
 	/**
 	 * Find a transaction by a reference id we send to bem paggo on creation
-	 * @param {string} referenceId Id sent by our backend on creation // orderReference
+	 * @param {string} referenceId Id sent by our backend on creation // TODO is orderReference
 	 * @returns { Promise<LayersTransaction> }
 	 */
 	async findTransactionsByReferenceId(referenceId: string): Promise<LayersTransaction> {
@@ -125,11 +126,17 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 
 	/**
 	 * Gets html for customized bank slip of a transaction
-	 * @param {string} transactionId
+	 * @param {string} transactionId //TODO is the charge id?
 	 * @returns { Promise<BankSlipRenderingData> }
 	 */
 	async getBankSlipRenderingData(transactionId: string): Promise<BankSlipRenderingData> {
-		throw new Error(`not implemented ${transactionId}`)
+		const bankSlip: BankSlipOperable = this.bempaggo!.getChargeService().getBankSlipServiceable();
+		const bempaggoCharge: BempaggoChargeResponse = await bankSlip.findChargeById(Number(transactionId));
+		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
+			return this.layers.response.toBankSlipRenderingData(bempaggoCharge);
+		} else {
+			throw new Error("paymentMethod <> PaymentMethodTypes.BANK_SLIP");
+		}
 	}
 
 
@@ -139,19 +146,35 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @returns { LayersTransaction }
 	 */
 	async createTransaction(transactionGroup: LayersTransactionGroup): Promise<LayersTransaction> {
+
 		const sellerId: number = transactionGroup.sourceId as number;
-		if (this.isOnlyCreditCard(transactionGroup.paymentMethods)) {
-			const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-			const response: BempaggoChargeResponse = await creditCardService.createCharge(sellerId, this.layers.request.toOrder(transactionGroup));
-			return this.layers.response.fromCharge(response);
+
+		let response: BempaggoChargeResponse;
+
+		if (this.isOnly("credit_card", transactionGroup.paymentMethods)) {
+			const method: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+			response = await method.createCreditCardCharge(sellerId, this.layers.request.toOrder(transactionGroup));
 		}
-		throw new Error("not implemented yet");
+
+		else if (this.isOnly("bank_slip", transactionGroup.paymentMethods)) {
+			const method: BankSlipOperable = this.bempaggo!.getChargeService().getBankSlipServiceable();
+			response = await method.createBankSlipCharge(sellerId, this.layers.request.toOrder(transactionGroup));
+		}
+
+		else if (this.isOnly("pix", transactionGroup.paymentMethods)) {
+			const method: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
+			response = await method.createPixCharge(sellerId, this.layers.request.toOrder(transactionGroup));
+		}
+
+		else {
+			throw Error("Try in another way");
+		}
+
+		return this.layers.response.fromCharge(response);
 	}
-	isOnlyCreditCard(paymentMethods: { method: "credit_card" }[]): boolean {
-		if (paymentMethods.filter(menthod => menthod.method != "credit_card").length > 0) {
-			throw new Error('Only credit card implemented')
-		}
-		return true;
+
+	private isOnly(method: string, paymentMethods: { method: "credit_card" | "pix" | "bank_slip" }[]): boolean {
+		return paymentMethods.filter(menthod => menthod.method != method).length == 0;
 	}
 
 	/**
@@ -168,7 +191,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	async chargeTransaction(transactionId: string): Promise<LayersTransaction> {
 		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-		const response: BempaggoChargeResponse = await creditCardService.captureCharge(Number(transactionId));
+		const response: BempaggoChargeResponse = await creditCardService.captureCreditCardCharge(Number(transactionId));
 		return this.layers.response.fromCharge(response);
 	}
 
@@ -179,7 +202,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	async refundTransaction(transactionId: string): Promise<LayersTransaction> {
 		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-		const response: BempaggoChargeResponse = await creditCardService.refundCharge(Number(transactionId));
+		const response: BempaggoChargeResponse = await creditCardService.refundCreditCardCharge(Number(transactionId));
 		return this.layers.response.fromCharge(response);
 	}
 	/**
@@ -210,7 +233,9 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @returns
 	 */
 	getExternalQrCode(transaction: LayersTransaction): string {
-		throw new Error('not implemented')
+		const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
+		return pix.createQuickResponseCodeUrlByOrderReference(transaction.referenceId).toString()
+
 	}
 
 	/**
@@ -220,7 +245,15 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @returns { 'bank_slip' | 'pix' | 'credit_card'}
 	 */
 	getExternalPaymentType(transaction: LayersTransaction): 'bank_slip' | 'pix' | 'credit_card' | undefined {
-		throw new Error('not implemented')
+		if (transaction.payments[0].payment_method == 'boleto') {
+			return 'bank_slip';
+		} else if (transaction.payments[0].payment_method == 'pix') {
+			return "pix"
+		} else if (transaction.payments[0].payment_method == 'credit_card') {
+			return "credit_card";
+		} else {
+			throw new Error(transaction.payments[0]);
+		}
 	}
 
 	/**
@@ -228,7 +261,15 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @param {LayersTransaction} transaction
 	 */
 	async cancelBankSlipTransaction(transaction: LayersTransaction): Promise<void> {
-		throw new Error('not implemented')
+		const bankSlip: BankSlipOperable = this.bempaggo!.getChargeService().getBankSlipServiceable();
+		const bempaggoCharge: BempaggoChargeResponse[] = await bankSlip.findChargesByOrderReferenceId(transaction.referenceId);
+		if (bempaggoCharge.length != 1) {
+			throw new Error("charges.length <> 1");
+		} else if (bempaggoCharge[0].transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
+			await bankSlip.cancelBankSlip(bempaggoCharge[0].id);
+		} else {
+			throw new Error("paymentMethod <> PaymentMethodTypes.BANK_SLIP");
+		}
 	}
 
 	/**
@@ -236,25 +277,18 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * We need this static attribute, to map BemPaggo's name to our names
 	 *  */
 	static ExternalPaymentType = {
-		//    boleto: 'bank_slip',
-		//    pix: 'pix',
-		credit_card: 'credit_card',
-	} as const
+		boleto: PaymentMethodTypes.BOLETO,
+		pix: PaymentMethodTypes.PIX,
+		credit_card: PaymentMethodTypes.CREDIT_CARD,
+	} as const;
 
 	/**
 	 * Another example
 	 * We need to know all available card brands on BemPaggo
 	 */
-	static availableCardBrands = [
-		'mastercard',
-		'visa',
-		'elo',
-		'american-express',
-		'diners-club',
-		'jcb',
-		'hipercard',
-	] as const
+	static availableCardBrands = [Object.values(CardBrandTypes)] as const
 }
+
 
 export type BemPaggoCardBrands = typeof BemPaggoSdk.availableCardBrands[number]
 
