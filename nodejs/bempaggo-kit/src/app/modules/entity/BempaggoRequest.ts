@@ -120,7 +120,8 @@ interface BempaggoPixPaymentRequest extends BempaggoAbstractPaymentRequest {
 	 * 
 	 * @TIMESTEMP
 	 */ 
-	desiredExpirationDate:number
+	desiredExpirationDate:number,
+	description?:string;
 }
 
 interface BempaggoSplitPaymentRequest {

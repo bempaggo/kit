@@ -135,7 +135,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
 			return this.layers.response.toBankSlipRenderingData(bempaggoCharge);
 		} else {
-			throw new Error("paymentMethod <> PaymentMethodTypes.BANK_SLIP");
+			throw new Error("paymentMethod <> PaymentMethodTypes.BOLETO");
 		}
 	}
 
@@ -268,7 +268,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 		} else if (bempaggoCharge[0].transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
 			await bankSlip.cancelBankSlip(bempaggoCharge[0].id);
 		} else {
-			throw new Error("paymentMethod <> PaymentMethodTypes.BANK_SLIP");
+			throw new Error("paymentMethod <> PaymentMethodTypes.BOLETO");
 		}
 	}
 
@@ -286,7 +286,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * Another example
 	 * We need to know all available card brands on BemPaggo
 	 */
-	static availableCardBrands = [Object.values(CardBrandTypes)] as const
+	static availableCardBrands = [...Object.values(CardBrandTypes)] as const
 }
 
 

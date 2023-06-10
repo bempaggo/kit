@@ -1,12 +1,16 @@
-import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
-import { BankSlipOperable, BempaggoTransactionServiceable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
 import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
-import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { BempaggoError } from "bempaggo-kit/lib/app/modules/entity/Exceptions";
+import { BempaggoBankSlipTransactionResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
+import { PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
 import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
-import { BempaggoBankSlipTransactionResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
+
+
+// TODO esta classe eh uma desgraca, os objetos de (request e response) parecem ser a mesma coisa, mas nao sao.
+// Tem transactionGroup que parcece ser os objetos de request. sao?? 
+// Ai tem essas classes da interface.ts que parecem ser os responses, mas falta muitos campos.  
+
+
 class Util {
 
 	static getDateAsString(data: Date): string | undefined {
@@ -171,8 +175,9 @@ class ResponsesFromBempaggo {
 						installments: transaction.installments,
 						statement_descriptor: "?need setup in gateway?"
 					},
-					refundedValue: response.refundedAmount ? response.refundedAmount : 0,
-					status: transaction.status
+					refunded_value: response.refundedAmount ? response.refundedAmount : 0,
+					status: transaction.status,
+					reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
 				};
 				payments.push(payment);
 			} else if (PaymentMethodTypes.PIX == transaction.paymentMethod) {

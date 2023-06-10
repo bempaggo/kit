@@ -19,11 +19,10 @@ export type LayersTransactionPaymentMethod =
 	| LayersPixPaymentMethod
 	| LayersBankSlipPaymentMethod
 
-interface LayersCreditCardPaymentMethod {
+export interface LayersCreditCardPaymentMethod {
 	payment_method: 'credit_card';
 	amount: number;
 	recipient_id: string;
-	
 	credit_card: {
 		card_id: string;
 		token: string;// --Bempaggo adding this field; "PAY"
@@ -31,8 +30,10 @@ interface LayersCreditCardPaymentMethod {
 		installments: number;
 		statement_descriptor: string;
 	};
-	refundedValue: number; // --Bempaggo adding this field; in cents such as 1000 = R$ 10,00
+	refunded_value: number; // --Bempaggo adding this field; in cents such as 1000 = R$ 10,00
 	status?: TransactionStatusTypes; // --Bempaggo adding this field; "PAY"
+	reference_id: string; // --Bempaggo adding this field
+	
 }
 
 interface LayersPixPaymentMethod {
@@ -42,6 +43,8 @@ interface LayersPixPaymentMethod {
 	pix: {
 		expires_in: string
 	}
+	reference_id: string; // --Bempaggo adding this field
+}
 }
 
 interface LayersBankSlipPaymentMethod {
