@@ -42,10 +42,10 @@ class RequestsToBempaggo {
 			city: address.city,
 			zipCode: address.code,
 			street: address.address,
-			streetNumber: address.address,
+			streetNumber: address.number,
 			lineTwo: address.address2,
-			neighborhood: address.country,
-			state: address.state,
+			neighborhood: address.district,
+			state: address.state
 		}
 	}
 	toOrder(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
@@ -59,14 +59,7 @@ class RequestsToBempaggo {
 		const birthday: string | undefined = Util.getDateAsString(transactionGroup.customerPayload.birth);
 		const payments: BempaggoPaymentRequest[] = []
 		for (const payment of transactionGroup.paymentMethods) {
-			const splits: BempaggoSplitPaymentRequest[] = [];
-			for (const split of payment.recipients) {
-				splits.push({
-					amount: split.total.amount,
-					sellerId: split.sourceId
-				});
-			}
-			const request: BempaggoCreditCardPaymentRequest = this.createCreditCard(splits, payment);
+			const request: BempaggoCreditCardPaymentRequest = this.createCreditCard(payment);
 			payments.push(request);
 		}
 		return {
@@ -84,7 +77,7 @@ class RequestsToBempaggo {
 
 		};
 	}
-	createCreditCard(splits: BempaggoSplitPaymentRequest[], payment:
+	createCreditCard(payment:
 		{
 			total: {
 				amount: number
@@ -94,8 +87,24 @@ class RequestsToBempaggo {
 				securityCode: string
 			},
 			installments: number
+			recipients: [
+				{
+					sourceId: any
+					total: {
+						amount: number
+						currency: 'BRL'
+					}
+				}
+			]
 		}
 	): BempaggoCreditCardPaymentRequest {
+		const splits: BempaggoSplitPaymentRequest[] = [];
+		for (const split of payment.recipients) {
+			splits.push({
+				amount: split.total.amount,
+				sellerId: split.sourceId
+			});
+		}
 		return {
 			paymentMethod: PaymentMethodTypes.CREDIT_CARD,
 			amount: payment.total.amount,
@@ -154,6 +163,7 @@ class ResponsesFromBempaggo {
 					name: " TODO let me know "
 				},
 				total_value: transaction.value.toString()
+
 			}
 		} else {
 			throw Error("Try in another way");
@@ -190,6 +200,8 @@ class ResponsesFromBempaggo {
 			items: [],
 			payments: payments,
 			status: response.status,
+			refunded_amount: response.refundedAmount,
+			amount: response.value
 		};
 	}
 	toCard(paymentMethod: LayersCustomerPaymentMethod): BempaggoCardRequest {
@@ -221,8 +233,11 @@ class ResponsesFromBempaggo {
 			name: card.holder.name,
 			month: card.expiration.month,
 			year: card.expiration.year,
-			number: "",
-			brand: card.brand
+			number: `${card.bin}...${card.lastFour}`,
+			brand: card.brand,
+			document: card.holder.document,
+			token: card.token
+
 		};
 	}
 	from(customer: BempaggoCustomerResponse): LayersCustomer {

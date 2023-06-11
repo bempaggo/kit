@@ -1,13 +1,13 @@
+import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
+import { BankSlipOperable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
+import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
+import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
+import { CardBrandTypes, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
 import { BaseSdk } from './BaseSDK';
 import { Layers } from "./Layers";
 import { LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction } from './interfaces';
 import { LayersTransactionGroup } from './transactionGroup';
-import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
-import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
-import { BankSlipOperable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
-import { CardBrandTypes, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 
 /**
  * @class BemPaggoSdk
@@ -78,7 +78,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 
 	/**
 	 * Gets a customer's payment methods
-	 * @param customerId // TODO cpf/cnpj? 06219385993 ok 
+	 * @param customerId // TODO cpf/cnpj? 06219385993 ok
 	 * @returns BemPaggoPaymentMethod
 	 */
 	async findCustomerPaymentMethod(customerId: string): Promise<LayersCustomerPaymentMethod> {
