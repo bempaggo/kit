@@ -16,7 +16,7 @@ const card: LayersCustomerPaymentMethod = {
 	title: "discarded",
 	document: "06219385993",
 }
-describe.concurrent.only("How use it extra", () => {
+describe.only("How use it extra", () => {
 	describe("credit card extra", async () => {
 		test("create customer", async () => {
 			const carlos: LayersCustomer = {
@@ -61,8 +61,9 @@ describe.concurrent.only("How use it extra", () => {
 			assert.equal("SC", customer.address.state);
 		});
 
-		test("create customer and find by document", async () => {
+		test.concurrent("create customer and find by document", async () => {
 			const carlos: LayersCustomer = {
+
 				document: "06219385993",
 				address: {
 					address: "Rua Laurindo Januario",
@@ -226,4 +227,4 @@ describe.concurrent.only("How use it extra", () => {
 			assert.equal(2028, cardResponse.year);
 		});
 	});
-});
+},{});

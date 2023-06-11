@@ -185,7 +185,7 @@ class ResponsesFromBempaggo {
 						installments: transaction.installments,
 						statement_descriptor: "?need setup in gateway?"
 					},
-					refunded_value: response.refundedAmount ? response.refundedAmount : 0,
+					refunded_value: transaction.refundValue ? transaction.refundValue : 0,
 					status: transaction.status,
 					reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
 				};
