@@ -91,12 +91,12 @@ interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactio
 	bank: BempaggoBankResponse;
 	/**
 	 * expirationDate is the timestamp. This is the deadline receive the payment.
-	 * 	 
+	 *
 	 * Example: The value 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
-	 * 
-	 *  
+	 *
+	 *
 	 * Note: This value is ***NOT added*** on the current date.
-	 * 
+	 *
 	 * @TIMESTEMP
 	 */
 	expirationDate: number;
@@ -185,22 +185,7 @@ interface BempaggoSplitResponse {
 	amount: number
 }
 export {
-	BempaggoBankResponse,
-	BempaggoPixTransactionResponse,
-	BempaggoBankSlipTransactionResponse,
-	BempaggoCreditCardTransactionResponse,
-	BempaggoTransactionResponse,
-	BempaggoSplitResponse,
-	BempaggoAddressResponse,
-	BempaggoChargeResponse,
-	BempaggoCustomerResponse,
-	BempaggoPhoneResponse,
-	BempaggoCardHolderResponse,
-	BempaggoCardExpirationResponse,
-	BempaggoCardResponse,
-	BempaggoAffiliateMinimalResponse,
-	BempaggoEstablishmentMinimalResponse,
-	BempaggoMinimalCustomerResponse
-
+	BempaggoAddressResponse, BempaggoAffiliateMinimalResponse, BempaggoBankResponse, BempaggoBankSlipTransactionResponse, BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoCustomerResponse, BempaggoEstablishmentMinimalResponse,
+	BempaggoMinimalCustomerResponse, BempaggoPhoneResponse, BempaggoPixTransactionResponse, BempaggoSplitResponse, BempaggoTransactionResponse
 };
 
