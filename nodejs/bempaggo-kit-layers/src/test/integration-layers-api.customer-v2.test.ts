@@ -1,12 +1,9 @@
 
-import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 import { LayersCustomer, LayersCustomerPaymentMethod } from "@/app/modules/layers/interfaces";
 import { CardBrandTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, test } from "vitest";
+import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY0MzUxMzUsImV4cCI6MTY4NjQ5NTEzNX0.cn4_dlAOq2pFCcwfN8MP6DA0N2BNi1RcHWzR3iv8c5ZFC0ROk7B8Clrww62mRSBNmYuGOAxZkRamrNtMmnTDmw"; // needs to generate a token in portal
-const url = "http://localhost:5000/api"
-const layers: BemPaggoSdk = new BemPaggoSdk(url, token);
 const card: LayersCustomerPaymentMethod = {
 	brand: CardBrandTypes.AMEX,
 	year: 2028,
@@ -16,7 +13,7 @@ const card: LayersCustomerPaymentMethod = {
 	title: "discarded",
 	document: "06219385993",
 }
-describe.only("How use it extra", () => {
+describe("How use it extra", () => {
 	describe("credit card extra", async () => {
 		test("create customer", async () => {
 			const carlos: LayersCustomer = {

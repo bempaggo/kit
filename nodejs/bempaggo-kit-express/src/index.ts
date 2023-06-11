@@ -89,7 +89,7 @@ app.post('/sellers/:sellerId/orders/pix', (req: Request, res: Response) => {
 // TODO testar
 app.get('/charges/pix/qrcode/:orderRefence', (req: Request, res: Response) => {
 	const orderRefence = req.params.orderRefence;
-	const url = pix(req).createQuickResponseCodeUrlByOrderReference(orderRefence);
+	const url = pix(req).createQuickResponseCodeUrlByChargeId(Number(orderRefence));
 	fetch(url, { method: "GET" })
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));

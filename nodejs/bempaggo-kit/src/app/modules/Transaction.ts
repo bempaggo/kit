@@ -26,14 +26,11 @@ interface BankSlipOperable extends ChargeFindable {
 interface PixOperable extends ChargeFindable {
 	createPixCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
 	cancelPix(chargeId: number): Promise<BempaggoChargeResponse>;
-	createQuickResponseCodeUrlByOrderReference(orderReference: string): URL;
+	createQuickResponseCodeUrlByChargeId(chargeId: number): URL;
 }
 
 export {
-	ChargeFindable,
-	CreditCardOperable,
-	BankSlipOperable,
-	PixOperable,
-	BempaggoTransactionServiceable
+	BankSlipOperable, BempaggoTransactionServiceable, ChargeFindable,
+	CreditCardOperable, PixOperable
 };
 

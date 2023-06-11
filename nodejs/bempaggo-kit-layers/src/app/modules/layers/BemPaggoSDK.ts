@@ -1,5 +1,5 @@
 import { Bempaggo, BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
-import { BankSlipOperable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
+import { BankSlipOperable, ChargeFindable, CreditCardOperable, PixOperable } from "bempaggo-kit/lib/app/modules/Transaction";
 import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
@@ -107,8 +107,8 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @returns { Promise<LayersTransaction> }
 	 */
 	async findTransactionsByReferenceId(referenceId: string): Promise<LayersTransaction> {
-		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-		const response: BempaggoChargeResponse[] = await creditCardService.findChargesByOrderReferenceId(referenceId);
+		const finder: ChargeFindable = this.bempaggo!.getChargeService().getChargeFinder();
+		const response: BempaggoChargeResponse[] = await finder.findChargesByOrderReferenceId(referenceId);
 		return this.layers.response.fromCharge(response[0]);
 	}
 
@@ -118,8 +118,8 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @returns { Promise<LayersTransaction> }
 	 */
 	async findChargeById(id: number): Promise<LayersTransaction> {
-		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-		const response: BempaggoChargeResponse = await creditCardService.findChargeById(id);
+		const finder: ChargeFindable = this.bempaggo!.getChargeService().getChargeFinder();
+		const response: BempaggoChargeResponse = await finder.findChargeById(id);
 		return this.layers.response.fromCharge(response);
 	}
 
@@ -153,17 +153,17 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 
 		if (this.isOnly("credit_card", transactionGroup.paymentMethods)) {
 			const method: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-			response = await method.createCreditCardCharge(sellerId, this.layers.request.toOrder(transactionGroup));
+			response = await method.createCreditCardCharge(sellerId, this.layers.request.toOrderCreditCard(transactionGroup));
 		}
 
 		else if (this.isOnly("bank_slip", transactionGroup.paymentMethods)) {
 			const method: BankSlipOperable = this.bempaggo!.getChargeService().getBankSlipServiceable();
-			response = await method.createBankSlipCharge(sellerId, this.layers.request.toOrder(transactionGroup));
+			response = await method.createBankSlipCharge(sellerId, this.layers.request.toOrderBankSlip(transactionGroup));
 		}
 
 		else if (this.isOnly("pix", transactionGroup.paymentMethods)) {
 			const method: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
-			response = await method.createPixCharge(sellerId, this.layers.request.toOrder(transactionGroup));
+			response = await method.createPixCharge(sellerId, this.layers.request.toOrderPix(transactionGroup));
 		}
 
 		else {
@@ -234,7 +234,7 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	getExternalQrCode(transaction: LayersTransaction): string {
 		const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
-		return pix.createQuickResponseCodeUrlByOrderReference(transaction.referenceId).toString()
+		return pix.createQuickResponseCodeUrlByChargeId(Number(transaction.referenceId)).toString()
 
 	}
 

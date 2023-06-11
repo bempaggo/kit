@@ -1,18 +1,14 @@
-import { BempaggoAddressRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoBankSlipPaymentRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoPixPaymentRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoBankSlipTransactionResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
-import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
+import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersPixPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
-
 
 // TODO esta classe eh uma desgraca, os objetos de (request e response) parecem ser a mesma coisa, mas nao sao.
 // Tem transactionGroup que parcece ser os objetos de request. sao?? 
 // Ai tem essas classes da interface.ts que parecem ser os responses, mas falta muitos campos.  
-
-
 class Util {
-
 	static getDateAsString(data: Date): string | undefined {
 		if (data) {
 			const year = data.getFullYear().toString();
@@ -36,6 +32,7 @@ class Layers {
 
 
 class RequestsToBempaggo {
+
 	toAddress(address: LayersAddress): BempaggoAddressRequest | undefined {
 		if (!address) return undefined;
 		return {
@@ -48,7 +45,7 @@ class RequestsToBempaggo {
 			state: address.state
 		}
 	}
-	toOrder(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
+	private toAbstractOrder(transactionGroup: LayersTransactionGroup, payments: BempaggoPaymentRequest[]): BempaggoOrderRequest {
 		const phoneLayers = transactionGroup.customerPayload.phone;
 		const phone: BempaggoPhoneRequest = {
 			areaCode: phoneLayers.areaCode,
@@ -57,11 +54,6 @@ class RequestsToBempaggo {
 		};
 		const address: BempaggoAddressRequest | undefined = this.toAddress(transactionGroup.customerPayload.addresses[0]);
 		const birthday: string | undefined = Util.getDateAsString(transactionGroup.customerPayload.birth);
-		const payments: BempaggoPaymentRequest[] = []
-		for (const payment of transactionGroup.paymentMethods) {
-			const request: BempaggoCreditCardPaymentRequest = this.createCreditCard(payment);
-			payments.push(request);
-		}
 		return {
 			customer: {
 				document: transactionGroup.customerPayload.document.value,
@@ -77,12 +69,96 @@ class RequestsToBempaggo {
 
 		};
 	}
+
+	toOrderCreditCard(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
+		const payments: BempaggoPaymentRequest[] = []
+		for (const payment of transactionGroup.paymentMethods) {
+			const request: BempaggoCreditCardPaymentRequest = this.createCreditCard(payment);
+			payments.push(request);
+		}
+		return this.toAbstractOrder(transactionGroup, payments)
+	}
+	toOrderBankSlip(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
+		const payments: BempaggoPaymentRequest[] = []
+		for (const payment of transactionGroup.paymentMethods) {
+			const request: BempaggoCreditCardPaymentRequest = this.createBankSlip(payment);
+			payments.push(request);
+		}
+		return this.toAbstractOrder(transactionGroup, payments)
+	}
+	toOrderPix(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
+		const payments: BempaggoPaymentRequest[] = []
+		for (const payment of transactionGroup.paymentMethods) {
+			const request: BempaggoPixPaymentRequest = this.createPix(payment);
+			payments.push(request);
+		}
+		return this.toAbstractOrder(transactionGroup, payments)
+	}
+	private createPix(payment:
+		{
+			total: {
+				amount: number
+			},
+			recipients: [
+				{
+					sourceId: any
+					total: {
+						amount: number
+						currency: 'BRL'
+					}
+				}
+			]
+		}
+	): BempaggoPixPaymentRequest {
+		const desiredExpirationDate = new Date();
+		desiredExpirationDate.setMinutes(desiredExpirationDate.getMinutes() + 30); // TODO hard code 
+		return {
+			paymentMethod: PaymentMethodTypes.PIX,
+			amount: payment.total.amount,
+			splits: this.toSplits(payment.recipients),
+			description: "", //  TODO a description to send  to the customer
+			desiredExpirationDate: desiredExpirationDate.getTime()
+		};
+	};
+
+	private createBankSlip(payment:
+		{
+			total: {
+				amount: number
+			},
+			bank_slip: {
+				url: string
+				dueDays: number | null
+				lateFee: number | null
+				lateInterestRate: number | null
+			},
+			recipients: [
+				{
+					sourceId: any
+					total: {
+						amount: number
+						currency: 'BRL'
+					}
+				}
+			]
+		}
+	): BempaggoBankSlipPaymentRequest {
+		const desiredExpirationDate = new Date();
+		return {
+			paymentMethod: PaymentMethodTypes.BOLETO,
+			amount: payment.total.amount,
+			splits: this.toSplits(payment.recipients),
+			expirationDate: payment.bank_slip.dueDays!,
+			
+			
+		};
+	};
 	createCreditCard(payment:
 		{
 			total: {
 				amount: number
 			},
-			card: {
+			card?: {
 				token: string
 				securityCode: string
 			},
@@ -98,23 +174,35 @@ class RequestsToBempaggo {
 			]
 		}
 	): BempaggoCreditCardPaymentRequest {
+		return {
+			paymentMethod: PaymentMethodTypes.CREDIT_CARD,
+			amount: payment.total.amount,
+			cardToken: {
+				token: payment.card!.token,
+				cvv: payment.card!.securityCode
+			},
+			installments: payment.installments,
+			splits: this.toSplits(payment.recipients)
+		};
+	}
+
+	private toSplits(recipients: [
+		{
+			sourceId: any
+			total: {
+				amount: number
+				currency: 'BRL'
+			}
+		}
+	]): BempaggoSplitPaymentRequest[] {
 		const splits: BempaggoSplitPaymentRequest[] = [];
-		for (const split of payment.recipients) {
+		for (const split of recipients) {
 			splits.push({
 				amount: split.total.amount,
 				sellerId: split.sourceId
 			});
 		}
-		return {
-			paymentMethod: PaymentMethodTypes.CREDIT_CARD,
-			amount: payment.total.amount,
-			cardToken: {
-				token: payment.card.token,
-				cvv: payment.card.securityCode
-			},
-			installments: payment.installments,
-			splits: splits
-		};
+		return splits;
 	}
 	toCustomer(customer: LayersCustomer): BempaggoCustomerRequest {
 		const address: BempaggoAddressRequest | undefined = this.toAddress(customer.address);
@@ -134,10 +222,6 @@ class RequestsToBempaggo {
 	}
 
 }
-
-
-
-
 class ResponsesFromBempaggo {
 	toBankSlipRenderingData(bempaggoCharge: BempaggoChargeResponse): BankSlipRenderingData {
 		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
@@ -177,7 +261,7 @@ class ResponsesFromBempaggo {
 				const payment: LayersTransactionPaymentMethod = {
 					payment_method: 'credit_card',
 					amount: transaction.value,
-					recipient_id: response.order.affiliate ? response.order.affiliate.id.toString() : "-",
+					recipient_id: transaction.affiliate ? transaction.affiliate.id.toString() : "-",
 					credit_card: {
 						token: transaction.card?.token ? transaction.card.token : "",
 						card_id: transaction.card?.token ? transaction.card.token : "",
@@ -191,7 +275,21 @@ class ResponsesFromBempaggo {
 				};
 				payments.push(payment);
 			} else if (PaymentMethodTypes.PIX == transaction.paymentMethod) {
-
+				const options: Intl.DateTimeFormatOptions = {
+					dateStyle: 'short',
+					timeStyle: 'short',
+				};
+				const payment: LayersPixPaymentMethod = {
+					payment_method: 'pix',
+					amount: transaction.value,
+					recipient_id: transaction.affiliate ? transaction.affiliate.id.toString() : "-",
+					status: transaction.status,
+					reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
+					pix: {
+						expires_in: new Date(transaction.expirationDate).toLocaleString(undefined, options)
+					}
+				};
+				payments.push(payment);
 			}
 		}
 		return {

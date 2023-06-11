@@ -1,3 +1,4 @@
+import { BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 
 export interface LayersTransaction {
@@ -27,7 +28,7 @@ export interface LayersCreditCardPaymentMethod {
 	recipient_id: string;
 	credit_card: {
 		card_id: string;
-		token: string;// --Bempaggo adding this field; "PAY"
+		token: string;// TODO -- Bempaggo adding this field; "PAY"
 		operation_type: 'auth_only';
 		installments: number;
 		statement_descriptor: string;
@@ -38,23 +39,30 @@ export interface LayersCreditCardPaymentMethod {
 
 }
 
-interface LayersPixPaymentMethod {
+export interface LayersPixPaymentMethod {
 	payment_method: 'pix'
 	amount: number
 	recipient_id: string
 	pix: {
 		expires_in: string
 	}
+	status?: TransactionStatusTypes; // --Bempaggo adding this field; "PAY"
 	reference_id: string; // --Bempaggo adding this field
 
 }
 
-interface LayersBankSlipPaymentMethod {
+export interface LayersBankSlipPaymentMethod {
 	payment_method: 'boleto'
 	recipient_id: string
 	boleto: {
 		due_at: string
 	}
+	status?: TransactionStatusTypes; // TODO--Bempaggo adding this field; "PAY"
+	reference_id: string; // --Bempaggo adding this field
+	amount: number;// --Bempaggo adding this field
+	paid_amount: number;// --Bempaggo adding this field
+	customer: BempaggoCustomerResponse;// --Bempaggo adding this field
+	
 }
 
 export interface LayersCustomer {

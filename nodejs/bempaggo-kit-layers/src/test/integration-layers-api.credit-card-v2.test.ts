@@ -4,6 +4,7 @@ import { LayersCreditCardPaymentMethod, LayersCustomerPaymentMethod, LayersTrans
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, test } from "vitest";
+import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
 const requestLayersStyle: LayersTransactionGroup = {
@@ -49,10 +50,6 @@ const cardLayers: LayersCustomerPaymentMethod = {
 	brand: "MASTERCARD",
 }
 
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY0MzUxMzUsImV4cCI6MTY4NjQ5NTEzNX0.cn4_dlAOq2pFCcwfN8MP6DA0N2BNi1RcHWzR3iv8c5ZFC0ROk7B8Clrww62mRSBNmYuGOAxZkRamrNtMmnTDmw"; // needs to generate a token in portal
-const url = "http://localhost:5000/api"
-const layers: BemPaggoSdk = new BemPaggoSdk(url, token);
-
 describe.concurrent.only("How use credit card charge", () => {
 	test("brands", async () => {
 		assert.equal(14, BemPaggoSdk.availableCardBrands.length);
@@ -81,7 +78,7 @@ describe.concurrent.only("How use credit card charge", () => {
 
 		test("create authorize one card", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
-			requestLayersStyle.paymentMethods[0].card.token = cardToken;
+			requestLayersStyle.paymentMethods[0].card!.token = cardToken;
 			requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
 			const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 
@@ -109,7 +106,7 @@ describe.concurrent.only("How use credit card charge", () => {
 		});
 		test("create authorize and capture one card", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
-			requestLayersStyle.paymentMethods[0].card.token = cardToken;
+			requestLayersStyle.paymentMethods[0].card!.token = cardToken;
 			requestLayersStyle.code = new Date().getTime().toString();
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 			const responseCapture: LayersTransaction = await layers.chargeTransaction(response.referenceId);
@@ -132,7 +129,7 @@ describe.concurrent.only("How use credit card charge", () => {
 
 		test("create authorize and capture and refund", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
-			requestLayersStyle.paymentMethods[0].card.token = cardToken;
+			requestLayersStyle.paymentMethods[0].card!.token = cardToken;
 			requestLayersStyle.code = new Date().getTime().toString();
 			const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 			await layers.chargeTransaction(response.referenceId);
@@ -225,8 +222,8 @@ describe.concurrent.only("How use credit card charge", () => {
 		test("create authorize two card", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			const cardTokenSecond: string = await layers.tokenizeCard(cardLayersSecond, "Not Used");
-			requestLayersStyleTwoCards.paymentMethods[0].card.token = cardToken;
-			requestLayersStyleTwoCards.paymentMethods[1].card.token = cardTokenSecond;
+			requestLayersStyleTwoCards.paymentMethods[0].card!.token = cardToken;
+			requestLayersStyleTwoCards.paymentMethods[1].card!.token = cardTokenSecond;
 			requestLayersStyleTwoCards.code = `o-${new Date().getTime().toString()}`;
 			const charge: LayersTransaction = await layers.createTransaction(requestLayersStyleTwoCards);
 			const payment: LayersCreditCardPaymentMethod = charge.payments[1] as LayersCreditCardPaymentMethod;
@@ -263,8 +260,8 @@ describe.concurrent.only("How use credit card charge", () => {
 		test("create authorize and capture two cards", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			const cardTokenSecond: string = await layers.tokenizeCard(cardLayersSecond, "Not Used");
-			requestLayersStyleTwoCards.paymentMethods[0].card.token = cardToken;
-			requestLayersStyleTwoCards.paymentMethods[1].card.token = cardTokenSecond;
+			requestLayersStyleTwoCards.paymentMethods[0].card!.token = cardToken;
+			requestLayersStyleTwoCards.paymentMethods[1].card!.token = cardTokenSecond;
 			requestLayersStyleTwoCards.code = `o-${new Date().getTime().toString()}`;
 			const charge: LayersTransaction = await layers.createTransaction(requestLayersStyleTwoCards);
 			const responseCapture: LayersTransaction = await layers.chargeTransaction(charge.referenceId);
@@ -299,8 +296,8 @@ describe.concurrent.only("How use credit card charge", () => {
 		test("create authorize and capture and refund two cards", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			const cardTokenSecond: string = await layers.tokenizeCard(cardLayersSecond, "Not Used");
-			requestLayersStyleTwoCards.paymentMethods[0].card.token = cardToken;
-			requestLayersStyleTwoCards.paymentMethods[1].card.token = cardTokenSecond;
+			requestLayersStyleTwoCards.paymentMethods[0].card!.token = cardToken;
+			requestLayersStyleTwoCards.paymentMethods[1].card!.token = cardTokenSecond;
 			requestLayersStyleTwoCards.code = `o-${new Date().getTime().toString()}`;
 			const charge: LayersTransaction = await layers.createTransaction(requestLayersStyleTwoCards);
 			await layers.chargeTransaction(charge.referenceId);
