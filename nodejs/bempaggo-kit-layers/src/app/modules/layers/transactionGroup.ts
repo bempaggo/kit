@@ -75,16 +75,16 @@ export interface LayersTransactionGroup {
 			//      expirationYear: number | null
 			securityCode: string //| null
 		}
-		   bank_slip ?: {
-		     url: string
-		     dueDays: number | null
-		     lateFee: number | null
-		     lateInterestRate: number | null
-		   }
+		bank_slip?: {
+			url: string
+			dueDays: number | null
+			lateFee: number | null
+			lateInterestRate: number | null
+		}
 		total: {
-					amount: number
-					currency: 'BRL'
-				}
+			amount: number
+			currency: 'BRL'
+		}
 		recipients: [
 			{
 				sourceId: ObjectId

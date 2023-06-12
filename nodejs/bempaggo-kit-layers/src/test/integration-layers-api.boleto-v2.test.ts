@@ -11,14 +11,14 @@ const requestLayersStyle: LayersTransactionGroup = {
 
 
 	price: {
-		amount: 1035,
+		amount: 10035,
 		currency: "BRL"
 	},
 	paymentMethods: [{
 		method: "bank_slip",
 		installments: 0,
-		recipients: [{ sourceId: 1, total: { amount: 1035, currency: "BRL" } }],
-		total: { amount: 1035, currency: "BRL" },
+		recipients: [{ sourceId: 1, total: { amount: 10035, currency: "BRL" } }],
+		total: { amount: 10035, currency: "BRL" },
 
 		bank_slip: {
 			dueDays: new Date().getTime(),
@@ -61,23 +61,23 @@ describe("boleto", () => {
 		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 		const payment: LayersBankSlipPaymentMethod = charge.payments[0] as LayersBankSlipPaymentMethod;
 		assert.equal(1, charge.payments.length);
-		assert.equal(1035, charge.amount);
+		assert.equal(10035, charge.amount);
 		assert.equal(null, charge.refunded_amount);
 		assert.equal(ChargeStatusTypes.PENDING, charge.status);
 		assert.isNotNull(charge.referenceId); // charge.referenceId is the charge reference from bempaggo
 		assert.isNotNull(payment.reference_id);
 		assert.equal("06219385993", charge.customer_id);
-		assert.equal(1035, payment.amount);
-		assert.equal(null, payment.paid_amount);
+		assert.equal(10035, payment.amount);
+		assert.equal(0, payment.paid_amount);
 		assert.equal(TransactionStatusTypes.AWAITING_PAYMENT, payment.status);
-		assert.equal('bank_slip', payment.payment_method);
+		assert.equal('boleto', payment.payment_method);
 		assert.equal(sellerId.toString(), payment.recipient_id);
 		assert.isNotNull(payment.reference_id);
-		assert.equal("Carlos Melo", payment.customer.name);
-		assert.equal("calos@bempaggo.com.br", payment.customer.email);
+		assert.equal("Douglas Hiuara Longo Customer", payment.customer.name);
+		assert.equal("douglas@bempaggo.com.br", payment.customer.email);
 		assert.equal("06219385993", payment.customer.document);
 		assert.equal("55", payment.customer.phone!.countryCode);
-		assert.equal("998761234", payment.customer.phone!.number);
+		assert.equal("988657196", payment.customer.phone!.number);
 		assert.equal("48", payment.customer.phone!.areaCode);
 		assert.equal("Rua Laurindo Januario", payment.customer.address!.street);
 		assert.equal("APt01", payment.customer.address?.lineTwo);

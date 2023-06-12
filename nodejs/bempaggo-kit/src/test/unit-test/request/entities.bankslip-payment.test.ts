@@ -9,6 +9,7 @@ describe("Bankslip Payment", () => {
         paymentMethod: PaymentMethodTypes.BOLETO,
         expirationDate: new Date().getTime(),
         amount: 1000,
+        paymentLimitDate:new Date().getTime(),
         splits: [],
       };
 
@@ -31,6 +32,7 @@ describe("Bankslip Payment", () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
         paymentMethod: PaymentMethodTypes.BOLETO,
         expirationDate: new Date().getTime(),
+        paymentLimitDate: new Date().getTime(),
         amount: 1000,
         splits: [{
           amount: 1000,

@@ -102,6 +102,7 @@ class RequestsToBempaggo {
             amount: payment.total.amount,
             splits: this.toSplits(payment.recipients),
             expirationDate: payment.bank_slip.dueDays,
+            paymentLimitDate: payment.bank_slip.dueDays,
         };
     }
     ;
@@ -211,6 +212,25 @@ class ResponsesFromBempaggo {
                     pix: {
                         expires_in: new Date(transaction.expirationDate).toLocaleString(undefined, options)
                     }
+                };
+                payments.push(payment);
+            }
+            else if (Enum_1.PaymentMethodTypes.BOLETO == transaction.paymentMethod) {
+                const options = {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                };
+                const payment = {
+                    payment_method: 'boleto',
+                    customer: transaction.customer,
+                    paid_amount: transaction.paidValue ? transaction.paidValue : 0,
+                    amount: transaction.value,
+                    recipient_id: transaction.affiliate ? transaction.affiliate.id.toString() : "-",
+                    status: transaction.status,
+                    reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
+                    boleto: {
+                        due_at: new Date(transaction.expirationDate).toLocaleString(undefined, options),
+                    },
                 };
                 payments.push(payment);
             }

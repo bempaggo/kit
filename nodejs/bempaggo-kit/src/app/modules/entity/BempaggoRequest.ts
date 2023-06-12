@@ -82,19 +82,21 @@ interface BempaggoAbstractPaymentRequest {
 interface BempaggoBankSlipPaymentRequest extends BempaggoAbstractPaymentRequest {
 	paymentMethod: PaymentMethodTypes.BOLETO;
 	/**
-	 * 
+	 *
 	 * Desired expiration date is the timestamp. This is the deadline receive the payment.
 	 * Please check the billing transaction for the available payment deadline.
 	 *
 	 * Example: The value 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
-	 * 
-	 *  
+	 *
+	 *
 	 * Note: This value is ***NOT added*** on the current date.
-	 * 
+	 *
 	 * @TIMESTEMP
-	 */ 
+	 */
 	
 	expirationDate:number
+	paymentLimitDate:number,
+	ourNumber?:number
 }
 
 interface BempaggoCreditCardPaymentRequest extends BempaggoAbstractPaymentRequest {
@@ -102,7 +104,7 @@ interface BempaggoCreditCardPaymentRequest extends BempaggoAbstractPaymentReques
 	/**
 	 * min = 1
 	 * max = 12 or according to card brand
-	 * 
+	 *
 	 */
 	installments: number;
 	cardToken: BempaggoTokenCardRequest;
@@ -114,12 +116,12 @@ interface BempaggoPixPaymentRequest extends BempaggoAbstractPaymentRequest {
 	 * Please check the billing transaction for the available payment deadline.
 	 *
 	 * Example: The desiredExpirationDate 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
-	 * 
-	 *  
+	 *
+	 *
 	 * Note: The desiredExpirationDate is ***NOT added*** on the current date.
-	 * 
+	 *
 	 * @TIMESTEMP
-	 */ 
+	 */
 	desiredExpirationDate:number,
 	description?:string;
 }
@@ -133,20 +135,9 @@ interface BempaggoSplitPaymentRequest {
 	sellerId: number;
 }
 export {
-	BempaggoSplitPaymentRequest,
-	BempaggoPixPaymentRequest,
-	BempaggoCreditCardPaymentRequest,
-	BempaggoBankSlipPaymentRequest,
-	BempaggoAbstractPaymentRequest,
-	BempaggoPaymentRequest,
-	BempaggoAddressRequest,
-	BempaggoCardExpirationRequest,
+	BempaggoAbstractPaymentRequest, BempaggoAddressRequest, BempaggoBankSlipPaymentRequest, BempaggoCardExpirationRequest,
 	BempaggoCardHolderRequest,
-	BempaggoCardRequest,
-	BempaggoOrderRequest,
-	BempaggoCustomerRequest,
-	BempaggoPhoneRequest,
-	BempaggoTokenCardRequest
+	BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoPixPaymentRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest
 };
 
 
