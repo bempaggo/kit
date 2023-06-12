@@ -27,6 +27,7 @@ interface PixOperable extends ChargeFindable {
 	createPixCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
 	cancelPix(chargeId: number): Promise<BempaggoChargeResponse>;
 	createQuickResponseCodeUrlByChargeId(chargeId: number): URL;
+	createQuickResponseCodeUrlByOrderReference(orderReference: string): Promise<Response>;
 }
 
 export {
