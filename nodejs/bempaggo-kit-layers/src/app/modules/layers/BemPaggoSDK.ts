@@ -262,11 +262,9 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 */
 	async cancelBankSlipTransaction(transaction: LayersTransaction): Promise<void> {
 		const bankSlip: BankSlipOperable = this.bempaggo!.getChargeService().getBankSlipServiceable();
-		const bempaggoCharge: BempaggoChargeResponse[] = await bankSlip.findChargesByOrderReferenceId(transaction.referenceId);
-		if (bempaggoCharge.length != 1) {
-			throw new Error("charges.length <> 1");
-		} else if (bempaggoCharge[0].transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
-			await bankSlip.cancelBankSlip(bempaggoCharge[0].id);
+		const bempaggoCharge: BempaggoChargeResponse = await bankSlip.findChargeById(Number(transaction.referenceId));
+		if (bempaggoCharge.transactions.length==1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
+			await bankSlip.cancelBankSlip(bempaggoCharge.id);
 		} else {
 			throw new Error("paymentMethod <> PaymentMethodTypes.BOLETO");
 		}
