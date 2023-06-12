@@ -1,5 +1,6 @@
 import { BempaggoAddressRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, expect, test } from "vitest";
+
 describe("Address entity", () => {
   describe("Request", () => {
     test("valid address", async () => {
@@ -14,30 +15,23 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      expect(address).not.toBeNull();
+      assert.notEqual(address, null);
       assertType<BempaggoAddressRequest>(address);
-      expect(Object.keys(address).length).toBe(7);
-      expect(address.street).toBe("Rua Jair Hamms");
-      expect(address.streetNumber).toBe("38");
-      expect(address.lineTwo).toBe("Sala 101");
-      expect(address.neighborhood).toBe("Pedra Branca");
-      expect(address.city).toBe("Palhoça");
-      expect(address.state).toBe("SC");
-      expect(address.zipCode).toBe("88137084");
-      expect(typeof address.street).toBe("string");
-      expect(typeof address.streetNumber).toBe("string");
-      expect(typeof address.lineTwo).toBe("string");
-      expect(typeof address.neighborhood).toBe("string");
-      expect(typeof address.city).toBe("string");
-      expect(typeof address.state).toBe("string");
-      expect(typeof address.zipCode).toBe("string");
-      expect(address.street.length).toBeGreaterThan(0);
-      expect(address.streetNumber.length).toBeGreaterThan(0);
-      expect(address.neighborhood.length).toBeGreaterThan(0);
-      expect(address.city.length).toBeGreaterThan(0);
-      expect(address.state.length).toBeGreaterThan(0);
-      expect(address.zipCode.length).toBeGreaterThan(0);
-      expect(zipCodeRegex.test(address.zipCode)).toBe(true);
+      assert.equal(Object.keys(address).length, 7);
+      assert.equal(address.street, "Rua Jair Hamms");
+      assert.equal(address.streetNumber, "38");
+      assert.equal(address.lineTwo, "Sala 101");
+      assert.equal(address.neighborhood, "Pedra Branca");
+      assert.equal(address.city, "Palhoça");
+      assert.equal(address.state, "SC");
+      assert.equal(address.zipCode, "88137084");
+      assert.ok(address.street.length > 0);
+      assert.ok(address.streetNumber.length > 0);
+      assert.ok(address.neighborhood.length > 0);
+      assert.ok(address.city.length > 0);
+      assert.ok(address.state.length > 0);
+      assert.ok(address.zipCode.length > 0);
+      assert.ok(zipCodeRegex.test(address.zipCode));
     });
 
     test("address with only required fields", async () => {
@@ -51,31 +45,22 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      expect(address).not.toBeNull();
       assertType<BempaggoAddressRequest>(address);
-      expect(Object.keys(address).length).toBe(6);
-      expect(address.street).toBe("Rua Jair Hamms");
-      expect(address.streetNumber).toBe("38");
-      expect(address.lineTwo).toBeUndefined();
-      expect(address.neighborhood).toBe("Pedra Branca");
-      expect(address.city).toBe("Palhoça");
-      expect(address.state).toBe("SC");
-      expect(address.zipCode).toBe("88137084");
-      expect(typeof address.street).toBe("string");
-      expect(typeof address.streetNumber).toBe("string");
-      expect(typeof address.lineTwo).toBe("undefined");
-      expect(typeof address.neighborhood).toBe("string");
-      expect(typeof address.city).toBe("string");
-      expect(typeof address.state).toBe("string");
-      expect(typeof address.zipCode).toBe("string");
-      expect(address.street.length).toBe(14); 
-      expect(address.streetNumber.length).toBeGreaterThan(0);
-      expect(address.neighborhood.length).toBeGreaterThan(0);
-      expect(address.city.length).toBe(7);
-      expect(address.state.length).toBeGreaterThan(0);
-      expect(address.zipCode.length).toBeGreaterThan(0);
-      expect(zipCodeRegex.test(address.zipCode)).toBe(true);
+      assert.equal(Object.keys(address).length, 6);
+      assert.equal(address.street, "Rua Jair Hamms");
+      assert.equal(address.streetNumber, "38");
+      assert.equal(address.lineTwo, undefined);
+      assert.equal(address.neighborhood, "Pedra Branca");
+      assert.equal(address.city, "Palhoça");
+      assert.equal(address.state, "SC");
+      assert.equal(address.zipCode, "88137084");
+      assert.ok(address.street.length === 14);
+      assert.ok(address.streetNumber.length > 0);
+      assert.ok(address.neighborhood.length > 0);
+      assert.ok(address.city.length === 7);
+      assert.ok(address.state.length > 0);
+      assert.ok(address.zipCode.length > 0);
+      assert.ok(zipCodeRegex.test(address.zipCode));
     });
   });
-  
 });
