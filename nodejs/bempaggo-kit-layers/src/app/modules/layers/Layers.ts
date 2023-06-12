@@ -2,7 +2,7 @@ import { BempaggoAddressRequest, BempaggoBankSlipPaymentRequest, BempaggoCardReq
 import { BempaggoBankSlipTransactionResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
-import { LayersAddress, LayersCustomer, LayersCustomerPaymentMethod, LayersPixPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
+import { LayersAddress, LayersBankSlipPaymentMethod, LayersCustomer, LayersCustomerPaymentMethod, LayersPixPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
 
 // TODO esta classe eh uma desgraca, os objetos de (request e response) parecem ser a mesma coisa, mas nao sao.
@@ -81,7 +81,7 @@ class RequestsToBempaggo {
 	toOrderBankSlip(transactionGroup: LayersTransactionGroup): BempaggoOrderRequest {
 		const payments: BempaggoPaymentRequest[] = []
 		for (const payment of transactionGroup.paymentMethods) {
-			const request: BempaggoCreditCardPaymentRequest = this.createBankSlip(payment);
+			const request: BempaggoBankSlipPaymentRequest = this.createBankSlip(payment);
 			payments.push(request);
 		}
 		return this.toAbstractOrder(transactionGroup, payments)
@@ -126,7 +126,7 @@ class RequestsToBempaggo {
 			total: {
 				amount: number
 			},
-			bank_slip: {
+			bank_slip?: {
 				url: string
 				dueDays: number | null
 				lateFee: number | null
@@ -148,9 +148,8 @@ class RequestsToBempaggo {
 			paymentMethod: PaymentMethodTypes.BOLETO,
 			amount: payment.total.amount,
 			splits: this.toSplits(payment.recipients),
-			expirationDate: payment.bank_slip.dueDays!,
-			
-			
+			expirationDate: payment.bank_slip!.dueDays!,
+			paymentLimitDate: payment.bank_slip!.dueDays!,
 		};
 	};
 	createCreditCard(payment:
@@ -288,6 +287,26 @@ class ResponsesFromBempaggo {
 					pix: {
 						expires_in: new Date(transaction.expirationDate).toLocaleString(undefined, options)
 					}
+				};
+				payments.push(payment);
+			}
+			else if (PaymentMethodTypes.BOLETO == transaction.paymentMethod) {
+				const options: Intl.DateTimeFormatOptions = {
+					dateStyle: 'short',
+					timeStyle: 'short',
+				};
+				const payment: LayersBankSlipPaymentMethod = {
+					payment_method: 'boleto',
+					customer: transaction.customer,
+					paid_amount:transaction.paidValue?transaction.paidValue:0,
+					amount: transaction.value,
+					recipient_id: transaction.affiliate ? transaction.affiliate.id.toString() : "-",
+					status: transaction.status,
+					reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
+					boleto: {
+						due_at: new Date(transaction.expirationDate).toLocaleString(undefined, options),
+						
+					},
 				};
 				payments.push(payment);
 			}
