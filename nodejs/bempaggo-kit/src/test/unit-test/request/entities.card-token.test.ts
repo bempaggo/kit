@@ -1,5 +1,5 @@
 import { BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assert, assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Credit card token", () => {
   describe("Request", () => {

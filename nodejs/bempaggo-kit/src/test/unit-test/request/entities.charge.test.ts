@@ -1,8 +1,8 @@
 
 
-import { BempaggoAddressRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest, BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Charge Entity", () => {
 	describe("Request", () => {

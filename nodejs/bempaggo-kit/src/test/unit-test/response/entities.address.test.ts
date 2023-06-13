@@ -1,5 +1,5 @@
 import { BempaggoAddressResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Address entity", () => {
   describe("Response", () => {
@@ -25,13 +25,6 @@ describe("Address entity", () => {
       assert.equal(address.city, "Palhoça");
       assert.equal(address.state, "SC");
       assert.equal(address.zipCode, "88137084");
-      assert.equal(typeof address.street, "string");
-      assert.equal(typeof address.streetNumber, "string");
-      assert.equal(typeof address.lineTwo, "string");
-      assert.equal(typeof address.neighborhood, "string");
-      assert.equal(typeof address.city, "string");
-      assert.equal(typeof address.state, "string");
-      assert.equal(typeof address.zipCode, "string");
       assert.isTrue(address.street.length > 0);
       assert.isTrue(address.streetNumber.length > 0);
       assert.isTrue(address.neighborhood.length > 0);
