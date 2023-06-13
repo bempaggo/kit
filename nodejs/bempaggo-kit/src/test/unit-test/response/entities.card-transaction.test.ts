@@ -1,6 +1,6 @@
 import { BempaggoCreditCardTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, describe, expect, test } from "vitest";
+import { assert, describe, test } from "vitest";
 
 describe("Credit card transaction", () => {
   describe("Response", () => {
