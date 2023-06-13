@@ -1,6 +1,6 @@
 import { BempaggoBankSlipTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { describe, expect, test } from "vitest";
+import { assert, describe, test } from "vitest";
 
 describe("Bankslip transaction", () => {
 	describe("Response", () => {
@@ -16,8 +16,7 @@ describe("Bankslip transaction", () => {
 				communityLegalName: "Bempaggo",
 				communityLegalDocument: "12345678901234",
 				ourNumber: "12345678901234567890",
-				documentNumber:"12323424",
-				
+				documentNumber: "12323424",
 				customer: {
 					id: 1,
 					name: "João da Silva",
@@ -60,101 +59,58 @@ describe("Bankslip transaction", () => {
 				splits: []
 			};
 
-
-			expect(Object.keys(bankSlip).length).toBe(22);
-			expect(Object.keys(bankSlip.bank).length).toBe(3);
-			expect(Object.keys(bankSlip.customer).length).toBe(7);
-			expect(Object.keys(bankSlip.customer.address!).length).toBe(6);
-			expect(Object.keys(bankSlip.customer.phone!).length).toBe(3);
-			expect(Object.keys(bankSlip.establishment).length).toBe(1);
-			expect(Object.keys(bankSlip.affiliate!).length).toBe(3);
-
-
-			expect(bankSlip.expirationDate).toBe(1620000000000);
-
-			expect(bankSlip.paymentInstructions).toBe("Pagar até o vencimento");
-
-			expect(bankSlip.communityLegalName).toBe("Bempaggo");
-
-			expect(bankSlip.communityLegalDocument).toBe("12345678901234");
-
-			expect(bankSlip.ourNumber).toBe("12345678901234567890");
-
-
-			expect(bankSlip.customer.id).toBe(1);
-
-			expect(bankSlip.customer.name).toBe("João da Silva");
-
-			expect(bankSlip.customer.address).toHaveProperty("city");
-			expect(bankSlip.customer.address).toHaveProperty("neighborhood");
-			expect(bankSlip.customer.address).toHaveProperty("state");
-			expect(bankSlip.customer.address).toHaveProperty("street");
-			expect(bankSlip.customer.address).toHaveProperty("streetNumber");
-			expect(bankSlip.customer.address).toHaveProperty("zipCode");
-
-			expect(bankSlip.customer.address?.city).toBe("São Paulo");
-
-			expect(bankSlip.customer.address?.neighborhood).toBe("Centro");
-
-			expect(bankSlip.customer.address?.state).toBe("SP");
-
-			expect(bankSlip.customer.address?.street).toBe("Rua da Consolação");
-
-			expect(bankSlip.customer.address?.streetNumber).toBe("123");
-
-			expect(bankSlip.customer.address?.zipCode).toBe("12345678");
-
-			expect(bankSlip.customer.document).toBe("12345678901");
-
-			expect(bankSlip.customer.birthdate).toBe("1620000000000");
-
-			expect(bankSlip.customer.email).toBe("joaodasilva@bempaggo.com");
-
-			expect(bankSlip.customer.phone?.number).toBe("123456789");
-			expect(bankSlip.customer.phone?.areaCode).toBe("11");
-			expect(bankSlip.customer.phone?.countryCode).toBe("55");
-
-			expect(bankSlip.digitableLine).toBe("12345678901234567890123456789012345678901234567890");
-
-			expect(bankSlip.paymentMethod).toBe(PaymentMethodTypes.BOLETO);
-
-			expect(bankSlip.id).toBe(1);
-
-			expect(bankSlip.documentNumber).toBe("12323424");
-			expect(bankSlip.transactionReference).toBe("12345678901234567890");
-
-			expect(bankSlip.returnCode).toBe("00");
-
-			expect(bankSlip.value).toBe(1000);
-
-			expect(bankSlip.paidValue).toBe(1000);
-
-			expect(bankSlip.returnMessage).toBe("Transação autorizada");
-
-			expect(bankSlip.status).toBe(TransactionStatusTypes.AUTHORIZED);
-
-			expect(bankSlip.transactionDate).toBe(1620000000000);
-
-			expect(bankSlip.type).toBe(TransactionResponseTypes.LOOSE);
-
-
-
-			expect(bankSlip.affiliate?.id).toBe(1);
-
-			expect(bankSlip.affiliate?.name).toBe("Bempaggo");
-
-			expect(bankSlip.affiliate?.businessName).toBe("Bempaggo");
-
-			expect(bankSlip.affiliate).toHaveProperty("id");
-
-			expect(bankSlip.affiliate?.id).toBe(1);
-
-
-			expect(bankSlip.establishment?.id).toBe(1);
-
-			expect(bankSlip.splits).toHaveLength(0);
-
+			assert.equal(Object.keys(bankSlip).length, 22);
+			assert.equal(Object.keys(bankSlip.bank).length, 3);
+			assert.equal(Object.keys(bankSlip.customer).length, 7);
+			assert.equal(Object.keys(bankSlip.customer.address!).length, 6);
+			assert.equal(Object.keys(bankSlip.customer.phone!).length, 3);
+			assert.equal(Object.keys(bankSlip.establishment).length, 1);
+			assert.equal(Object.keys(bankSlip.affiliate!).length, 3);
+			assert.equal(bankSlip.expirationDate, 1620000000000);
+			assert.equal(bankSlip.paymentInstructions, "Pagar até o vencimento");
+			assert.equal(bankSlip.communityLegalName, "Bempaggo");
+			assert.equal(bankSlip.communityLegalDocument, "12345678901234");
+			assert.equal(bankSlip.ourNumber, "12345678901234567890");
+			assert.equal(bankSlip.customer.id, 1);
+			assert.equal(bankSlip.customer.name, "João da Silva");
+			assert.property(bankSlip.customer.address, "city");
+			assert.property(bankSlip.customer.address, "neighborhood");
+			assert.property(bankSlip.customer.address, "state");
+			assert.property(bankSlip.customer.address, "street");
+			assert.property(bankSlip.customer.address, "streetNumber");
+			assert.property(bankSlip.customer.address, "zipCode");
+			assert.equal(bankSlip.customer.address?.city, "São Paulo");
+			assert.equal(bankSlip.customer.address?.neighborhood, "Centro");
+			assert.equal(bankSlip.customer.address?.state, "SP");
+			assert.equal(bankSlip.customer.address?.street, "Rua da Consolação");
+			assert.equal(bankSlip.customer.address?.streetNumber, "123");
+			assert.equal(bankSlip.customer.address?.zipCode, "12345678");
+			assert.equal(bankSlip.customer.document, "12345678901");
+			assert.equal(bankSlip.customer.birthdate, "1620000000000");
+			assert.equal(bankSlip.customer.email, "joaodasilva@bempaggo.com");
+			assert.equal(bankSlip.customer.phone?.number, "123456789");
+			assert.equal(bankSlip.customer.phone?.areaCode, "11");
+			assert.equal(bankSlip.customer.phone?.countryCode, "55");
+			assert.equal(bankSlip.digitableLine, "12345678901234567890123456789012345678901234567890");
+			assert.equal(bankSlip.paymentMethod, PaymentMethodTypes.BOLETO);
+			assert.equal(bankSlip.id, 1);
+			assert.equal(bankSlip.documentNumber, "12323424");
+			assert.equal(bankSlip.transactionReference, "12345678901234567890");
+			assert.equal(bankSlip.returnCode, "00");
+			assert.equal(bankSlip.value, 1000);
+			assert.equal(bankSlip.paidValue, 1000);
+			assert.equal(bankSlip.returnMessage, "Transação autorizada");
+			assert.equal(bankSlip.status, TransactionStatusTypes.AUTHORIZED);
+			assert.equal(bankSlip.transactionDate, 1620000000000);
+			assert.equal(bankSlip.type, TransactionResponseTypes.LOOSE);
+			assert.equal(bankSlip.affiliate?.id, 1);
+			assert.equal(bankSlip.affiliate?.name, "Bempaggo");
+			assert.equal(bankSlip.affiliate?.businessName, "Bempaggo");
+			assert.property(bankSlip.affiliate, "id");
+			assert.equal(bankSlip.affiliate?.id, 1);
+			assert.equal(bankSlip.establishment?.id, 1);
+			assert.lengthOf(bankSlip.splits, 0);
 		});
-
 	});
 });
+

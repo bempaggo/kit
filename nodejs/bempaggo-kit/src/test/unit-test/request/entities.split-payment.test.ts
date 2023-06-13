@@ -1,6 +1,6 @@
 import { BempaggoCreditCardPaymentRequest, BempaggoSplitPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, expect, test } from "vitest";
 
 describe("Split payment", () => {
   describe("Request", () => {
@@ -10,16 +10,10 @@ describe("Split payment", () => {
         sellerId: 123456789,
       };
 
-      expect(splitPayment).not.toBeNull();
-      expect(splitPayment).not.toBeUndefined();
-      expect(splitPayment).not.toBeNaN();
-
       assertType<BempaggoSplitPaymentRequest>(splitPayment);
-
-      expect(splitPayment.amount).toBeGreaterThan(0);
-      expect(splitPayment.sellerId).toBeGreaterThan(0);
-
+      assert.isTrue(splitPayment.amount > 0);
+      assert.isTrue(splitPayment.sellerId > 0);
     });
   });
-
 });
+

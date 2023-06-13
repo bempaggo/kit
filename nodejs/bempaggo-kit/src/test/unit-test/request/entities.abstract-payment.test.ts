@@ -13,9 +13,7 @@ describe("Abstract Payment", () => {
 
       assert.notEqual(abstractPayment, null);
       assert.notEqual(abstractPayment, undefined);
-
       assertType<BempaggoAbstractPaymentRequest>(abstractPayment);
-
       assert.equal(abstractPayment.paymentMethod, PaymentMethodTypes.BOLETO);
       assert.ok(abstractPayment.amount > 0);
       assert.notEqual(abstractPayment.splits, null);
@@ -41,17 +39,13 @@ describe("Abstract Payment", () => {
 
       assert.notEqual(abstractPayment, null);
       assert.notEqual(abstractPayment, undefined);
-
       assertType<BempaggoAbstractPaymentRequest>(abstractPayment);
-
       assert.equal(abstractPayment.paymentMethod, PaymentMethodTypes.BOLETO);
       assert.ok(abstractPayment.amount > 0);
       assert.notEqual(abstractPayment.splits, null);
       assert.notEqual(abstractPayment.splits, undefined);
-
       assert.ok(abstractPayment.splits[0].amount > 0);
       assert.ok(abstractPayment.splits[0].sellerId > 0);
-      
       assert.ok(abstractPayment.splits[1].amount > 0);
       assert.ok(abstractPayment.splits[1].sellerId > 0);
     });

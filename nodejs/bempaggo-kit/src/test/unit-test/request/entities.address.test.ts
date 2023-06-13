@@ -14,6 +14,7 @@ describe("Address entity", () => {
         zipCode: "88137084",
       };
       const zipCodeRegex = /^\d{8}$/;
+      
 
       assert.notEqual(address, null);
       assertType<BempaggoAddressRequest>(address);
