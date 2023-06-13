@@ -9,11 +9,10 @@ describe("Card Entity", () => {
         document: "51190844001",
       };
 
-      assert.notEqual(cardHolder, null);
       assertType<BempaggoCardHolderRequest>(cardHolder);
-      assert.equal(Object.keys(cardHolder).length, 2);
-      assert.equal(cardHolder.name, "Tony Stark");
-      assert.equal(cardHolder.document, "51190844001");
+      assert.equal(2, Object.keys(cardHolder).length);
+      assert.equal("Tony Stark", cardHolder.name);
+      assert.equal("51190844001", cardHolder.document);
     });
 
     test("cardExpiration", async () => {
@@ -23,10 +22,9 @@ describe("Card Entity", () => {
       };
 
       assertType<BempaggoCardExpirationRequest>(cardExpiration);
-      assert.notEqual(cardExpiration, null);
-      assert.equal(Object.keys(cardExpiration).length, 2);
-      assert.equal(cardExpiration.year, 2025);
-      assert.equal(cardExpiration.month, 3);
+      assert.equal(2, Object.keys(cardExpiration).length);
+      assert.equal(2025, cardExpiration.year);
+      assert.equal(3, cardExpiration.month);
     });
 
     test("card", async () => {
@@ -45,15 +43,16 @@ describe("Card Entity", () => {
       assertType<BempaggoCardRequest>(card);
       assertType<BempaggoCardHolderRequest>(card.holder);
       assertType<BempaggoCardExpirationRequest>(card.expiration);
-      assert.notEqual(card, null);
-      assert.equal(Object.keys(card).length, 3);
-      assert.equal(card.cardNumber, "5448280000000007");
-      assert.equal(Object.keys(card.holder).length, 2);
-      assert.equal(card.holder.name, "Tony Stark");
-      assert.equal(card.holder.document, "51190844001");
-      assert.equal(Object.keys(card.expiration).length, 2);
-      assert.equal(card.expiration.year, 2025);
-      assert.equal(card.expiration.month, 3);
+
+      assert.equal(3, Object.keys(card).length);
+      assert.equal(2, Object.keys(card.holder).length);
+      assert.equal(2, Object.keys(card.expiration).length);
+      
+      assert.equal("5448280000000007", card.cardNumber);
+      assert.equal("Tony Stark", card.holder.name);
+      assert.equal("51190844001", card.holder.document);
+      assert.equal(2025, card.expiration.year);
+      assert.equal(3, card.expiration.month);
     });
   });
 });

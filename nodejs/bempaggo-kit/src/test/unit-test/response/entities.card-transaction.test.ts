@@ -1,6 +1,6 @@
 import { BempaggoCreditCardTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Credit card transaction", () => {
   describe("Response", () => {
@@ -45,34 +45,40 @@ describe("Credit card transaction", () => {
         splits: []
       };
 
-      assert.equal(card.refundValue, 1000);
-      assert.equal(card.transactionKey, "12345678901234567890");
-      assert.equal(card.refundRason, RefundReasonTypes.OTHERS);
+      assertType<BempaggoCreditCardTransactionResponse>(card);
 
-      assert.equal(card.card.token, "12345678901234567890");
-      assert.equal(card.card.holder.name, "Teste");
-      assert.equal(card.card.holder.document, "12345678901");
-      assert.equal(card.card.bin, "123456");
-      assert.equal(card.card.lastFour, "1234");
-      assert.equal(card.card.expiration.month, 12);
-      assert.equal(card.card.expiration.year, 2021);
-      assert.equal(card.card.brand, CardBrandTypes.VISA);
+      assert.equal(18, Object.keys(card).length);
+      assert.equal(6, Object.keys(card.card).length);
+      assert.equal(2, Object.keys(card.card.holder).length);
+      assert.equal(1, Object.keys(card.establishment).length);
+      assert.equal(3, Object.keys(card.affiliate!).length);
 
-      assert.equal(card.installments, 1);
-      assert.equal(card.paymentMethod, PaymentMethodTypes.CREDIT_CARD);
-      assert.equal(card.id, 1);
-      assert.equal(card.transactionReference, "12345678901234567890");
-      assert.equal(card.returnCode, "00");
-      assert.equal(card.returnMessage, "Transação autorizada");
-      assert.equal(card.status, TransactionStatusTypes.AUTHORIZED);
-      assert.equal(card.value, 1000);
-      assert.equal(card.transactionDate, 1620000000000);
-      assert.equal(card.type, TransactionResponseTypes.LOOSE);
-      assert.equal(card.affiliate?.id, 1);
-      assert.equal(card.affiliate?.name, "Bempaggo");
-      assert.equal(card.affiliate?.businessName, "Bempaggo");
-      assert.equal(card.establishment?.id, 1);
-      assert.lengthOf(card.splits, 0);
+      assert.equal(1000, card.refundValue);
+      assert.equal("12345678901234567890", card.transactionKey);
+      assert.equal("OTHERS", card.refundRason);
+      assert.equal("12345678901234567890", card.card.token);
+      assert.equal("Teste", card.card.holder.name);
+      assert.equal("12345678901", card.card.holder.document);
+      assert.equal("123456", card.card.bin);
+      assert.equal("1234", card.card.lastFour);
+      assert.equal(12, card.card.expiration.month);
+      assert.equal(2021, card.card.expiration.year);
+      assert.equal("VISA", card.card.brand);
+      assert.equal(1, card.installments);
+      assert.equal("CREDIT_CARD", card.paymentMethod);
+      assert.equal(1, card.id);
+      assert.equal(1, card.establishment?.id);
+      assert.equal("00", card.returnCode);
+      assert.equal("Transação autorizada", card.returnMessage);
+      assert.equal("AUTHORIZED", card.status);
+      assert.equal(1000, card.value);
+      assert.equal(1620000000000, card.transactionDate);
+      assert.equal("12345678901234567890", card.transactionReference);
+      assert.equal("LOOSE", card.type);
+      assert.equal(1, card.affiliate?.id);
+      assert.equal("Bempaggo", card.affiliate?.name);
+      assert.equal("Bempaggo", card.affiliate?.businessName);
+      assert.deepEqual([], card.splits);
     });
   });
 });

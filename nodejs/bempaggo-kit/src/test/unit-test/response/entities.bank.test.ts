@@ -11,10 +11,10 @@ describe("Bank entity", () => {
       };
 
       assertType<BempaggoBankResponse>(bank);
-      assert.equal(bank.code, "001");
-      assert.equal(bank.agency, "1234");
-      assert.equal(bank.account, "123456");
-
+      assert.equal(3, Object.keys(bank).length);
+      assert.equal("001", bank.code);
+      assert.equal("1234", bank.agency);
+      assert.equal("123456", bank.account);
     });
   });
 });

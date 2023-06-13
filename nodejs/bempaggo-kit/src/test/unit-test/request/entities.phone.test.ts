@@ -11,11 +11,10 @@ describe("Customer", () => {
       };
 
       assertType<BempaggoPhoneRequest>(phone);
-      assert.notEqual(phone, null);
-      assert.equal(Object.keys(phone).length, 3);
-      assert.equal(phone.countryCode, 55);
-      assert.equal(phone.areaCode, 48);
-      assert.equal(phone.number, 999999999);
+      assert.equal(3, Object.keys(phone).length);
+      assert.equal(55, phone.countryCode);
+      assert.equal(48, phone.areaCode);
+      assert.equal(999999999, phone.number);
     });
   });
 });

@@ -12,8 +12,6 @@ describe("Split payment", () => {
       assertType<BempaggoSplitPaymentRequest>(splitPayment);
       assert.equal(1000, splitPayment.amount);
       assert.equal(123456789, splitPayment.sellerId);
-      assert.isTrue(splitPayment.amount > 0);
-      assert.isTrue(splitPayment.sellerId > 0);
     });
   });
 });

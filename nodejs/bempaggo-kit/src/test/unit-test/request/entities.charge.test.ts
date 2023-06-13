@@ -1,6 +1,6 @@
 
 
-import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import { assert, assertType, describe, test } from "vitest";
 
@@ -8,7 +8,6 @@ describe("Charge Entity", () => {
 	describe("Request", () => {
 
 		test("charge", async () => {
-
 			const charge: BempaggoOrderRequest = {
 				customer: {
 					phone: {
@@ -50,41 +49,45 @@ describe("Charge Entity", () => {
 				notificationUrl: "https://meusite.com.br/events",
 			};
 
-			assert.notEqual(charge.customer, null);
 			assertType<BempaggoCustomerRequest>(charge.customer);
 			assertType<BempaggoOrderRequest>(charge);
 			assertType<BempaggoAddressRequest | undefined>(charge.customer.address);
 			assertType<BempaggoPhoneRequest | undefined>(charge.customer.phone);
 			assertType<BempaggoTokenCardRequest>((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!);
+			assertType<BempaggoSplitPaymentRequest[]>((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits);
 
-			assert.equal(Object.keys(charge).length, 5);
-			assert.equal(charge.amount, 1000);
-			assert.equal((charge.payments[0] as BempaggoCreditCardPaymentRequest).installments, 1);
-			assert.equal(charge.orderReference, "order-1");
-			assert.equal(charge.notificationUrl, "https://meusite.com.br/events");
-
-			assert.equal(Object.keys(charge.customer).length, 6);
-			assert.equal(charge.customer.name, "Tony Stark");
-			assert.equal(charge.customer.document, "51190844001");
-			assert.equal(charge.customer.birthdate, "2000-01-01");
-			assert.equal(charge.customer.email, "tony.stark@bempaggo.com");
-			assert.equal(Object.keys(charge.customer?.address ?? {}).length, 7);
-			assert.equal(charge.customer.address?.street, "Rua Jair Hamms");
-			assert.equal(charge.customer.address?.streetNumber, "38");
-			assert.equal(charge.customer.address?.lineTwo, "Sala 101");
-			assert.equal(charge.customer.address?.neighborhood, "Pedra Branca");
-			assert.equal(charge.customer.address?.city, "Palhoça");
-			assert.equal(charge.customer.address?.state, "SC");
-			assert.equal(charge.customer.address?.zipCode, "88137084");
-			assert.equal(Object.keys(charge.customer?.phone ?? {}).length, 3);
-			assert.equal(charge.customer.phone?.countryCode, 55);
-			assert.equal(charge.customer.phone?.areaCode, 48);
-			assert.equal(charge.customer.phone?.number, 999999999);
-			assert.equal(Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length, 2);
-			assert.equal((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv, "123");
-			assert.equal((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token, "123");
-			assert.equal(charge.payments[0].splits[0].amount, 1000);
-			assert.equal(charge.payments[0].splits[0].sellerId, 1);
+			assert.equal(5, Object.keys(charge).length);
+			assert.equal(6, Object.keys(charge.customer).length);
+			assert.equal(3, Object.keys(charge.customer?.phone ?? {}).length);
+			assert.equal(7, Object.keys(charge.customer?.address ?? {}).length);
+			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length);
+			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits[0]).length);
+			
+			assert.equal(55, charge.customer.phone?.countryCode);
+			assert.equal(48, charge.customer.phone?.areaCode);
+			assert.equal(999999999, charge.customer.phone?.number);
+			assert.equal("Rua Jair Hamms", charge.customer.address?.street);
+			assert.equal("38", charge.customer.address?.streetNumber);
+			assert.equal("Sala 101", charge.customer.address?.lineTwo);
+			assert.equal("Pedra Branca", charge.customer.address?.neighborhood);
+			assert.equal("Palhoça", charge.customer.address?.city);
+			assert.equal("SC", charge.customer.address?.state);
+			assert.equal("88137084", charge.customer.address?.zipCode);
+			assert.equal("Tony Stark", charge.customer.name);
+			assert.equal("51190844001", charge.customer.document);
+			assert.equal("2000-01-01", charge.customer.birthdate);
+			assert.equal("tony.stark@bempaggo.com", charge.customer.email);
+			assert.equal("order-1", charge.orderReference);
+			assert.equal("CREDIT_CARD", charge.payments[0].paymentMethod);
+			assert.equal(1, (charge.payments[0] as BempaggoCreditCardPaymentRequest).installments);
+			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv);
+			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token);
+			assert.equal(1000, charge.payments[0].amount);
+			assert.lengthOf(charge.payments[0].splits, 1);
+			assert.equal(1000, charge.payments[0].splits[0].amount);
+			assert.equal(1, charge.payments[0].splits[0].sellerId);
+			assert.equal(1000, charge.amount);
+			assert.equal("https://meusite.com.br/events", charge.notificationUrl);
 		});
 	});
 });

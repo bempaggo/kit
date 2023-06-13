@@ -10,9 +10,8 @@ describe("Card Entity", () => {
         document: "51190844001",
       };
 
-      assert.isNotNull(cardHolder);
       assertType<BempaggoCardHolderResponse>(cardHolder);
-      assert.equal(Object.keys(cardHolder).length, 2);
+      assert.equal(2, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
       assert.equal("51190844001", cardHolder.document);
     });
@@ -22,9 +21,8 @@ describe("Card Entity", () => {
         name: "Tony Stark",
       };
 
-      assert.isNotNull(cardHolder);
       assertType<BempaggoCardHolderResponse>(cardHolder);
-      assert.equal(Object.keys(cardHolder).length, 1);
+      assert.equal(1, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
     })
 
@@ -34,7 +32,6 @@ describe("Card Entity", () => {
         month: 1
       };
 
-      assert.isNotNull(cardExpiration);
       assertType<BempaggoCardExpirationResponse>(cardExpiration);
       assert.equal(2, Object.keys(cardExpiration).length);
       assert.equal(2035, cardExpiration.year);
@@ -57,21 +54,22 @@ describe("Card Entity", () => {
         brand: CardBrandTypes.MASTERCARD,
       };
 
-      assert.isNotNull(card);
       assertType<BempaggoCardResponse>(card);
       assertType<BempaggoCardHolderResponse>(card.holder);
       assertType<BempaggoCardExpirationResponse>(card.expiration);
+
       assert.equal(6, Object.keys(card).length);
       assert.equal(2, Object.keys(card.holder).length);
+      assert.equal(2, Object.keys(card.expiration).length);
+
       assert.equal("Tony Stark", card.holder.name);
       assert.equal("51190844001", card.holder.document);
       assert.equal("token-1", card.token);
       assert.equal("544828", card.bin);
       assert.equal("0007", card.lastFour);
-      assert.equal(2, Object.keys(card.expiration).length);
       assert.equal(2035, card.expiration.year);
       assert.equal(1, card.expiration.month);
-      assert.equal(CardBrandTypes.MASTERCARD, card.brand);
+      assert.equal("MASTERCARD", card.brand);
     });
   });
 });

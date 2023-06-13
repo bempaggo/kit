@@ -11,10 +11,10 @@ describe("Affiliate entity", () => {
       };
 
       assertType<BempaggoAffiliateMinimalResponse>(affiliateMinimal);
-      assert.equal(Object.keys(affiliateMinimal).length, 3);
-      assert.equal(affiliateMinimal.id, 1);
-      assert.equal(affiliateMinimal.name, "Tony Stark");
-      assert.equal(affiliateMinimal.businessName, "Stark Industries");
+      assert.equal(3, Object.keys(affiliateMinimal).length);
+      assert.equal(1, affiliateMinimal.id);
+      assert.equal("Tony Stark", affiliateMinimal.name);
+      assert.equal("Stark Industries", affiliateMinimal.businessName);
     });
   });
 });

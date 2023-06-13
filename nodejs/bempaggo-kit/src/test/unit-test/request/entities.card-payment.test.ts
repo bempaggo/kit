@@ -18,12 +18,15 @@ describe("Credit card payment", () => {
       };
 
       assertType<BempaggoCreditCardPaymentRequest>(creditCardPayment);
-      assert.equal(creditCardPayment.paymentMethod, PaymentMethodTypes.CREDIT_CARD);
-      assert.equal(creditCardPayment.splits.length, 0);
-      assert.notEqual(creditCardPayment.splits, null);
-      assert.notEqual(creditCardPayment.splits, undefined);
-      assert.ok(creditCardPayment.amount > 0);
-      assert.ok(Array.isArray(creditCardPayment.splits));
+      assert.equal(5, Object.keys(creditCardPayment).length);
+      assert.equal(2, Object.keys(creditCardPayment.cardToken).length);
+      assert.equal("CREDIT_CARD", creditCardPayment.paymentMethod);
+      assert.equal("123", creditCardPayment.cardToken.cvv);
+      assert.equal("123", creditCardPayment.cardToken.token);
+      assert.equal(1, creditCardPayment.installments);
+      assert.equal(1000, creditCardPayment.amount);
+      assert.deepEqual([], creditCardPayment.splits);
+
     });
 
     test("Valid request with splits", async () => {
@@ -46,14 +49,18 @@ describe("Credit card payment", () => {
       };
 
       assertType<BempaggoCreditCardPaymentRequest>(creditCardPayment);
-      assert.equal(creditCardPayment.paymentMethod, PaymentMethodTypes.CREDIT_CARD);
-      assert.equal(creditCardPayment.splits.length, 2);
-      assert.ok(creditCardPayment.amount > 0);
-      assert.ok(Array.isArray(creditCardPayment.splits));
-      assert.ok(creditCardPayment.splits[0].amount > 0);
-      assert.ok(creditCardPayment.splits[0].sellerId > 0);
-      assert.ok(creditCardPayment.splits[1].amount > 0);
-      assert.ok(creditCardPayment.splits[1].sellerId > 0);
+      assert.equal(5, Object.keys(creditCardPayment).length);
+      assert.equal(2, Object.keys(creditCardPayment.cardToken).length);
+      assert.equal("CREDIT_CARD", creditCardPayment.paymentMethod);
+      assert.equal("123", creditCardPayment.cardToken.cvv);
+      assert.equal("123", creditCardPayment.cardToken.token);
+      assert.equal(1, creditCardPayment.installments);
+      assert.equal(1000, creditCardPayment.amount);
+      assert.lengthOf(creditCardPayment.splits, 2);
+      assert.equal(1000, creditCardPayment.splits[0].amount);
+      assert.equal(123456789, creditCardPayment.splits[0].sellerId);
+      assert.equal(1000, creditCardPayment.splits[1].amount);
+      assert.equal(123456789, creditCardPayment.splits[1].sellerId);
     });
   });
 });

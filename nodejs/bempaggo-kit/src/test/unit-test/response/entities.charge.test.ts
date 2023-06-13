@@ -1,6 +1,6 @@
 import { BempaggoAffiliateMinimalResponse, BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoEstablishmentMinimalResponse, BempaggoPixTransactionResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Charge Entity", () => {
 	describe("Response", () => {
@@ -242,7 +242,7 @@ describe("Charge Entity", () => {
 				type: TransactionResponseTypes.LOOSE,
 				status: TransactionStatusTypes.APPROVED,
 				transactionReference: String(123456),
-				transactionDate: new Date().getTime(),
+				transactionDate: 1520000000000,
 				paymentMethod: PaymentMethodTypes.CREDIT_CARD,
 				establishment: {
 					id: 1
@@ -289,74 +289,71 @@ describe("Charge Entity", () => {
 				value: 1000,
 				transactions: transactions,
 				order: {
-					id: 123, orderReference: "123456",
+					id: 123, 
+					orderReference: "123456",
 					affiliate: {
 						id: 1,
-						businessName: "",
-						name: "Selo A"
+						name: "Selo A",
+						businessName: "Mega Loja",
 					}
 				}
 			};
 
-			expect(chargeResponse).not.toBeNull();
-			expect(Object.keys(chargeResponse.transactions[0]).length).toBe(14);
-			expect(chargeResponse.id).toBe(1);
-			expect(chargeResponse.transactions[0].id).toBe(1);
-			expect(chargeResponse.transactions[0].returnCode).toBe("00");
-			expect(chargeResponse.transactions[0].returnMessage).toBe("Transação autorizada");
-			expect(chargeResponse.transactions[0].value).toBe(1000);
-			expect(chargeResponse.transactions[0].paidValue).toBeUndefined();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundValue).toBeUndefined();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).transactionKey).toBe("123456");
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason).toBeUndefined();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type).toBe("LOOSE");
-			expect(chargeResponse.transactions[0].status).toBe("APPROVED");
-			expect(chargeResponse.transactions[0].transactionReference).toBe("123456");
-			expect(chargeResponse.transactions[0].transactionDate).toBeGreaterThan(0);
-			expect(chargeResponse.transactions[0].paymentMethod).toBe("CREDIT_CARD");
-			expect(Object.keys(chargeResponse.transactions[0].establishment).length).toBe(1);
-			expect(chargeResponse.transactions[0].establishment.id).toBe(1);
-			expect(chargeResponse.transactions[0].splits).toStrictEqual([]);
+			assert.equal(1, chargeResponse.id);
+			assert.equal(1, chargeResponse.customer.id);
+			assert.equal("51190844001", chargeResponse.customer.document);
+			assert.equal("AUTHORIZED", chargeResponse.status);
+			assert.equal(1000, chargeResponse.value);
 
-			expect(chargeResponse.transactions[1].id).toBe(1);
-			expect(chargeResponse.transactions[1].returnCode).toBe("00");
-			expect(chargeResponse.transactions[1].returnMessage).toBeUndefined();
-			expect(chargeResponse.transactions[1].paidValue).toBeUndefined();
-			expect(chargeResponse.transactions[1].value).toBe(1000);
-			expect((chargeResponse.transactions[1] as BempaggoCreditCardTransactionResponse).transactionKey).toBeUndefined();
-			expect((chargeResponse.transactions[1] as BempaggoCreditCardTransactionResponse).refundValue).toBeUndefined();
-			expect((chargeResponse.transactions[1] as BempaggoCreditCardTransactionResponse).refundRason).toBeUndefined();
-			expect((chargeResponse.transactions[1] as BempaggoCreditCardTransactionResponse).type).toBe("LOOSE");
-			expect(chargeResponse.transactions[1].status).toBe("AUTHORIZED");
-			expect(chargeResponse.transactions[1].transactionReference).toBeUndefined();
-			expect(chargeResponse.transactions[1].transactionDate).toBeGreaterThan(0);
-			expect(chargeResponse.transactions[1].paymentMethod).toBe("PIX");
-			expect(Object.keys(chargeResponse.transactions[1].establishment).length).toBe(1);
-			expect(chargeResponse.transactions[1].establishment.id).toBe(1);
-			expect(chargeResponse.transactions[1].splits).toStrictEqual([]);
-			expect((chargeResponse.transactions[1] as BempaggoCreditCardTransactionResponse).installments).toBeUndefined();
+			assert.equal(1, chargeResponse.transactions[0].id);
+			assert.equal("00", chargeResponse.transactions[0].returnCode);
+			assert.equal("Transação autorizada", chargeResponse.transactions[0].returnMessage);
+			assert.equal(1000, chargeResponse.transactions[0].value);
+			assert.equal("123456", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).transactionKey);
+			assert.equal("LOOSE", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
+			assert.equal("APPROVED", chargeResponse.transactions[0].status);
+			assert.equal("123456", chargeResponse.transactions[0].transactionReference);
+			assert.equal(1520000000000, chargeResponse.transactions[0].transactionDate);
+			assert.equal("CREDIT_CARD", chargeResponse.transactions[0].paymentMethod);
+			assert.equal(1, chargeResponse.transactions[0].establishment.id);
+			assert.equal(1, (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).installments);
+			assert.equal("Teste", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.name);
+			assert.equal("12345678901", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.document);
+			assert.equal("123456", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.bin);
+			assert.equal("1234", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.lastFour);
+			assert.equal(12, (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration.month);
+			assert.equal(2021, (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration.year);
+			assert.equal("VISA", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.brand);
+			assert.deepEqual([], chargeResponse.transactions[0].splits);
+			
+			assert.equal(1620000000000, (chargeResponse.transactions[1] as BempaggoPixTransactionResponse).expirationDate);
+			assert.equal("PIX", chargeResponse.transactions[1].paymentMethod);
+			assert.equal(1, chargeResponse.transactions[1].id);
+			assert.equal(1, chargeResponse.transactions[1].establishment.id);
+			assert.equal("00", chargeResponse.transactions[1].returnCode);
+			assert.equal("AUTHORIZED", chargeResponse.transactions[1].status);
+			assert.equal(1000, chargeResponse.transactions[1].value);
+			assert.equal(1620000000000, chargeResponse.transactions[1].transactionDate);
+			assert.equal("LOOSE", chargeResponse.transactions[1].type);
+			assert.deepEqual([], chargeResponse.transactions[1].splits);
 
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).not.toBeNull();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).not.toBeUndefined();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).not.toBeNaN();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).toHaveProperty("name");
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.name).not.toBeNull();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.name).not.toBeUndefined();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.name).not.toBeNaN();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.name).toBe("Teste")
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).toHaveProperty("document");
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.document).not.toBeNull();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.document).not.toBeUndefined();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.document).not.toBeNaN();
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.document).toBe("12345678901");
-			expect((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).installments).toBe(1);
+			assert.equal(123, chargeResponse.order.id);
+			assert.equal("123456", chargeResponse.order.orderReference);
+			assert.equal(1, chargeResponse.order.affiliate?.id);
+			assert.equal("Selo A", chargeResponse.order.affiliate?.name);
+			assert.equal("Mega Loja", chargeResponse.order.affiliate?.businessName);
 
-			expect(chargeResponse.customer.id).toBe(1);
-			expect(chargeResponse.customer.document).toBe("51190844001");
-			expect(chargeResponse.status).toBe("AUTHORIZED");
-			expect(chargeResponse.value).toBe(1000);
-			expect(chargeResponse.refundedAmount).toBeUndefined();
-			expect(chargeResponse.order.id).toBe(123);
+			assert.equal(2, Object.keys(chargeResponse.customer).length);
+			assert.equal(3, Object.keys(chargeResponse.order).length);
+			assert.equal(3, Object.keys(chargeResponse.order.affiliate!).length);
+			assert.equal(14, Object.keys(chargeResponse.transactions[0]).length);
+			assert.equal(1, Object.keys(chargeResponse.transactions[0].establishment).length);
+			assert.equal(5, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
+			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
+			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
+			assert.equal(10, Object.keys(chargeResponse.transactions[1]).length);
+			assert.equal(1, Object.keys(chargeResponse.transactions[1].establishment).length);
+			
 			assertType<BempaggoChargeResponse>(chargeResponse);
 			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
 			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason!);
@@ -367,7 +364,6 @@ describe("Charge Entity", () => {
 			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
 			assertType<ChargeStatusTypes>(chargeResponse.status);
 			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[1].establishment);
-
 		});
 
 	});

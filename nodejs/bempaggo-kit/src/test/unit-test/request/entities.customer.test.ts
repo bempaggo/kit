@@ -28,23 +28,27 @@ describe("Customer", () => {
       assertType<BempaggoAddressRequest | undefined>(customer.address);
       assertType<BempaggoPhoneRequest | undefined>(customer.phone);
       assertType<BempaggoCustomerRequest>(customer);
-      assert.equal(Object.keys(customer).length, 6);
-      assert.equal(customer.name, "Tony Stark");
-      assert.equal(customer.document, "51190844001");
-      assert.equal(customer.birthdate, "2000-01-01");
-      assert.equal(customer.email, "tony.stark@bempaggo.com");
-      assert.equal(Object.keys(customer?.address ?? {}).length, 7);
-      assert.equal(customer.address?.street, "Rua Jair Hamms");
-      assert.equal(customer.address?.streetNumber, "38");
-      assert.equal(customer.address?.lineTwo, "Sala 101");
-      assert.equal(customer.address?.neighborhood, "Pedra Branca");
-      assert.equal(customer.address?.city, "Palhoça");
-      assert.equal(customer.address?.state, "SC");
-      assert.equal(customer.address?.zipCode, "88137084");
-      assert.equal(Object.keys(customer?.phone ?? {}).length, 3);
-      assert.equal(customer.phone?.countryCode, 55);
-      assert.equal(customer.phone?.areaCode, 48);
-      assert.equal(customer.phone?.number, 999999999);
+
+      assert.equal(6, Object.keys(customer).length);
+      assert.equal(7, Object.keys(customer?.address ?? {}).length);
+      assert.equal(3, Object.keys(customer?.phone ?? {}).length);
+
+      assert.equal(55, customer.phone?.countryCode);
+      assert.equal(48, customer.phone?.areaCode);
+      assert.equal(999999999, customer.phone?.number);
+
+      assert.equal("Rua Jair Hamms", customer.address?.street);
+      assert.equal("38", customer.address?.streetNumber);
+      assert.equal("Sala 101", customer.address?.lineTwo);
+      assert.equal("Pedra Branca", customer.address?.neighborhood);
+      assert.equal("Palhoça", customer.address?.city);
+      assert.equal("SC", customer.address?.state);
+      assert.equal("88137084", customer.address?.zipCode);
+      assert.equal("Tony Stark", customer.name);
+      assert.equal("51190844001", customer.document);
+      assert.equal("2000-01-01", customer.birthdate);
+      assert.equal("tony.stark@bempaggo.com", customer.email);
+     
     });
   });
 });

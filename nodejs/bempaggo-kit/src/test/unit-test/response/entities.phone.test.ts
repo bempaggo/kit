@@ -1,5 +1,5 @@
 import { BempaggoPhoneResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Customer", () => {
   describe("Response", () => {
@@ -10,12 +10,11 @@ describe("Customer", () => {
         number: "999999999"
       };
 
-      expect(phoneResponse).not.toBeNull();
-      assertType< BempaggoPhoneResponse>(phoneResponse);
-      expect(Object.keys(phoneResponse).length).toBe(3);
-      expect(phoneResponse.countryCode).toBe("55");
-      expect(phoneResponse.areaCode).toBe("11");
-      expect(phoneResponse.number).toBe("999999999");
+      assertType<BempaggoPhoneResponse>(phoneResponse);
+      assert.equal(3, Object.keys(phoneResponse).length);
+      assert.equal("55", phoneResponse.countryCode);
+      assert.equal("11", phoneResponse.areaCode);
+      assert.equal("999999999", phoneResponse.number);
     });
   });
 });

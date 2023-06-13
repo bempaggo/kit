@@ -7,20 +7,23 @@ describe("Pix Payment", () => {
     test("Valid request", async () => {
       const pixPayment: BempaggoPixPaymentRequest = {
         paymentMethod: PaymentMethodTypes.PIX,
-        desiredExpirationDate: new Date().getTime(),
+        desiredExpirationDate: 1686681565342,
         amount: 1000,
         splits: [],
       };
 
       assertType<BempaggoPixPaymentRequest>(pixPayment);
-      assert.equal(pixPayment.paymentMethod, PaymentMethodTypes.PIX);
-      assert.lengthOf(pixPayment.splits, 0);
+      assert.equal(4, Object.keys(pixPayment).length);
+      assert.equal("PIX", pixPayment.paymentMethod);
+      assert.equal(1686681565342, pixPayment.desiredExpirationDate);
+      assert.equal(1000, pixPayment.amount);
+      assert.deepEqual([], pixPayment.splits);
     });
 
     test("Valid request", async () => {
       const pixPayment: BempaggoPixPaymentRequest = {
         paymentMethod: PaymentMethodTypes.PIX,
-        desiredExpirationDate: new Date().getTime(),
+        desiredExpirationDate: 1686681565342,
         amount: 1000,
         splits: [{
           amount: 1000,
@@ -33,8 +36,14 @@ describe("Pix Payment", () => {
       };
 
       assertType<BempaggoPixPaymentRequest>(pixPayment);
-      assert.equal(pixPayment.paymentMethod, PaymentMethodTypes.PIX);
+      assert.equal("PIX", pixPayment.paymentMethod);
+      assert.equal(1686681565342, pixPayment.desiredExpirationDate);
+      assert.equal(1000, pixPayment.amount);
       assert.lengthOf(pixPayment.splits, 2);
+      assert.equal(1000, pixPayment.splits[0].amount);
+      assert.equal(123456789, pixPayment.splits[0].sellerId);
+      assert.equal(1000, pixPayment.splits[1].amount);
+      assert.equal(123456789, pixPayment.splits[1].sellerId);
     });
   });
 });

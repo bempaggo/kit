@@ -11,14 +11,11 @@ describe("Abstract Payment", () => {
         splits: [],
       };
 
-      assert.notEqual(abstractPayment, null);
-      assert.notEqual(abstractPayment, undefined);
       assertType<BempaggoAbstractPaymentRequest>(abstractPayment);
-      assert.equal(abstractPayment.paymentMethod, PaymentMethodTypes.BOLETO);
-      assert.ok(abstractPayment.amount > 0);
-      assert.notEqual(abstractPayment.splits, null);
-      assert.notEqual(abstractPayment.splits, undefined);
-      assert.equal(abstractPayment.splits.length, 0);
+      assert.equal(3, Object.keys(abstractPayment).length);
+      assert.equal("BOLETO", abstractPayment.paymentMethod);
+      assert.equal(1000, abstractPayment.amount);
+      assert.deepEqual([], abstractPayment.splits);
     });
 
     test("Valid request with splits", async () => {
@@ -37,17 +34,15 @@ describe("Abstract Payment", () => {
         ],
       };
 
-      assert.notEqual(abstractPayment, null);
-      assert.notEqual(abstractPayment, undefined);
       assertType<BempaggoAbstractPaymentRequest>(abstractPayment);
-      assert.equal(abstractPayment.paymentMethod, PaymentMethodTypes.BOLETO);
-      assert.ok(abstractPayment.amount > 0);
-      assert.notEqual(abstractPayment.splits, null);
-      assert.notEqual(abstractPayment.splits, undefined);
-      assert.ok(abstractPayment.splits[0].amount > 0);
-      assert.ok(abstractPayment.splits[0].sellerId > 0);
-      assert.ok(abstractPayment.splits[1].amount > 0);
-      assert.ok(abstractPayment.splits[1].sellerId > 0);
+      assert.equal(3, Object.keys(abstractPayment).length);
+      assert.equal("BOLETO", abstractPayment.paymentMethod);
+      assert.equal(1000, abstractPayment.amount);
+      assert.lengthOf(abstractPayment.splits, 2);
+      assert.equal(1000, abstractPayment.splits[0].amount);
+      assert.equal(123456789, abstractPayment.splits[0].sellerId);
+      assert.equal(1000, abstractPayment.splits[1].amount);
+      assert.equal(123456789, abstractPayment.splits[1].sellerId);
     });
   });
 });
