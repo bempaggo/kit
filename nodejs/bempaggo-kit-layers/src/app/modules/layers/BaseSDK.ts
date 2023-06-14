@@ -1,5 +1,5 @@
 import { BankSlipRenderingData } from "./BankSlipRenderinData"
-import { TransactionGroup } from './transactionGroup'
+import { LayersTransactionGroup } from './transactionGroup'
 
 /**
  * @class BaseSdk
@@ -102,10 +102,10 @@ export abstract class BaseSdk<GatewayCustomer, GatewayTransaction, GatewayCustom
 
   /**
    *
-   * @param {TransactionGroup} transactionGroup
+   * @param {LayersTransactionGroup} transactionGroup
    * @returns { GatewayTransaction }
    */
-  async createTransaction(transactionGroup: TransactionGroup): Promise<GatewayTransaction> {
+  async createTransaction(transactionGroup: LayersTransactionGroup): Promise<GatewayTransaction> {
     throw new Error(`Not implemented for ${this.gateway}`)
   }
 

@@ -1,5 +1,5 @@
 import { BempaggoCustomerResponse, BempaggoMinimalCustomerResponse, BempaggoPhoneResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, expect, test } from "vitest";
 
 describe("Customer", () => {
   describe("Response", () => {
@@ -17,43 +17,44 @@ describe("Customer", () => {
         name: "Tony Stark"
       };
 
-      expect(customer).not.toBeNull();
-      assertType< BempaggoCustomerResponse>(customer);
-      expect(Object.keys(customer).length).toBe(6);
-      expect(customer.id).toBe(1);
       assertType< BempaggoPhoneResponse>(customer.phone!);
-      expect(Object.keys(customer.phone!).length).toBe(3);
-      expect(customer.phone!.countryCode).toBe("55");
-      expect(customer.phone!.areaCode).toBe("11");
-      expect(customer.phone!.number).toBe("999999999");
-      expect(customer.birthdate).toBe("2023-01-03");
-      expect(customer.email).toBe("tony.stark@ligadajustica.com");
-      expect(customer.document).toBe("51190844001");
-      expect(customer.name).toBe("Tony Stark");
+      assertType<BempaggoCustomerResponse>(customer);
+
+      assert.equal(6, Object.keys(customer).length);
+      assert.equal(3, Object.keys(customer.phone!).length);
+
+      assert.equal(1, customer.id);
+      assert.equal("55", customer.phone!.countryCode);
+      assert.equal("11", customer.phone!.areaCode);
+      assert.equal("999999999", customer.phone!.number);
+      assert.equal("2023-01-03", customer.birthdate);
+      assert.equal("tony.stark@ligadajustica.com", customer.email);
+      assert.equal("51190844001", customer.document);
+      assert.equal("Tony Stark", customer.name);
     });
+
     test("customerResponse with only required fields", async () => {
       const customer:  BempaggoCustomerResponse = {
         id: 1,
         name: "Tony Stark"
       };
 
-      expect(customer).not.toBeNull();
-      assertType< BempaggoCustomerResponse>(customer);
-      expect(Object.keys(customer).length).toBe(2);
-      expect(customer.id).toBe(1);
-      expect(customer.name).toBe("Tony Stark");
+      assertType<BempaggoCustomerResponse>(customer);
+      assert.equal(2, Object.keys(customer).length);
+      assert.equal(1, customer.id);
+      assert.equal("Tony Stark", customer.name);
     });
+
     test("customerResponse with minimal response", async () => {
       const customerMinimal:  BempaggoMinimalCustomerResponse = {
         id: 1,
         document: "51190844001",
       };
 
-      expect(customerMinimal).not.toBeNull();
       assertType<BempaggoMinimalCustomerResponse>(customerMinimal);
       expect(Object.keys(customerMinimal).length).toBe(2);
-      expect(customerMinimal.id).toBe(1);
-      expect(customerMinimal.document).toBe("51190844001");
+      assert.equal(1, customerMinimal.id);
+      assert.equal("51190844001", customerMinimal.document);
     });
   });
 });

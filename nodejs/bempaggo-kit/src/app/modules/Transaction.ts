@@ -1,23 +1,37 @@
-import { BempaggoChargeRequest, BempaggoRefundRequest } from "./entity/BempaggoRequest";
+import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
-
-
 interface BempaggoTransactionServiceable {
-  getCreditCardServiceable(): CreditCardOperable;
-}
-interface CreditCardOperable {
-  findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
-
-  findChargesByReferenceId(referenceId: number): Promise<BempaggoChargeResponse[]>;
-
-  createCharge(charge: BempaggoChargeRequest): Promise<BempaggoChargeResponse>;
-
-  captureCharge(chargeId: number): Promise<BempaggoChargeResponse>;
-
-  refundCharge(transactionId: number, refund: BempaggoRefundRequest): Promise<BempaggoChargeResponse>;
-
-  createChargeAndCapture(charge: BempaggoChargeRequest): Promise<BempaggoChargeResponse>;
+	getCreditCardServiceable(): CreditCardOperable;
+	getBankSlipServiceable(): BankSlipOperable;
+	getPixServiceable(): PixOperable;
+	getChargeFinder(): ChargeFindable;
 }
 
-export { CreditCardOperable, BempaggoTransactionServiceable };
+interface ChargeFindable {
+	findChargeById(chargeId: number): Promise<BempaggoChargeResponse>;
+	findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]>;
+}
+
+interface CreditCardOperable extends ChargeFindable {
+	createCreditCardCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
+	captureCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse>;
+	refundCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse>;
+}
+
+interface BankSlipOperable extends ChargeFindable {
+	createBankSlipCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
+	cancelBankSlip(chargeId: number): Promise<BempaggoChargeResponse>;
+}
+
+interface PixOperable extends ChargeFindable {
+	createPixCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
+	cancelPix(chargeId: number): Promise<BempaggoChargeResponse>;
+	createQuickResponseCodeUrlByChargeId(chargeId: number): URL;
+	createQuickResponseCodeUrlByOrderReference(orderReference: string): Promise<Response>;
+}
+
+export {
+	BankSlipOperable, BempaggoTransactionServiceable, ChargeFindable,
+	CreditCardOperable, PixOperable
+};
 

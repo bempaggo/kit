@@ -1,44 +1,28 @@
+import { BempaggoChargeFinderV2 } from "./BempaggoChargeFinder";
 import { BempaggoHttp } from "./BempaggoHttp";
-import { BempaggoChargeRequest, BempaggoRefundRequest } from "./entity/BempaggoRequest";
+import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
-import { assertNotError, getByUrlResponse } from "./entity/Exceptions";
+import { getByUrlResponse } from "./entity/Exceptions";
 import { CreditCardOperable } from "./Transaction";
 
-class CreditCardApiV2 implements CreditCardOperable {
-  constructor(private http: BempaggoHttp) {
-  }
+class CreditCardApiV2 extends BempaggoChargeFinderV2 implements CreditCardOperable {
+	constructor(http: BempaggoHttp) {
+		super(http);
+	}
+	async createCreditCardCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> {
+		const response = await this.http.httpPost(`/v2/sellers/${sellerId}/orders/credit-card/authorize`, order); // OK
+		return await getByUrlResponse(response, this.http); // /v2/charges/${chargeId}
+	}
 
-  async createChargeAndCapture(charge: BempaggoChargeRequest): Promise<BempaggoChargeResponse> {
-    const response: Response = await this.http.httpPost("/v2/charges/credit/card", charge);
-    return await getByUrlResponse(response, this.http);
-  }
+	async captureCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse> {
+		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit-card/capture`, {}); 
+		return await getByUrlResponse(response, this.http); //v2/charges/${chargeId}
+	}
 
-  async findChargesByReferenceId(referenceId: number): Promise<BempaggoChargeResponse[]> {
-    const response: Response = await this.http.httpGet(`/v2/charges/requests/${referenceId}`);
-    await assertNotError(response);
-    return await response.json();
-  }
-
-  async findChargeById(chargeId: number): Promise<BempaggoChargeResponse> {
-    const response: Response = await this.http.httpGet(`/v2/charges/${chargeId}/credit/card`);
-    await assertNotError(response);
-    return await response.json();
-  }
-
-  async createCharge(charge: BempaggoChargeRequest): Promise<BempaggoChargeResponse> {
-    const response = await this.http.httpPost("/v2/charges/credit/card/authorize", charge);
-    return await getByUrlResponse(response, this.http);
-  }
-
-  async captureCharge(chargeId: number): Promise<BempaggoChargeResponse> {
-    const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit/card/capture`, {});
-    return await getByUrlResponse(response, this.http);;
-  }
-
-  async refundCharge(chargeId: number, refund: BempaggoRefundRequest): Promise<BempaggoChargeResponse> {
-    const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit/card/refund`, refund);
-    return await getByUrlResponse(response, this.http);
-  }
+	async refundCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse> {
+		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit/card/refund`, { reason: "OTHERS" });
+		return await getByUrlResponse(response, this.http); // //v2/charges/${chargeId}/credit/card
+	}
 }
 
 export { CreditCardApiV2 };

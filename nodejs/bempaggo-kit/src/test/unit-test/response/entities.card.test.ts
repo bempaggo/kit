@@ -1,6 +1,6 @@
 import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes } from "@/app/modules/entity/Enum";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Card Entity", () => {
   describe("Response", () => {
@@ -10,11 +10,10 @@ describe("Card Entity", () => {
         document: "51190844001",
       };
 
-      expect(cardHolder).not.toBeNull();
       assertType<BempaggoCardHolderResponse>(cardHolder);
-      expect(Object.keys(cardHolder).length).toBe(2);
-      expect(cardHolder.name).toBe("Tony Stark");
-      expect(cardHolder.document).toBe("51190844001");
+      assert.equal(2, Object.keys(cardHolder).length);
+      assert.equal("Tony Stark", cardHolder.name);
+      assert.equal("51190844001", cardHolder.document);
     });
 
     test("card holder with only required fields", async () => {
@@ -22,10 +21,9 @@ describe("Card Entity", () => {
         name: "Tony Stark",
       };
 
-      expect(cardHolder).not.toBeNull();
       assertType<BempaggoCardHolderResponse>(cardHolder);
-      expect(Object.keys(cardHolder).length).toBe(1);
-      expect(cardHolder.name).toBe("Tony Stark");
+      assert.equal(1, Object.keys(cardHolder).length);
+      assert.equal("Tony Stark", cardHolder.name);
     })
 
     test("cardExpiration", async () => {
@@ -34,16 +32,15 @@ describe("Card Entity", () => {
         month: 1
       };
 
-      expect(cardExpiration).not.toBeNull();
       assertType<BempaggoCardExpirationResponse>(cardExpiration);
-      expect(Object.keys(cardExpiration).length).toBe(2);
-      expect(cardExpiration.year).toBe(2035);
-      expect(cardExpiration.month).toBe(1);
+      assert.equal(2, Object.keys(cardExpiration).length);
+      assert.equal(2035, cardExpiration.year);
+      assert.equal(1, cardExpiration.month);
     });
 
     test("cardResponse", async () => {
       const card: BempaggoCardResponse = {
-        id: 1,
+        token: "token-1",
         holder: {
           name: "Tony Stark",
           document: "51190844001",
@@ -57,18 +54,22 @@ describe("Card Entity", () => {
         brand: CardBrandTypes.MASTERCARD,
       };
 
-      expect(card).not.toBeNull();
       assertType<BempaggoCardResponse>(card);
-      expect(Object.keys(card).length).toBe(6);
       assertType<BempaggoCardHolderResponse>(card.holder);
-      expect(Object.keys(card.holder).length).toBe(2);
-      expect(card.holder.name).toBe("Tony Stark");
-      expect(card.holder.document).toBe("51190844001");
       assertType<BempaggoCardExpirationResponse>(card.expiration);
-      expect(Object.keys(card.expiration).length).toBe(2);
-      expect(card.expiration.year).toBe(2035);
-      expect(card.expiration.month).toBe(1);
-      expect(card.brand).toBe(CardBrandTypes.MASTERCARD);
+
+      assert.equal(6, Object.keys(card).length);
+      assert.equal(2, Object.keys(card.holder).length);
+      assert.equal(2, Object.keys(card.expiration).length);
+
+      assert.equal("Tony Stark", card.holder.name);
+      assert.equal("51190844001", card.holder.document);
+      assert.equal("token-1", card.token);
+      assert.equal("544828", card.bin);
+      assert.equal("0007", card.lastFour);
+      assert.equal(2035, card.expiration.year);
+      assert.equal(1, card.expiration.month);
+      assert.equal("MASTERCARD", card.brand);
     });
   });
 });
