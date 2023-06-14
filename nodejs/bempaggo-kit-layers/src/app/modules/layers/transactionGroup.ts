@@ -77,8 +77,8 @@ export interface LayersTransactionGroup {
 		}
 		bank_slip?: {
 			url: string
-			dueDays: number | null
-			lateFee: number | null
+			dueDays: number | null // TODO timestamp ??
+			lateFee: number | null // TODO flat?
 			lateInterestRate: number | null // TODO DAY, MONTH ??? PERCENTAGE, FLAT ?
 		}
 		total: {

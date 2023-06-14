@@ -1,5 +1,5 @@
 #!/bin/bash
-sub_version=55
+sub_version=57
 version="1.0.$sub_version"
 sub_version_release=$((sub_version+1))
 update="1.0.$sub_version_release"

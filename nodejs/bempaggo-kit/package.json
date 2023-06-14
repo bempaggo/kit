@@ -1,6 +1,6 @@
 {
   "name": "bempaggo-kit",
-  "version": "1.0.55",
+  "version": "1.0.57",
   "description": "Software Development Kit (SDK) to the integration with Bempaggo Payment Gateway",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
