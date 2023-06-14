@@ -3,7 +3,7 @@ import { LayersPixPaymentMethod, LayersTransaction } from "@/app/modules/layers/
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, test } from "vitest";
-import { layers, simulation } from "./setup";
+import { layers, simulation, tokenLayers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
 const requestLayersStyle: LayersTransactionGroup = {
@@ -99,7 +99,9 @@ describe("pix", () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 		const url: string = await layers.getExternalQrCode(response);
-		const responseQuickResponseCode = await fetch(url, { method: "GET" });
+		const headers = new Headers();
+		headers.set("Authorization", `Bearer ${tokenLayers}`);
+		const responseQuickResponseCode = await fetch(url, { method: "GET", headers });
 		assert.equal(200, responseQuickResponseCode.status);
 	});
 });
