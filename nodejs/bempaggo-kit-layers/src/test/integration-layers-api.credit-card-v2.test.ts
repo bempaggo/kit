@@ -206,7 +206,7 @@ describe.concurrent.only("How use credit card charge", () => {
 			requestLayersStyle.price.amount = 59;
 
 			requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
-		
+			await layers.createTransaction(requestLayersStyle);
 		});
 
 
