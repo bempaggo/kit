@@ -1,7 +1,6 @@
 import { BempaggoApiV2 } from "./BempaggoApiV2";
 import { BempaggoTransactionServiceable } from "./Transaction";
 import {
-	BempaggoAddressRequest,
 	BempaggoCardRequest,
 	BempaggoCustomerRequest,
 } from "./entity/BempaggoRequest";

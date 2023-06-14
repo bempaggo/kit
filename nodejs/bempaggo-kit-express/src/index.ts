@@ -86,21 +86,20 @@ app.post('/sellers/:sellerId/orders/pix', (req: Request, res: Response) => {
 		.catch((e) => errorHandler(e, res));
 });
 
-// TODO testar
-// app.get('/charges/pix/qrcode', (req: Request, res: Response) => {
-// 	const orderReference = req.query.orderReference;
-// 	console.log(orderReference, "orderReference")
-// 	const url = pix(req).createQuickResponseCodeUrlByOrderReference(orderReference as string);
-// 	fetch(url, { method: "GET" })
-// 		.then(value => send(value, res))
-// 		.catch((e) => errorHandler(e, res));
-// });
+app.get('/charges/pix/qrcode', (req: Request, res: Response) => {
+	const chargeId = req.query.chargeId;
+	console.log(chargeId, "chargeId")
+	const url = pix(req).createQuickResponseCodeUrlByChargeId(Number(chargeId));
+	fetch(url, { method: "GET" })
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
 
 app.get('/charges/pix/qrcode', (req: Request, res: Response) => {
-	const orderReference = req.query.orderReference;
-	pix(req).createQuickResponseCodeUrlByOrderReference(orderReference as string)
+	const chargeId = req.query.chargeId;
+	pix(req).getQuickResponseCodeUrlByChargeId(Number(chargeId))
 		.then(value => send(value, res))
-		.catch((e) => errorHandler(e, res));	
+		.catch((e) => errorHandler(e, res));
 });
 
 app.post('/charges/:id/credit-card/refund', (req: Request, res: Response) => {
