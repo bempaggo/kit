@@ -16,7 +16,9 @@ Adjusting tokenLayers and url following the environment, in file:
 ../src/test/setup.ts
  
 Command to test:
+
 cd ../kit/nodejs/bempaggo-kit-layers
+
 npm run test
 
 
