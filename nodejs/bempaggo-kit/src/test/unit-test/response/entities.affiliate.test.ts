@@ -1,8 +1,7 @@
 import { BempaggoAffiliateMinimalResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Affiliate entity", () => {
-
   describe("Response", () => {
     test("BempaggoAffiliateMinimalResponse", async () => {
       const affiliateMinimal: BempaggoAffiliateMinimalResponse = {
@@ -11,12 +10,12 @@ describe("Affiliate entity", () => {
         businessName: "Stark Industries"
       };
 
-      expect(affiliateMinimal).not.toBeNull();
       assertType<BempaggoAffiliateMinimalResponse>(affiliateMinimal);
-      expect(Object.keys(affiliateMinimal).length).toBe(3);
-      expect(affiliateMinimal.id).toBe(1);
-      expect(affiliateMinimal.name).toBe("Tony Stark");
-      expect(affiliateMinimal.businessName).toBe("Stark Industries");
+      assert.equal(3, Object.keys(affiliateMinimal).length);
+      assert.equal(1, affiliateMinimal.id);
+      assert.equal("Tony Stark", affiliateMinimal.name);
+      assert.equal("Stark Industries", affiliateMinimal.businessName);
     });
   });
 });
+
