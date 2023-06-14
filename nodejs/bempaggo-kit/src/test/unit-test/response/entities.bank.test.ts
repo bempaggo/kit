@@ -1,8 +1,7 @@
 import { BempaggoBankResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Bank entity", () => {
-
   describe("Response", () => {
     test("BempaggoBank", async () => {
       const bank: BempaggoBankResponse = {
@@ -11,27 +10,12 @@ describe("Bank entity", () => {
         account: "123456"
       };
 
-      expect(bank).not.toBeNull();
-      expect(bank).not.toBeUndefined();
-      expect(bank).not.toBeNaN();
-
       assertType<BempaggoBankResponse>(bank);
-
-      expect(bank.code).not.toBeNull();
-      expect(bank.code).not.toBeUndefined();
-      expect(bank.code).not.toBeNaN();
-      expect(bank.code).toBe("001");
-
-      expect(bank.agency).not.toBeNull();
-      expect(bank.agency).not.toBeUndefined();
-      expect(bank.agency).not.toBeNaN();
-      expect(bank.agency).toBe("1234");
-      
-      expect(bank.account).not.toBeNull();
-      expect(bank.account).not.toBeUndefined();
-      expect(bank.account).not.toBeNaN();
-      expect(bank.account).toBe("123456");
-
+      assert.equal(3, Object.keys(bank).length);
+      assert.equal("001", bank.code);
+      assert.equal("1234", bank.agency);
+      assert.equal("123456", bank.account);
     });
   });
 });
+

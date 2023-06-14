@@ -1,6 +1,6 @@
 import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes } from "@/app/modules/entity/Enum";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Customer", () => {
   describe("Response", () => {
@@ -20,19 +20,22 @@ describe("Customer", () => {
         brand: CardBrandTypes.MASTERCARD,
       };
 
-      expect(paymentMethod).not.toBeNull();
       assertType<BempaggoCardResponse>(paymentMethod);
-      expect(Object.keys(paymentMethod).length).toBe(6);
       assertType<BempaggoCardHolderResponse>(paymentMethod.holder);
-      expect(Object.keys(paymentMethod.holder).length).toBe(2);
-      expect(paymentMethod.holder.name).toBe("Tony Stark");
-      expect(paymentMethod.holder.document).toBe("51190844001");
       assertType<BempaggoCardExpirationResponse>(paymentMethod.expiration);
-      expect(Object.keys(paymentMethod.expiration).length).toBe(2);
-      expect(paymentMethod.expiration.year).toBe(2035);
-      expect(paymentMethod.expiration.month).toBe(1);
-      expect(paymentMethod.token).toBe("skksks");
-      expect(paymentMethod.brand).toBe("MASTERCARD");
+
+      assert.equal(6, Object.keys(paymentMethod).length);
+      assert.equal(2, Object.keys(paymentMethod.holder).length);
+      assert.equal(2, Object.keys(paymentMethod.expiration).length);
+
+      assert.equal("skksks", paymentMethod.token);
+      assert.equal("Tony Stark", paymentMethod.holder.name);
+      assert.equal("51190844001", paymentMethod.holder.document);
+      assert.equal("544828", paymentMethod.bin);
+      assert.equal("0007", paymentMethod.lastFour);
+      assert.equal(2035, paymentMethod.expiration.year);
+      assert.equal(1, paymentMethod.expiration.month);
+      assert.equal("MASTERCARD", paymentMethod.brand);
     });
   });
 });

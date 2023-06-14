@@ -1,6 +1,7 @@
 import { BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
+
 
 describe("Credit card payment", () => {
   describe("Request", () => {
@@ -16,20 +17,18 @@ describe("Credit card payment", () => {
         splits: [],
       };
 
-      expect(creditCardPayment).not.toBeNull();
-      expect(creditCardPayment).not.toBeUndefined();
-      expect(creditCardPayment).not.toBeNaN();
-
       assertType<BempaggoCreditCardPaymentRequest>(creditCardPayment);
-
-      expect(creditCardPayment.paymentMethod).toBe(PaymentMethodTypes.CREDIT_CARD);
-      expect(creditCardPayment.amount).toBeGreaterThan(0);
-      expect(creditCardPayment.splits).not.toBeNull();
-      expect(creditCardPayment.splits).not.toBeUndefined();
-      expect(creditCardPayment.splits).not.toBeNaN();
-      expect(creditCardPayment.splits).toHaveLength(0);
+      assert.equal(5, Object.keys(creditCardPayment).length);
+      assert.equal(2, Object.keys(creditCardPayment.cardToken).length);
+      assert.equal("CREDIT_CARD", creditCardPayment.paymentMethod);
+      assert.equal("123", creditCardPayment.cardToken.cvv);
+      assert.equal("123", creditCardPayment.cardToken.token);
+      assert.equal(1, creditCardPayment.installments);
+      assert.equal(1000, creditCardPayment.amount);
+      assert.deepEqual([], creditCardPayment.splits);
 
     });
+
     test("Valid request with splits", async () => {
       const creditCardPayment: BempaggoCreditCardPaymentRequest = {
         paymentMethod: PaymentMethodTypes.CREDIT_CARD,
@@ -49,25 +48,20 @@ describe("Credit card payment", () => {
         }],
       };
 
-      expect(creditCardPayment).not.toBeNull();
-      expect(creditCardPayment).not.toBeUndefined();
-      expect(creditCardPayment).not.toBeNaN();
-
       assertType<BempaggoCreditCardPaymentRequest>(creditCardPayment);
-
-      expect(creditCardPayment.paymentMethod).toBe(PaymentMethodTypes.CREDIT_CARD);
-      expect(creditCardPayment.amount).toBeGreaterThan(0);
-      expect(creditCardPayment.splits).not.toBeNull();
-      expect(creditCardPayment.splits).not.toBeUndefined();
-      expect(creditCardPayment.splits).not.toBeNaN();
-      expect(creditCardPayment.splits).toHaveLength(2);
-
-      expect(creditCardPayment.splits[0].amount).toBeGreaterThan(0);
-      expect(creditCardPayment.splits[0].sellerId).toBeGreaterThan(0);
-
-      expect(creditCardPayment.splits[1].amount).toBeGreaterThan(0);
-      expect(creditCardPayment.splits[1].sellerId).toBeGreaterThan(0);
+      assert.equal(5, Object.keys(creditCardPayment).length);
+      assert.equal(2, Object.keys(creditCardPayment.cardToken).length);
+      assert.equal("CREDIT_CARD", creditCardPayment.paymentMethod);
+      assert.equal("123", creditCardPayment.cardToken.cvv);
+      assert.equal("123", creditCardPayment.cardToken.token);
+      assert.equal(1, creditCardPayment.installments);
+      assert.equal(1000, creditCardPayment.amount);
+      assert.lengthOf(creditCardPayment.splits, 2);
+      assert.equal(1000, creditCardPayment.splits[0].amount);
+      assert.equal(123456789, creditCardPayment.splits[0].sellerId);
+      assert.equal(1000, creditCardPayment.splits[1].amount);
+      assert.equal(123456789, creditCardPayment.splits[1].sellerId);
     });
   });
-
 });
+

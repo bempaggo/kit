@@ -1,29 +1,19 @@
 import { BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Credit card token", () => {
   describe("Request", () => {
     test("Valid request", async () => {
-      const cardToken: BempaggoTokenCardRequest  = {
+      const cardToken: BempaggoTokenCardRequest = {
         cvv: "123",
         token: "123"
       }
 
-      expect(cardToken).not.toBeNull();
-      expect(cardToken).not.toBeUndefined();
-      expect(cardToken).not.toBeNaN();
-
-      expect(cardToken.cvv).not.toBeNull();
-      expect(cardToken.cvv).not.toBeUndefined();
-      expect(cardToken.cvv).not.toBeNaN();
-      expect(cardToken.cvv).toHaveLength(3);
-
-      expect(cardToken.token).not.toBeNull();
-      expect(cardToken.token).not.toBeUndefined();
-      expect(cardToken.token).not.toBeNaN();
-      expect(cardToken.token).toHaveLength(3);
-      
+      assertType<BempaggoTokenCardRequest>(cardToken);
+      assert.equal(2, Object.keys(cardToken).length);
+      assert.equal("123", cardToken.cvv);
+      assert.equal("123", cardToken.token);
     });
   });
-
 });
+

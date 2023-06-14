@@ -1,38 +1,34 @@
 import { BempaggoBankSlipPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
+
 
 describe("Bankslip Payment", () => {
   describe("Request", () => {
     test("Valid request", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
         paymentMethod: PaymentMethodTypes.BOLETO,
-        dueDate: new Date().getTime(),
+        dueDate: 1686683096030,
         amount: 1000,
-        paymentLimitDate:new Date().getTime(),
+        paymentLimitDate: 1686683096030,
         splits: [],
       };
 
-      expect(bankslipPayment).not.toBeNull();
-      expect(bankslipPayment).not.toBeUndefined();
-      expect(bankslipPayment).not.toBeNaN();
-
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
 
-      expect(bankslipPayment.paymentMethod).toBe(PaymentMethodTypes.BOLETO);
-      expect(bankslipPayment.dueDate).toBeGreaterThan(0);
-      expect(bankslipPayment.amount).toBeGreaterThan(0);
-      expect(bankslipPayment.splits).not.toBeNull();
-      expect(bankslipPayment.splits).not.toBeUndefined();
-      expect(bankslipPayment.splits).not.toBeNaN();
-      expect(bankslipPayment.splits).toHaveLength(0);
 
+      assert.equal("BOLETO", bankslipPayment.paymentMethod);
+      assert.equal(1686683096030, bankslipPayment.dueDate);
+      assert.equal(1000, bankslipPayment.amount);
+      assert.equal(1686683096030, bankslipPayment.paymentLimitDate);
+      assert.deepEqual([], bankslipPayment.splits);
     });
+
     test("Valid request with splits", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
         paymentMethod: PaymentMethodTypes.BOLETO,
         dueDate: new Date().getTime(),
-        paymentLimitDate: new Date().getTime(),
+        paymentLimitDate:1686683096030,
         amount: 1000,
         splits: [{
           amount: 1000,
@@ -44,18 +40,19 @@ describe("Bankslip Payment", () => {
         }],
       };
 
-      expect(PaymentMethodTypes.BOLETO).toBe(bankslipPayment.paymentMethod);
+      assert.equal(PaymentMethodTypes.BOLETO, bankslipPayment.paymentMethod);
       assert.equal(1000, bankslipPayment.amount);
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
-      assert.equal(PaymentMethodTypes.BOLETO, bankslipPayment.paymentMethod);
-      expect(bankslipPayment.dueDate).toBeGreaterThan(0);
-      expect(bankslipPayment.splits).toHaveLength(2);
-      expect(bankslipPayment.splits[0].amount).toBeGreaterThan(0);
+      assert.equal("BOLETO", bankslipPayment.paymentMethod);
+      assert.equal(1686683096030, bankslipPayment.dueDate);
+      assert.equal(1686683096030, bankslipPayment.paymentLimitDate);
+      assert.ok(bankslipPayment.dueDate > 0);
+      assert.lengthOf(bankslipPayment.splits, 2);
       assert.equal(1000, bankslipPayment.splits[0].amount);
-      expect(bankslipPayment.splits[0].sellerId).toBeGreaterThan(0);
-      expect(bankslipPayment.splits[1].amount).toBeGreaterThan(0);
-      expect(bankslipPayment.splits[1].sellerId).toBeGreaterThan(0);
+      assert.equal(123456789, bankslipPayment.splits[0].sellerId);
+      assert.equal(1000, bankslipPayment.splits[1].amount);
+      assert.equal(123456789, bankslipPayment.splits[1].sellerId);
     });
   });
-
 });
+

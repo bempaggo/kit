@@ -63,14 +63,14 @@ app.get('/orders/:chargeId', (req: Request, res: Response) => {
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
-// TODO testar
+
 app.post('/charges/:id/bank-slip/cancel', (req: Request, res: Response) => {
 	const id = req.params.id;
 	bankSlipService(req).cancelBankSlip(Number(id))
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
-// TODO testar
+
 app.post('/charges/:id/pix/cancel', (req: Request, res: Response) => {
 	const id = req.params.id;
 	pix(req).cancelPix(Number(id))
@@ -78,7 +78,6 @@ app.post('/charges/:id/pix/cancel', (req: Request, res: Response) => {
 		.catch((e) => errorHandler(e, res));
 });
 
-// TODO testar
 app.post('/sellers/:sellerId/orders/pix', (req: Request, res: Response) => {
 	const charge: BempaggoOrderRequest = req.body;
 	const sellerId = req.params.sellerId;
@@ -86,15 +85,23 @@ app.post('/sellers/:sellerId/orders/pix', (req: Request, res: Response) => {
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
-// TODO testar
-app.get('/charges/pix/qrcode/:orderRefence', (req: Request, res: Response) => {
-	const orderRefence = req.params.orderRefence;
-	const url = pix(req).createQuickResponseCodeUrlByChargeId(Number(orderRefence));
-	fetch(url, { method: "GET" })
-		.then(value => send(value, res))
-		.catch((e) => errorHandler(e, res));
-});
 
+// TODO testar
+// app.get('/charges/pix/qrcode', (req: Request, res: Response) => {
+// 	const orderReference = req.query.orderReference;
+// 	console.log(orderReference, "orderReference")
+// 	const url = pix(req).createQuickResponseCodeUrlByOrderReference(orderReference as string);
+// 	fetch(url, { method: "GET" })
+// 		.then(value => send(value, res))
+// 		.catch((e) => errorHandler(e, res));
+// });
+
+app.get('/charges/pix/qrcode', (req: Request, res: Response) => {
+	const orderReference = req.query.orderReference;
+	pix(req).createQuickResponseCodeUrlByOrderReference(orderReference as string)
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));	
+});
 
 app.post('/charges/:id/credit-card/refund', (req: Request, res: Response) => {
 	const id = req.params.id;

@@ -1,5 +1,5 @@
 import { BempaggoCardExpirationRequest, BempaggoCardHolderRequest, BempaggoCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Card Entity", () => {
   describe("Request", () => {
@@ -8,12 +8,11 @@ describe("Card Entity", () => {
         name: "Tony Stark",
         document: "51190844001",
       };
-      expect(cardHolder).not.toBeNull();
+
       assertType<BempaggoCardHolderRequest>(cardHolder);
-      expect(Object.keys(cardHolder).length).toBe(2);
-      expect(cardHolder.name).toBe("Tony Stark");
-      expect(cardHolder.document).toBe("51190844001");
-      
+      assert.equal(2, Object.keys(cardHolder).length);
+      assert.equal("Tony Stark", cardHolder.name);
+      assert.equal("51190844001", cardHolder.document);
     });
 
     test("cardExpiration", async () => {
@@ -22,12 +21,10 @@ describe("Card Entity", () => {
         month: 3,
       };
 
-      expect(cardExpiration).not.toBeNull();
       assertType<BempaggoCardExpirationRequest>(cardExpiration);
-      expect(Object.keys(cardExpiration).length).toBe(2);
-      expect(cardExpiration.year).toBe(2025);
-      expect(cardExpiration.month).toBe(3);
-
+      assert.equal(2, Object.keys(cardExpiration).length);
+      assert.equal(2025, cardExpiration.year);
+      assert.equal(3, cardExpiration.month);
     });
 
     test("card", async () => {
@@ -43,20 +40,20 @@ describe("Card Entity", () => {
         },
       };
 
-      expect(card).not.toBeNull();
       assertType<BempaggoCardRequest>(card);
       assertType<BempaggoCardHolderRequest>(card.holder);
       assertType<BempaggoCardExpirationRequest>(card.expiration);
-      expect(Object.keys(card).length).toBe(3);
-      expect(card.cardNumber).toBe("5448280000000007");
-      expect(Object.keys(card.holder).length).toBe(2);
-      expect(card.holder.name).toBe("Tony Stark");
-      expect(card.holder.document).toBe("51190844001");
-      expect(Object.keys(card.expiration).length).toBe(2);
-      expect(card.expiration.year).toBe(2025);
-      expect(card.expiration.month).toBe(3);
 
+      assert.equal(3, Object.keys(card).length);
+      assert.equal(2, Object.keys(card.holder).length);
+      assert.equal(2, Object.keys(card.expiration).length);
+      
+      assert.equal("5448280000000007", card.cardNumber);
+      assert.equal("Tony Stark", card.holder.name);
+      assert.equal("51190844001", card.holder.document);
+      assert.equal(2025, card.expiration.year);
+      assert.equal(3, card.expiration.month);
     });
   });
-
 });
+

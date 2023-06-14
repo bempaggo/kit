@@ -1,14 +1,13 @@
 
 
-import { BempaggoAddressRequest, BempaggoOrderRequest, BempaggoCustomerRequest, BempaggoPhoneRequest, BempaggoTokenCardRequest, BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
+import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assertType, describe, expect, test } from "vitest";
+import { assert, assertType, describe, test } from "vitest";
 
 describe("Charge Entity", () => {
 	describe("Request", () => {
 
 		test("charge", async () => {
-
 			const charge: BempaggoOrderRequest = {
 				customer: {
 					phone: {
@@ -50,44 +49,46 @@ describe("Charge Entity", () => {
 				notificationUrl: "https://meusite.com.br/events",
 			};
 
-			expect(charge.customer).not.toBeNull();
 			assertType<BempaggoCustomerRequest>(charge.customer);
 			assertType<BempaggoOrderRequest>(charge);
 			assertType<BempaggoAddressRequest | undefined>(charge.customer.address);
 			assertType<BempaggoPhoneRequest | undefined>(charge.customer.phone);
 			assertType<BempaggoTokenCardRequest>((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!);
+			assertType<BempaggoSplitPaymentRequest[]>((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits);
 
-			expect(Object.keys(charge).length).toBe(5);
-			expect(charge.amount).toBe(1000);
-			expect((charge.payments[0] as BempaggoCreditCardPaymentRequest).installments).toBe(1);
-			expect(charge.orderReference).toBe("order-1");
-			expect(charge.notificationUrl).toBe("https://meusite.com.br/events");
-
-			expect(Object.keys(charge.customer).length).toBe(6);
-			expect(charge.customer.name).toBe("Tony Stark");
-			expect(charge.customer.document).toBe("51190844001");
-			expect(charge.customer.birthdate).toBe("2000-01-01");
-			expect(charge.customer.email).toBe("tony.stark@bempaggo.com");
-			expect(Object.keys(charge.customer?.address ?? {}).length).toBe(7);
-			expect(charge.customer.address?.street).toBe("Rua Jair Hamms");
-			expect(charge.customer.address?.streetNumber).toBe("38");
-			expect(charge.customer.address?.lineTwo).toBe("Sala 101");
-			expect(charge.customer.address?.neighborhood).toBe("Pedra Branca");
-			expect(charge.customer.address?.city).toBe("Palhoça");
-			expect(charge.customer.address?.state).toBe("SC");
-			expect(charge.customer.address?.zipCode).toBe("88137084");
-			expect(Object.keys(charge.customer?.phone ?? {}).length).toBe(3);
-			expect(charge.customer.phone?.countryCode).toBe(55);
-			expect(charge.customer.phone?.areaCode).toBe(48);
-			expect(charge.customer.phone?.number).toBe(999999999);
-			expect(Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length).toBe(2);
-			expect((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv).toBe("123");
-			expect((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token).toBe("123");
-			expect(charge.payments[0].splits[0].amount).toBe(1000);
-			expect(charge.payments[0].splits[0].sellerId).toBe(1);
+			assert.equal(5, Object.keys(charge).length);
+			assert.equal(6, Object.keys(charge.customer).length);
+			assert.equal(3, Object.keys(charge.customer?.phone ?? {}).length);
+			assert.equal(7, Object.keys(charge.customer?.address ?? {}).length);
+			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length);
+			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits[0]).length);
+			
+			assert.equal(55, charge.customer.phone?.countryCode);
+			assert.equal(48, charge.customer.phone?.areaCode);
+			assert.equal(999999999, charge.customer.phone?.number);
+			assert.equal("Rua Jair Hamms", charge.customer.address?.street);
+			assert.equal("38", charge.customer.address?.streetNumber);
+			assert.equal("Sala 101", charge.customer.address?.lineTwo);
+			assert.equal("Pedra Branca", charge.customer.address?.neighborhood);
+			assert.equal("Palhoça", charge.customer.address?.city);
+			assert.equal("SC", charge.customer.address?.state);
+			assert.equal("88137084", charge.customer.address?.zipCode);
+			assert.equal("Tony Stark", charge.customer.name);
+			assert.equal("51190844001", charge.customer.document);
+			assert.equal("2000-01-01", charge.customer.birthdate);
+			assert.equal("tony.stark@bempaggo.com", charge.customer.email);
+			assert.equal("order-1", charge.orderReference);
+			assert.equal("CREDIT_CARD", charge.payments[0].paymentMethod);
+			assert.equal(1, (charge.payments[0] as BempaggoCreditCardPaymentRequest).installments);
+			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv);
+			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token);
+			assert.equal(1000, charge.payments[0].amount);
+			assert.lengthOf(charge.payments[0].splits, 1);
+			assert.equal(1000, charge.payments[0].splits[0].amount);
+			assert.equal(1, charge.payments[0].splits[0].sellerId);
+			assert.equal(1000, charge.amount);
+			assert.equal("https://meusite.com.br/events", charge.notificationUrl);
 		});
-
-
 	});
-
 });
+
