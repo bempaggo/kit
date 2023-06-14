@@ -1,4 +1,3 @@
-
 import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
@@ -33,7 +32,6 @@ const card: BempaggoCardRequest = {
 	holder: {
 		name: "Carlos Cartola",
 		document: "06219385993",
-
 	},
 	cardNumber: "5448280000000007",// master number
 }
@@ -56,6 +54,95 @@ describe("customer functions", async () => {
 		test("create a customer", async () => {
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
+			assert.equal(3, Object.keys(customerResponse.phone!).length);
+			assert.equal(8, Object.keys(customerResponse.address!).length);
+			assert.equal(1, customerResponse.id);
+			assert.equal("Carlos Cartola", customerResponse.name);
+			assert.equal("carlos@bempaggo.com", customerResponse.email);
+			assert.equal("06219385993", customerResponse.document);
+			assert.equal("55", customerResponse.phone?.countryCode);
+			assert.equal("999999999", customerResponse.phone?.number);
+			assert.equal("11", customerResponse.phone?.areaCode);
+			assert.equal("1990-01-01", customerResponse.birthdate);
+			assert.equal("Rua do Zé", customerResponse.address?.street);
+			assert.equal("apto 123", customerResponse.address?.lineTwo);
+			assert.equal("São Paulo", customerResponse.address?.city);
+			assert.equal("12345678", customerResponse.address?.zipCode);
+			assert.equal("123", customerResponse.address?.streetNumber);
+			assert.equal("SP", customerResponse.address?.state);
+			assert.equal("Centro", customerResponse.address?.neighborhood);
+		});
+		test("find a customer by document", async () => {
+			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
+			const foundCustomerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).findCustomerByDocument(customerResponse.document as string);
+			assert.equal(7, Object.keys(foundCustomerResponse).length);
+			assert.equal(3, Object.keys(foundCustomerResponse.phone!).length);
+			assert.equal(8, Object.keys(foundCustomerResponse.address!).length);
+			assert.equal(1, foundCustomerResponse.id);
+			assert.equal("Carlos Cartola", foundCustomerResponse.name);
+			assert.equal("carlos@bempaggo.com", foundCustomerResponse.email);
+			assert.equal("06219385993", foundCustomerResponse.document);
+			assert.equal("55", foundCustomerResponse.phone?.countryCode);
+			assert.equal("999999999", foundCustomerResponse.phone?.number);
+			assert.equal("11", foundCustomerResponse.phone?.areaCode);
+			assert.equal("1990-01-01", foundCustomerResponse.birthdate);
+			assert.equal("Rua do Zé", foundCustomerResponse.address?.street);
+			assert.equal("apto 123", foundCustomerResponse.address?.lineTwo);
+			assert.equal("São Paulo", foundCustomerResponse.address?.city);
+			assert.equal("12345678", foundCustomerResponse.address?.zipCode);
+			assert.equal("123", foundCustomerResponse.address?.streetNumber);
+			assert.equal("SP", foundCustomerResponse.address?.state);
+			assert.equal("Centro", foundCustomerResponse.address?.neighborhood);
+		});
+		test("update customer", async () => {
+			let updatedCustomer: BempaggoCustomerResponse;
+			const newCustomer: BempaggoCustomerRequest = {
+				name: "Carlos Cartolasso",
+				document: "06219385993",
+				email: "carlota@bempaggo.bol",
+				phone: {
+					areaCode: 31,
+					countryCode: 55,
+					number: 3134537322
+				},
+				birthdate: "1994-10-12",
+				address: {
+					street: "Rua Ramalhete",
+					neighborhood: "Meio",
+					city: "Beaga",
+					state: "BH",
+					zipCode: "31570120",
+					streetNumber: "343",
+					lineTwo: "casa 2"
+				}
+			};
+			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
+			if (customerResponse.document) {
+				updatedCustomer = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).updateCustomer(customerResponse.document, newCustomer);
+			} else {
+				throw new Error("customer document not found");
+			}
+
+			console.log(customerResponse.document);
+			console.log(updatedCustomer);
+			assert.equal(7, Object.keys(updatedCustomer).length);
+			assert.equal(3, Object.keys(updatedCustomer.phone!).length);
+			assert.equal(8, Object.keys(updatedCustomer.address!).length);
+			assert.equal(1, updatedCustomer.id);
+			assert.equal("Carlos Cartola", updatedCustomer.name);
+			assert.equal("carlos@bempaggo.com", updatedCustomer.email);
+			assert.equal("06219385993", updatedCustomer.document);
+			assert.equal("55", updatedCustomer.phone?.countryCode);
+			assert.equal("999999999", updatedCustomer.phone?.number);
+			assert.equal("11", updatedCustomer.phone?.areaCode);
+			assert.equal("1990-01-01", updatedCustomer.birthdate);
+			assert.equal("Rua do Zé", updatedCustomer.address?.street);
+			assert.equal("apto 123", updatedCustomer.address?.lineTwo);
+			assert.equal("São Paulo", updatedCustomer.address?.city);
+			assert.equal("12345678", updatedCustomer.address?.zipCode);
+			assert.equal("123", updatedCustomer.address?.streetNumber);
+			assert.equal("SP", updatedCustomer.address?.state);
+			assert.equal("Centro", updatedCustomer.address?.neighborhood);
 		});
 	});
 
@@ -76,13 +163,37 @@ describe("customer functions", async () => {
 			assert.equal("BANESCARD", CardBrandTypes.BANESCARD);
 			assert.equal("CREDZ", CardBrandTypes.CREDZ);
 		});
-		test("tokenize a card", async () => {
-			// token= rode a classe OneTimeV2EredeSantilanaSetupServiceTest.java e surgira um token
-			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).tokenizeCard(card, "no");
-			assert.equal(64, cardResponse.token!.length);
-		});
 		test("create a card", async () => {
 			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomerPaymentMethod(document, paymentMethod);
+			//TODO: o response que vem é na verdade o response do CardV2Response e não do BempaggoCardResponse. Id, year e month diferem. 
+			assert.equal(7, Object.keys(cardResponse).length);
+			assert.equal(2, Object.keys(cardResponse.holder).length);
+			assert.equal(2, Object.keys(cardResponse.expiration).length);
+			assert.equal("Carlos Cartola", cardResponse.holder.name);
+			assert.equal("06219385993", cardResponse.holder.document);
+			assert.equal("544828", cardResponse.bin);
+			assert.equal("0007", cardResponse.lastFour);
+			assert.equal(2028, cardResponse.expiration.year);
+			assert.equal(1, cardResponse.expiration.month);
+			assert.equal("MASTERCARD", cardResponse.brand);
+			assert.equal(64, cardResponse.token!.length);
 		});
+		test("tokenize a card", async () => {
+			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).tokenizeCard(card, "no");
+			//TODO: o tokenizeCard devolve um cardResponse sem id. Seria o certo devolver so o token? Ou fazer igual o createCustomerPaymentMethod e devolver um CardResponse completo?
+			assert.equal(7, Object.keys(cardResponse).length);
+			assert.equal(2, Object.keys(cardResponse.holder).length);
+			assert.equal(2, Object.keys(cardResponse.expiration).length);
+			assert.equal("Carlos Cartola", cardResponse.holder.name);
+			assert.equal("06219385993", cardResponse.holder.document);
+			assert.equal("544828", cardResponse.bin);
+			assert.equal("0007", cardResponse.lastFour);
+			assert.equal(2028, cardResponse.expiration.year);
+			assert.equal(1, cardResponse.expiration.month);
+			assert.equal("MASTERCARD", cardResponse.brand);
+			assert.equal(64, cardResponse.token!.length);
+			assert.equal(64, cardResponse.token!.length);
+		});
+
 	});
 });

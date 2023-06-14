@@ -44,7 +44,6 @@ Comments with TODO are for highlights and review.
 
 
 ### layers style
-
 import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 
 const layers: BemPaggoSdk = new BemPaggoSdk(url, tokenLayers);

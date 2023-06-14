@@ -15,12 +15,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-    "bempaggo-kit": "1.0.55",
+    "bempaggo-kit": "1.0.57",
     "rimraf": "^5.0.1"
-=======
-	"bempaggo-kit":"1.0.57"
->>>>>>> branch 'main' of https://github.com/bempaggo/kit.git
   },
   "devDependencies": {
     "typescript": "^5.0.4",
