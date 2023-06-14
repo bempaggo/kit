@@ -1,5 +1,11 @@
+## NPM
 
-##Install
+npm i bempaggo-kit // only sdk bempaggo
+
+npm i bempaggo-kit-layers
+
+
+## Install this projetc
 
 npm i
 
