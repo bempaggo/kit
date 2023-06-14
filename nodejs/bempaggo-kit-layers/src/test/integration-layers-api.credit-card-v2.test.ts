@@ -359,8 +359,6 @@ describe.concurrent.only("How use credit card charge", () => {
 				assert.equal("06219385993", refund.customer_id);
 				assert.equal(ChargeStatusTypes.REFUND, refund.status);
 
-
-
 				assert.equal(-1035, paymentRefund.amount);
 				assert.equal(TransactionStatusTypes.REFUND, paymentRefund.status);
 				assert.equal(1035, paymentRefund.refunded_value);
