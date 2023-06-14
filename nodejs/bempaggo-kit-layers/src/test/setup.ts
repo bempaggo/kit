@@ -41,9 +41,9 @@
 
 import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY2NzA2NjksImV4cCI6MTY4NjczMDY2OX0.MYnnG2jOPY7khETUzZLSq1O_TIeEs1WE2wb8opUAX4pzyjgfZk4VgZqcdJJKKOgxwryDSowfI9BmJD4SlhrOBg";
+const token = "Portal";
 // needs to generate a token in portal
-const url = "http://localhost:5000/api"
+const url = "https://api-sandbox.bempaggo.io/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(url, token);
 
 const simulation = async (chargeId: number): Promise<void> => {
