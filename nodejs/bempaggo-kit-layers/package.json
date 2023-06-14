@@ -9,13 +9,14 @@
     "clean": "rimraf lib",
     "build": "npm run clean && tsc",
     "test": "npm run clean && vitest --no-threads --watch ",
-    "t":"npx vitest run --no-threads -t "
+    "t": "npx vitest run --no-threads -t "
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-	"bempaggo-kit":"1.0.55"
+    "bempaggo-kit": "1.0.55",
+    "rimraf": "^5.0.1"
   },
   "devDependencies": {
     "typescript": "^5.0.4",
