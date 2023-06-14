@@ -3,7 +3,6 @@ import { BempaggoHttp } from "./BempaggoHttp";
 import { BempaggoTransactionApiV2 } from "./BempaggoTransactionApiV2";
 import { BempaggoTransactionServiceable } from "./Transaction";
 import {
-	BempaggoAddressRequest,
 	BempaggoCardRequest,
 	BempaggoCustomerRequest
 } from "./entity/BempaggoRequest.js";
