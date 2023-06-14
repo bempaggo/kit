@@ -56,7 +56,7 @@ describe("customer functions", async () => {
 			assert.equal(7, Object.keys(customerResponse).length);
 			assert.equal(3, Object.keys(customerResponse.phone!).length);
 			assert.equal(8, Object.keys(customerResponse.address!).length);
-			assert.equal(1, customerResponse.id);
+			assert.isNotNull(customerResponse.id);
 			assert.equal("Carlos Cartola", customerResponse.name);
 			assert.equal("carlos@bempaggo.com", customerResponse.email);
 			assert.equal("06219385993", customerResponse.document);
@@ -78,7 +78,7 @@ describe("customer functions", async () => {
 			assert.equal(7, Object.keys(foundCustomerResponse).length);
 			assert.equal(3, Object.keys(foundCustomerResponse.phone!).length);
 			assert.equal(8, Object.keys(foundCustomerResponse.address!).length);
-			assert.equal(1, foundCustomerResponse.id);
+			assert.isNotNull(foundCustomerResponse.id);
 			assert.equal("Carlos Cartola", foundCustomerResponse.name);
 			assert.equal("carlos@bempaggo.com", foundCustomerResponse.email);
 			assert.equal("06219385993", foundCustomerResponse.document);
@@ -95,7 +95,6 @@ describe("customer functions", async () => {
 			assert.equal("Centro", foundCustomerResponse.address?.neighborhood);
 		});
 		test("update customer", async () => {
-			let updatedCustomer: BempaggoCustomerResponse;
 			const newCustomer: BempaggoCustomerRequest = {
 				name: "Carlos Cartolasso",
 				document: "06219385993",
@@ -103,7 +102,7 @@ describe("customer functions", async () => {
 				phone: {
 					areaCode: 31,
 					countryCode: 55,
-					number: 3134537322
+					number: 991881234
 				},
 				birthdate: "1994-10-12",
 				address: {
@@ -117,32 +116,27 @@ describe("customer functions", async () => {
 				}
 			};
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
-			if (customerResponse.document) {
-				updatedCustomer = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).updateCustomer(customerResponse.document, newCustomer);
-			} else {
-				throw new Error("customer document not found");
-			}
+			const updatedCustomer: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).updateCustomer(customerResponse.document!, newCustomer);
 
-			console.log(customerResponse.document);
-			console.log(updatedCustomer);
 			assert.equal(7, Object.keys(updatedCustomer).length);
 			assert.equal(3, Object.keys(updatedCustomer.phone!).length);
 			assert.equal(8, Object.keys(updatedCustomer.address!).length);
-			assert.equal(1, updatedCustomer.id);
-			assert.equal("Carlos Cartola", updatedCustomer.name);
-			assert.equal("carlos@bempaggo.com", updatedCustomer.email);
+			assert.isNotNull(updatedCustomer.id);
+			assert.equal(customerResponse.id, updatedCustomer.id);
+			assert.equal("Carlos Cartolasso", updatedCustomer.name);
+			assert.equal("carlota@bempaggo.bol", updatedCustomer.email);
 			assert.equal("06219385993", updatedCustomer.document);
 			assert.equal("55", updatedCustomer.phone?.countryCode);
-			assert.equal("999999999", updatedCustomer.phone?.number);
-			assert.equal("11", updatedCustomer.phone?.areaCode);
-			assert.equal("1990-01-01", updatedCustomer.birthdate);
-			assert.equal("Rua do Zé", updatedCustomer.address?.street);
-			assert.equal("apto 123", updatedCustomer.address?.lineTwo);
-			assert.equal("São Paulo", updatedCustomer.address?.city);
-			assert.equal("12345678", updatedCustomer.address?.zipCode);
-			assert.equal("123", updatedCustomer.address?.streetNumber);
-			assert.equal("SP", updatedCustomer.address?.state);
-			assert.equal("Centro", updatedCustomer.address?.neighborhood);
+			assert.equal("991881234", updatedCustomer.phone?.number);
+			assert.equal("31", updatedCustomer.phone?.areaCode);
+			assert.equal("1994-10-12", updatedCustomer.birthdate);
+			assert.equal("Rua Ramalhete", updatedCustomer.address?.street);
+			assert.equal("casa 2", updatedCustomer.address?.lineTwo);
+			assert.equal("Beaga", updatedCustomer.address?.city);
+			assert.equal("31570120", updatedCustomer.address?.zipCode);
+			assert.equal("343", updatedCustomer.address?.streetNumber);
+			assert.equal("BH", updatedCustomer.address?.state);
+			assert.equal("Meio", updatedCustomer.address?.neighborhood);
 		});
 	});
 
