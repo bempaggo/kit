@@ -6,8 +6,8 @@ import { LayersAddress, LayersBankSlipPaymentMethod, LayersCustomer, LayersCusto
 import { LayersTransactionGroup } from "./transactionGroup";
 
 // TODO esta classe eh uma desgraca, os objetos de (request e response) parecem ser a mesma coisa, mas nao sao.
-// Tem transactionGroup que parcece ser os objetos de request. sao?? 
-// Ai tem essas classes da interface.ts que parecem ser os responses, mas falta muitos campos.  
+// Tem transactionGroup que parcece ser os objetos de request. sao??
+// Ai tem essas classes da interface.ts que parecem ser os responses, mas falta muitos campos.
 class Util {
 	static getDateAsString(data: Date): string | undefined {
 		if (data) {
@@ -65,8 +65,8 @@ class RequestsToBempaggo {
 			},
 			amount: transactionGroup.price.amount, // is this in cents?
 			payments: payments,
-			orderReference: transactionGroup.code
-
+			orderReference: transactionGroup.code,
+			notificationUrl: transactionGroup.urlNotification
 		};
 	}
 
@@ -148,7 +148,7 @@ class RequestsToBempaggo {
 			paymentMethod: PaymentMethodTypes.BOLETO,
 			amount: payment.total.amount,
 			splits: this.toSplits(payment.recipients),
-			expirationDate: payment.bank_slip!.dueDays!,
+			dueDate: payment.bank_slip!.dueDays!,
 			paymentLimitDate: payment.bank_slip!.dueDays!,
 		};
 	};
@@ -229,7 +229,7 @@ class ResponsesFromBempaggo {
 				bank_account: transaction.bank.account,
 				bank_agency: transaction.bank.agency,
 				bank_code: transaction.bank.code,
-				community_legal_document: "?",//TODO let me know 
+				community_legal_document: "?",//TODO let me know
 				community_legal_name: "TODO let me know ",
 				creation_date: new Date(transaction.transactionDate).toDateString(),
 				customer_address_1: transaction.customer.address?.street ? transaction.customer.address?.street : "",
@@ -238,7 +238,7 @@ class ResponsesFromBempaggo {
 				customer_name: transaction.customer.name,
 				digitable_line: transaction.digitableLine,
 				document_number: transaction.documentNumber,
-				expiration_date: new Date(transaction.expirationDate).toDateString(),
+				expiration_date: new Date(transaction.dueDate).toDateString(),
 				our_number: transaction.ourNumber,
 				payment_instructions: transaction.customer.address?.street ? transaction.customer.address?.street : "",
 				source: {
@@ -286,7 +286,8 @@ class ResponsesFromBempaggo {
 					reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
 					pix: {
 						expires_in: new Date(transaction.expirationDate).toLocaleString(undefined, options)
-					}
+					},
+					emv:transaction.emv
 				};
 				payments.push(payment);
 			}
@@ -298,14 +299,14 @@ class ResponsesFromBempaggo {
 				const payment: LayersBankSlipPaymentMethod = {
 					payment_method: 'boleto',
 					customer: transaction.customer,
-					paid_amount:transaction.paidValue?transaction.paidValue:0,
+					paid_amount: transaction.paidValue ? transaction.paidValue : 0,
 					amount: transaction.value,
 					recipient_id: transaction.affiliate ? transaction.affiliate.id.toString() : "-",
 					status: transaction.status,
 					reference_id: transaction.transactionReference ? transaction.transactionReference : "not created",
 					boleto: {
-						due_at: new Date(transaction.expirationDate).toLocaleString(undefined, options),
-						
+						due_at: new Date(transaction.dueDate).toLocaleString(undefined, options),
+
 					},
 				};
 				payments.push(payment);

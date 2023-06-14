@@ -263,7 +263,8 @@ describe("Charge Entity", () => {
 				value: 1000,
 				transactionDate: 1620000000000,
 				type: TransactionResponseTypes.LOOSE,
-				splits: []
+				splits: [],
+				emv:"code-emv mocked"
 			} as BempaggoPixTransactionResponse];
 
 			const chargeResponse: BempaggoChargeResponse = {

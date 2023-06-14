@@ -23,8 +23,8 @@ const requestLayersStyle: LayersTransactionGroup = {
 
 		bank_slip: {
 			dueDays: new Date().getTime(),
-			lateFee: 1,
-			lateInterestRate: 1,
+			lateFee: 1, // TODO ignoring 
+			lateInterestRate: 1, // TODO ignoring 
 			url: "not used?"
 		}
 
@@ -52,9 +52,8 @@ const requestLayersStyle: LayersTransactionGroup = {
 			state: "SC"
 		}],
 	},
-	urlNotification: "https://webhook.site/6d4af021-511a-4f77-b7ce-a73961c90d3e"
+	urlNotification: "https://ec90340f030e4657830412c7817b1ccc.m.pipedream.net"
 }
-
 
 describe("boleto", () => {
 	test("create boleto only", async () => {
@@ -97,13 +96,13 @@ describe("boleto", () => {
 		assert.equal(1, chargeCancel.payments.length);
 		assert.equal(10035, chargeCancel.amount);
 		assert.equal(null, chargeCancel.refunded_amount);
-		assert.equal(ChargeStatusTypes.PENDING, chargeCancel.status);
+		assert.equal(ChargeStatusTypes.CANCELED, chargeCancel.status);
 		assert.isNotNull(chargeCancel.referenceId); // charge.referenceId is the charge reference from bempaggo
 		assert.isNotNull(payment.reference_id);
 		assert.equal("06219385993", chargeCancel.customer_id);
 		assert.equal(10035, chargeCancel.amount);
 		assert.equal(0, payment.paid_amount);
-		assert.equal(TransactionStatusTypes.AWAITING_PAYMENT, payment.status);
+		assert.equal(TransactionStatusTypes.CANCELED, payment.status);
 		assert.equal('boleto', payment.payment_method);
 		assert.equal(sellerId.toString(), payment.recipient_id);
 		assert.isNotNull(payment.reference_id);

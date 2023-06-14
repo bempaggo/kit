@@ -33,7 +33,8 @@ const requestLayersStyle: LayersTransactionGroup = {
 		},
 		addresses: [],
 	},
-	urlNotification: "https://webhook.site/6d4af021-511a-4f77-b7ce-a73961c90d3e"
+	urlNotification: "https://ec90340f030e4657830412c7817b1ccc.m.pipedream.net/webhooks"
+
 }
 
 
@@ -63,12 +64,13 @@ describe("pix", () => {
 		assert.equal(sellerId.toString(), payment.recipient_id);
 		assert.isNotNull(payment.reference_id);
 		assert.equal("06219385993", charge.customer_id);
+		assert.equal(175, payment.emv.length);
 	});
 	test("create pix paid simulation", async () => {
 		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
 		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 		await simulation(Number(charge.referenceId))
-		const chargePaid:LayersTransaction = await layers.findChargeById(Number(charge.referenceId));
+		const chargePaid: LayersTransaction = await layers.findChargeById(Number(charge.referenceId));
 		const payment: LayersPixPaymentMethod = chargePaid.payments[0] as LayersPixPaymentMethod;
 		assert.equal(1, chargePaid.payments.length);
 		assert.equal(1035, chargePaid.amount);
@@ -83,12 +85,21 @@ describe("pix", () => {
 		assert.equal(sellerId.toString(), payment.recipient_id);
 		assert.isNotNull(payment.reference_id);
 		assert.equal("06219385993", chargePaid.customer_id);
+		assert.equal(175, payment.emv.length);
+	});
+
+	test("create pix and get  urls of qr cod", async () => {
+		requestLayersStyle.code = new Date().getTime().toString();
+		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
+		const url: string = await layers.getExternalQrCode(response);
+		assert.equal(`http://localhost:5000/api/v2/charges/${response.referenceId}/qrcode`, url);
 	});
 
 	test("create pix and get qr cod", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		const qrCode: string = await layers.getExternalQrCode(response);
-		assert.equal(`http://localhost:5000/api/v2/charges/${response.referenceId}/qrcode`, qrCode);
+		const url: string = await layers.getExternalQrCode(response);
+		const responseQuickResponseCode = await fetch(url, { method: "GET" });
+		assert.equal(200, responseQuickResponseCode.status);
 	});
 });

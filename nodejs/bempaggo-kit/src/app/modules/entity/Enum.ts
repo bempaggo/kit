@@ -80,14 +80,34 @@ enum CardBrandTypes {
 	BANESCARD = "BANESCARD",
 	CREDZ = "CREDZ"
 }
+enum OrderStatusType {
+	ACTIVE = "ACTIVE",
+	INACTIVE = "INACTIVE",
+	OVERDUE = "OVERDUE",
+	PENDING = "PENDING",
+	CANCELED = "CANCELED",
+	CHARGEBACK = "CHARGEBACK",
+	COUNTERCHARGE = "COUNTERCHARGE"
+}
+enum MathTypes {
+	FLAT = "FLAT",
+	/**When FLAT use the amount in cents	*/
+	PERCENTAGE = "PERCENTAGE"
+	/**When PERCENTAGE use the amount, using five position to the decimal
+	 * Examples:
+	 * 	percent		= amount to send bempaggo
+	 *  1.00%  		= 100000
+	 *  1.50%  		= 150000
+	 *  5.00%  		= 500000
+	 *  10.00% 		= 1000000
+	 *  10.98% 		= 1098000
+	*/
 
+}
+enum PeriodicityTypes {
+	DAILY = "DAILY", MONTHLY = "MONTHLY", ANNUAL = "ANNUAL"
+}
 export {
-	PaymentMethodTypes,
-	ChargeStatusTypes,
-	RefundReasonTypes,
-	TransactionStatusTypes,
-	Environments,
-	TransactionResponseTypes,
-	CardBrandTypes
+	CardBrandTypes, ChargeStatusTypes, Environments, MathTypes, OrderStatusType, PaymentMethodTypes, PeriodicityTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes
 };
 

@@ -10,7 +10,7 @@ describe("Pix transaction", () => {
         expirationDate: 1620000000000,
         paymentMethod: PaymentMethodTypes.PIX,
         id: 1,
-        establishment:{
+        establishment: {
           id: 1,
         },
         returnCode: "00",
@@ -26,13 +26,14 @@ describe("Pix transaction", () => {
           businessName: "Bempaggo",
         },
         paidValue: 1000,
-        splits: []
+        splits: [],
+        emv: "emv mocked"
       };
 
-      expect(Object.keys(pix).length).toBe(15);
+      expect(Object.keys(pix).length).toBe(16);
       expect(Object.keys(pix.establishment).length).toBe(1);
       expect(Object.keys(pix.affiliate!).length).toBe(3);
-
+      expect("emv mocked").toBe(pix.emv)
       expect(pix).not.toBeNull();
       expect(pix).not.toBeUndefined();
       expect(pix).not.toBeNaN();
@@ -158,7 +159,7 @@ describe("Pix transaction", () => {
       expect(pix.splits).not.toBeUndefined();
       expect(pix.splits).not.toBeNaN();
       expect(pix.splits).toHaveLength(0);
-    
+
     });
 
   });

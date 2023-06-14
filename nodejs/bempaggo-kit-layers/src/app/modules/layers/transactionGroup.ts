@@ -15,12 +15,12 @@ export interface LayersTransactionGroup {
 	// Source for the transaction main seller
 	sourceId: ObjectId
 
-	urlNotification: string | null;// TODO Bempaggo 
+	urlNotification: string | undefined;// TODO Bempaggo
 	/**
 	 * Payment Method used in this transaction group
 	 */
 	paymentMethods: {
-		//key: string 
+		//key: string
 
 		// custom: boolean
 
@@ -79,7 +79,7 @@ export interface LayersTransactionGroup {
 			url: string
 			dueDays: number | null
 			lateFee: number | null
-			lateInterestRate: number | null
+			lateInterestRate: number | null // TODO DAY, MONTH ??? PERCENTAGE, FLAT ?
 		}
 		total: {
 			amount: number

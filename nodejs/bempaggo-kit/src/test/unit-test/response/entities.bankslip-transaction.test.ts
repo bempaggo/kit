@@ -11,7 +11,7 @@ describe("Bankslip transaction", () => {
 					code: "001",
 					agency: "1234",
 				},
-				expirationDate: 1620000000000,
+				dueDate: 1620000000000,
 				paymentInstructions: "Pagar até o vencimento",
 				communityLegalName: "Bempaggo",
 				communityLegalDocument: "12345678901234",
@@ -70,7 +70,7 @@ describe("Bankslip transaction", () => {
 			expect(Object.keys(bankSlip.affiliate!).length).toBe(3);
 
 
-			expect(bankSlip.expirationDate).toBe(1620000000000);
+			expect(bankSlip.dueDate).toBe(1620000000000);
 
 			expect(bankSlip.paymentInstructions).toBe("Pagar até o vencimento");
 

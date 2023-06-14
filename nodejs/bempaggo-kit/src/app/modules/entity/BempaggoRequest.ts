@@ -1,4 +1,4 @@
-import { PaymentMethodTypes } from "./Enum";
+import { MathTypes, PaymentMethodTypes, PeriodicityTypes } from "./Enum";
 
 interface BempaggoCardRequest {
 	cardNumber: string;
@@ -69,15 +69,18 @@ type BempaggoPaymentRequest =
 
 interface BempaggoAbstractPaymentRequest {
 	paymentMethod: PaymentMethodTypes,
-	// this value is in cents of payment part. It shoud order.amount == sum (order.payments[i].amount)  
+	// this value is in cents of payment part. It shoud order.amount == sum (order.payments[i].amount)
 	amount: number;
-	/** 
-	 * The splits are parts that each affiliate (seller) owns. 
+	/**
+	 * The splits are parts that each affiliate (seller) owns.
 	 * However, the amounts are not sent to the affiliate acquirer's account.
 	 * The amounts are only sent to the acquirer's account for the affiliate (seller informed in the order authorization, in the order URL).
 	 * */
 	splits: BempaggoSplitPaymentRequest[];
 }
+
+
+
 
 interface BempaggoBankSlipPaymentRequest extends BempaggoAbstractPaymentRequest {
 	paymentMethod: PaymentMethodTypes.BOLETO;
@@ -93,12 +96,35 @@ interface BempaggoBankSlipPaymentRequest extends BempaggoAbstractPaymentRequest 
 	 *
 	 * @TIMESTEMP
 	 */
-	
-	expirationDate:number
-	paymentLimitDate:number,
-	ourNumber?:number
+
+	dueDate: number
+	paymentLimitDate: number,
+	ourNumber?: number,
+	fine?: BempaggoBankSlipPaymentV2FineRequest;
+	interest?: BempaggoBankSlipPaymentV2InterestRequest;
 }
 
+interface BempaggoBankSlipPaymentV2FineRequest {
+
+	days: number;
+
+	type: MathTypes;
+
+	amount: number;
+
+
+
+}
+
+interface BempaggoBankSlipPaymentV2InterestRequest {
+	days: number;
+
+	type: MathTypes;
+
+	amount: number;
+
+	frequency: PeriodicityTypes;
+}
 interface BempaggoCreditCardPaymentRequest extends BempaggoAbstractPaymentRequest {
 	paymentMethod: PaymentMethodTypes.CREDIT_CARD;
 	/**
@@ -122,12 +148,12 @@ interface BempaggoPixPaymentRequest extends BempaggoAbstractPaymentRequest {
 	 *
 	 * @TIMESTEMP
 	 */
-	desiredExpirationDate:number,
-	description?:string;
+	desiredExpirationDate: number,
+	description?: string;
 }
 
 interface BempaggoSplitPaymentRequest {
-	
+
 	/**
 	 *This value is in cents.
 	 * */
@@ -135,9 +161,8 @@ interface BempaggoSplitPaymentRequest {
 	sellerId: number;
 }
 export {
-	BempaggoAbstractPaymentRequest, BempaggoAddressRequest, BempaggoBankSlipPaymentRequest, BempaggoCardExpirationRequest,
-	BempaggoCardHolderRequest,
-	BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoPixPaymentRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest
+	BempaggoAbstractPaymentRequest, BempaggoAddressRequest, BempaggoBankSlipPaymentRequest, BempaggoBankSlipPaymentV2FineRequest, BempaggoBankSlipPaymentV2InterestRequest, BempaggoCardExpirationRequest,
+	BempaggoCardHolderRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoPixPaymentRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest
 };
 
 

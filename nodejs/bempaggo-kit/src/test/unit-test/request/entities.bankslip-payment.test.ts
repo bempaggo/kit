@@ -7,7 +7,7 @@ describe("Bankslip Payment", () => {
     test("Valid request", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
         paymentMethod: PaymentMethodTypes.BOLETO,
-        expirationDate: new Date().getTime(),
+        dueDate: new Date().getTime(),
         amount: 1000,
         paymentLimitDate:new Date().getTime(),
         splits: [],
@@ -20,7 +20,7 @@ describe("Bankslip Payment", () => {
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
 
       expect(bankslipPayment.paymentMethod).toBe(PaymentMethodTypes.BOLETO);
-      expect(bankslipPayment.expirationDate).toBeGreaterThan(0);
+      expect(bankslipPayment.dueDate).toBeGreaterThan(0);
       expect(bankslipPayment.amount).toBeGreaterThan(0);
       expect(bankslipPayment.splits).not.toBeNull();
       expect(bankslipPayment.splits).not.toBeUndefined();
@@ -31,7 +31,7 @@ describe("Bankslip Payment", () => {
     test("Valid request with splits", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
         paymentMethod: PaymentMethodTypes.BOLETO,
-        expirationDate: new Date().getTime(),
+        dueDate: new Date().getTime(),
         paymentLimitDate: new Date().getTime(),
         amount: 1000,
         splits: [{
@@ -48,7 +48,7 @@ describe("Bankslip Payment", () => {
       assert.equal(1000, bankslipPayment.amount);
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
       assert.equal(PaymentMethodTypes.BOLETO, bankslipPayment.paymentMethod);
-      expect(bankslipPayment.expirationDate).toBeGreaterThan(0);
+      expect(bankslipPayment.dueDate).toBeGreaterThan(0);
       expect(bankslipPayment.splits).toHaveLength(2);
       expect(bankslipPayment.splits[0].amount).toBeGreaterThan(0);
       assert.equal(1000, bankslipPayment.splits[0].amount);

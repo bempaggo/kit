@@ -58,7 +58,7 @@ describe("How use it extra", () => {
 			assert.equal("SC", customer.address.state);
 		});
 
-		test.concurrent("create customer and find by document", async () => {
+		test("create customer and find by document", async () => {
 			const carlos: LayersCustomer = {
 
 				document: "06219385993",

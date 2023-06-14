@@ -90,7 +90,7 @@ interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactio
 	paymentMethod: PaymentMethodTypes.BOLETO;
 	bank: BempaggoBankResponse;
 	/**
-	 * expirationDate is the timestamp. This is the deadline receive the payment.
+	 * dueDate is the timestamp. This is the deadline receive the payment.
 	 *
 	 * Example: The value 0 is GMT: Thursday, January 1, 1970 12:00:00 AM.
 	 *
@@ -99,7 +99,8 @@ interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactio
 	 *
 	 * @TIMESTEMP
 	 */
-	expirationDate: number;
+	dueDate: number;
+	paymentDate?: number;
 	paymentInstructions: string;
 	communityLegalName: string;
 	communityLegalDocument: string;
@@ -115,6 +116,8 @@ interface BempaggoPixTransactionResponse extends BempaggoAbstractTransactionResp
 	 * expirationDate is the timestamp. This is the deadline receive the payment.
 	 */
 	expirationDate: number;
+	paymentDate?: number;
+	emv:string;
 
 }
 
@@ -135,9 +138,9 @@ interface BempaggoCreditCardTransactionResponse extends BempaggoAbstractTransact
 
 interface BempaggoAbstractTransactionResponse {
 	paymentMethod: PaymentMethodTypes;
-	/** 
+	/**
 	 * id is the value from Bempaggo. 
-	 * 
+	 *
 	 * */
 	id: number;
 
@@ -169,8 +172,8 @@ interface BempaggoAbstractTransactionResponse {
 	 * establishment is a specific account of the affiliate that the payment was sent to.
 	 */
 	establishment: BempaggoEstablishmentMinimalResponse;
-	/** 
-	 * The splits are parts that each affiliate (seller) owns. 
+	/**
+	 * The splits are parts that each affiliate (seller) owns.
 	 * However, the amounts are not sent to the affiliate acquirer's account.
 	 * The amounts are only sent to the acquirer's account for the affiliate (seller informed in the order authorization, in the order URL).
 	 */
