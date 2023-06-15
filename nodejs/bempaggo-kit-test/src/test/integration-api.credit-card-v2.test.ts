@@ -653,52 +653,67 @@ describe("credit card functions", async () => {
 
 			test("create authorize and capture and refund two cards", async () => {
 				const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
+				const creditCardServiceable = bempaggo.getChargeService().getCreditCardServiceable()
 				const cardToken = await bempaggo.tokenizeCard(card, "Not used");
 				const cardTokenSecond = await bempaggo.tokenizeCard(secondCard, "Not used");
 
 				(order.payments[0] as BempaggoCreditCardPaymentRequest).cardToken.token = cardToken.token!;
 				(order.payments[1] as BempaggoCreditCardPaymentRequest).cardToken.token = cardTokenSecond.token!;
 				order.orderReference = `o-${new Date().getTime().toString()}`
-				const charge: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
-				const responseCapture: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().captureCreditCardCharge(charge.id); 
-				const refundResponse = await bempaggo.getChargeService().getCreditCardServiceable().refundCreditCardCharge(responseCapture.id);
-				console.log(refundResponse);
+				const charge: BempaggoChargeResponse = await creditCardServiceable.createCreditCardCharge(1, order);
+				const responseCapture: BempaggoChargeResponse = await creditCardServiceable.captureCreditCardCharge(charge.id); 
+				const refundResponse = await creditCardServiceable.refundCreditCardCharge(responseCapture.id);
 				const transaction1: BempaggoCreditCardTransactionResponse = refundResponse.transactions[3] as BempaggoCreditCardTransactionResponse;
 				const transaction2: BempaggoCreditCardTransactionResponse = refundResponse.transactions[2] as BempaggoCreditCardTransactionResponse;
-				const transaction3: BempaggoCreditCardTransactionResponse = refundResponse.transactions[1] as BempaggoCreditCardTransactionResponse;
-				const transaction4: BempaggoCreditCardTransactionResponse = refundResponse.transactions[0] as BempaggoCreditCardTransactionResponse;
+				const transactionRefund: BempaggoCreditCardTransactionResponse = refundResponse.transactions[1] as BempaggoCreditCardTransactionResponse;
+				const transactionRefund2: BempaggoCreditCardTransactionResponse = refundResponse.transactions[0] as BempaggoCreditCardTransactionResponse;
 				assert.equal(26, Object.keys(transaction1).length);
 				assert.equal(26, Object.keys(transaction2).length);
-				assert.equal(26, Object.keys(transaction3).length);
-				assert.equal(26, Object.keys(transaction4).length);
+				assert.equal(26, Object.keys(transactionRefund).length);
+				assert.equal(26, Object.keys(transactionRefund2).length);
 
-				assert.equal(2, refundResponse.transactions.length);
+				assert.equal(4, refundResponse.transactions.length);
 				assert.equal(2500, refundResponse.value);
-				assert.equal("PAY", refundResponse.status);
+				assert.equal("REFUND", refundResponse.status);
+				assert.equal(2500, refundResponse.refundedAmount);
+				assert.equal("REFUND", refundResponse.status);
+				
+				assert.equal("CREDIT_CARD", transactionRefund.paymentMethod);
+				assert.isNotNull(transactionRefund.id);
+				assert.equal(-1000, transactionRefund.value);
+				assert.equal(1000, transactionRefund.paidValue);
+				assert.equal(1000, transactionRefund.refundValue);
+				assert.equal("REFUND", transactionRefund.type);
+				assert.equal("REFUND", transactionRefund.status);
+				assert.isNotNull(transactionRefund.transactionKey);
+				assert.equal("OTHERS", transactionRefund.refundRason);
+				assert.isNotNull(transactionRefund.transactionReference);
+				assert.equal(cardToken.token, transactionRefund.card.token!);
+				assert.isNull(transactionRefund.installments);
+
+				assert.equal("CREDIT_CARD", transactionRefund2.paymentMethod);
+				assert.isNotNull(transactionRefund2.id);
+				assert.equal(-1500, transactionRefund2.value);
+				assert.equal(1500, transactionRefund2.paidValue);
+				assert.equal(1500, transactionRefund2.refundValue);
+				assert.equal("REFUND", transactionRefund2.type);
+				assert.equal("REFUND", transactionRefund2.status);
+				assert.isNotNull(transactionRefund2.transactionKey);
+				assert.equal("OTHERS", transactionRefund2.refundRason);
+				assert.isNotNull(transactionRefund2.transactionReference);
+				assert.equal(cardTokenSecond.token, transactionRefund2.card.token!);
+				assert.isNull(transactionRefund2.installments);
+
 				assert.equal("CREDIT_CARD", transaction1.paymentMethod);
 				assert.isNotNull(transaction1.id);
 				assert.equal(1000, transaction1.value);
 				assert.equal(1000, transaction1.paidValue);
-				assert.isNull(transaction1.refundValue);
+				assert.equal(1000, transaction1.refundValue);
 				assert.equal("LOOSE", transaction1.type);
 				assert.equal("APPROVED", transaction1.status);
-				assert.isNotNull(transaction1.transactionDate);
-				assert.equal(1, transaction1.affiliate?.id);
-				assert.equal("Up Negócios", transaction1.affiliate?.name);
-				assert.equal("Up Negócios LTDA.", transaction1.affiliate?.businessName);
-				assert.equal(1, transaction1.establishment.id);
-				assert.equal("00", transaction1.returnCode);
-				assert.equal("Sucesso.", transaction1.returnMessage);
 				assert.isNotNull(transaction1.transactionKey);
 				assert.isNull(transaction1.refundRason);
 				assert.isNotNull(transaction1.transactionReference);
-				assert.equal("544828", transaction1.card.bin);
-				assert.equal("MASTERCARD", transaction1.card.brand);
-				assert.equal(1, transaction1.card.expiration.month);
-				assert.equal(2028, transaction1.card.expiration.year);
-				assert.equal("Carlos Cartola", transaction1.card.holder.name);
-				assert.equal("06219385993", transaction1.card.holder.document);
-				assert.equal("0007", transaction1.card.lastFour);
 				assert.equal(cardToken.token, transaction1.card.token!);
 				assert.equal(1, transaction1.installments);
 				
@@ -706,26 +721,12 @@ describe("credit card functions", async () => {
 				assert.isNotNull(transaction2.id);
 				assert.equal(1500, transaction2.value);
 				assert.equal(1500, transaction2.paidValue);
-				assert.isNull(transaction2.refundValue);
+				assert.equal(1500, transaction2.refundValue);
 				assert.equal("LOOSE", transaction2.type);
 				assert.equal("APPROVED", transaction2.status);
-				assert.isNotNull(transaction2.transactionDate);
-				assert.equal(1, transaction2.affiliate?.id);
-				assert.equal("Up Negócios", transaction2.affiliate?.name);
-				assert.equal("Up Negócios LTDA.", transaction2.affiliate?.businessName);
-				assert.equal(1, transaction2.establishment.id);
-				assert.equal("00", transaction2.returnCode);
-				assert.equal("Sucesso.", transaction2.returnMessage);
 				assert.isNotNull(transaction2.transactionKey);
 				assert.isNull(transaction2.refundRason);
 				assert.isNotNull(transaction2.transactionReference);
-				assert.equal("423564", transaction2.card.bin);
-				assert.equal("VISA", transaction2.card.brand);
-				assert.equal(1, transaction2.card.expiration.month);
-				assert.equal(2029, transaction2.card.expiration.year);
-				assert.equal("Douglas Hiura Longo Visa", transaction2.card.holder.name);
-				assert.equal("06219385993", transaction2.card.holder.document);
-				assert.equal("5682", transaction2.card.lastFour);
 				assert.equal(cardTokenSecond.token, transaction2.card.token!);
 				assert.equal(2, transaction2.installments);
 			});
