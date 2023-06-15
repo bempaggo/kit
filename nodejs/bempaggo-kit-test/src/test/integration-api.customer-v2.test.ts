@@ -35,7 +35,7 @@ const card: BempaggoCardRequest = {
 	},
 	cardNumber: "5448280000000007",// master number
 }
-const token: string = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY3NDQ1MjAsImV4cCI6MTY4NjgwNDUyMH0.XqkSuYjwYh-PUKFrjNawKKLivsWZAGJR6-o96qzIgp9YUqqbeJTrnG47CD47h4gMv8wMt4P74V9YFuKpIBUWPw"
+const token: string = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY4MzU0MDEsImV4cCI6MTY4Njg5NTQwMX0.kCGdb5dQicqy3fmfZkDctz2SUCq1H-7Q3ciaAuM8Ong0pVTcPn5NpASn5rGgssrDBE06wx6Phg0hhf-OVc0bAw"
 const document: string = "06219385993"
 const paymentMethod: BempaggoCardRequest = {
 	expiration: {

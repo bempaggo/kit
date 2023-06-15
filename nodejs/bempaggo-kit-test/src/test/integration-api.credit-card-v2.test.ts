@@ -1,6 +1,6 @@
 import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
-import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
+import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, CardBrandTypes, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, test } from "vitest";
 
@@ -36,7 +36,7 @@ const card: BempaggoCardRequest = {
 	},
 	cardNumber: "5448280000000007",// master number
 }
-const token: string = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY3NDQ1MjAsImV4cCI6MTY4NjgwNDUyMH0.XqkSuYjwYh-PUKFrjNawKKLivsWZAGJR6-o96qzIgp9YUqqbeJTrnG47CD47h4gMv8wMt4P74V9YFuKpIBUWPw"
+const token: string = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY4MzU0MDEsImV4cCI6MTY4Njg5NTQwMX0.kCGdb5dQicqy3fmfZkDctz2SUCq1H-7Q3ciaAuM8Ong0pVTcPn5NpASn5rGgssrDBE06wx6Phg0hhf-OVc0bAw"
 const document: string = "06219385993"
 const paymentMethod: BempaggoCardRequest = {
 	expiration: {
@@ -169,11 +169,58 @@ describe("credit card functions", async () => {
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
 			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 			(order.payments[0] as BempaggoCreditCardPaymentRequest).cardToken.token = cardResponse.token!;
+			order.orderReference = `o-${new Date().getTime().toString()}`
 			const authorizedCard: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
 
-			console.log(cardResponse);
-			assert.equal(7, Object.keys(authorizedCard).length);
+			console.log(authorizedCard);
+			assert.equal(8, Object.keys(authorizedCard).length);
+			assert.equal(26, Object.keys(authorizedCard.transactions[0]).length);
+			assert.equal(3, Object.keys((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).affiliate!).length);
+			assert.equal(1, Object.keys((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).establishment!).length);
+			assert.equal(7, Object.keys((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
+			assert.equal(2, Object.keys((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
+			assert.equal(2, Object.keys((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
+			assert.equal(2, Object.keys(authorizedCard.customer).length);
+			assert.equal(3, Object.keys(authorizedCard.order).length);
+			assert.equal(3, Object.keys(authorizedCard.order.affiliate!).length);
 			
+			assert.isNotNull(authorizedCard.id);
+			assert.equal("AUTHORIZED", authorizedCard.status);
+			assert.equal(1000, authorizedCard.value);
+			assert.isNull(authorizedCard.refundedAmount);
+			assert.equal("CREDIT_CARD", authorizedCard.transactions[0].paymentMethod);
+			assert.isNotNull(authorizedCard.transactions[0].id);
+			assert.equal(1000, authorizedCard.transactions[0].value);
+			assert.isNull(authorizedCard.transactions[0].paidValue);
+			assert.isNull((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).refundValue);
+			assert.equal("LOOSE", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).type);
+			assert.equal("AUTHORIZED", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).status);
+			assert.isNotNull((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).transactionDate);
+			assert.equal(1, (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).affiliate?.id);
+			assert.equal("Up Negócios", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).affiliate?.name);
+			assert.equal("Up Negócios LTDA.", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).affiliate?.businessName);
+			assert.equal(1, (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).establishment.id);
+			assert.equal("00", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).returnCode);
+			assert.equal("Sucesso.", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).returnMessage);
+			assert.isNotNull((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).transactionKey);
+			assert.isNull((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason);
+			assert.isNotNull((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).transactionReference);
+			assert.equal("544828", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.bin);
+			assert.equal("MASTERCARD", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.brand);
+			assert.equal(1, (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration.month);
+			assert.equal(2028, (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration.year);
+			assert.equal("Carlos Cartola", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.name);
+			assert.equal("06219385993", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder.document);
+			assert.equal("0007", (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.lastFour);
+			assert.isNotNull((authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).card.token);
+			assert.equal(1, (authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse).installments);
+			assert.equal(2, authorizedCard.customer.id);
+			assert.equal("51190844001", authorizedCard.customer.document);
+			assert.isNotNull(authorizedCard.order.id);
+			assert.isNotNull(authorizedCard.order.orderReference);
+			assert.equal(1, authorizedCard.order.affiliate?.id);
+			assert.equal("Up Negócios", authorizedCard.order.affiliate?.name);
+			assert.equal("Up Negócios LTDA.", authorizedCard.order.affiliate?.businessName);
 		});
 
 	});
