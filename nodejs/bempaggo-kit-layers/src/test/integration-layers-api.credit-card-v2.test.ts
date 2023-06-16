@@ -3,7 +3,7 @@ import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 import { LayersCreditCardPaymentMethod, LayersCustomerPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
+import { assert, describe, expect, test, vi } from "vitest";
 import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
@@ -206,7 +206,15 @@ describe.concurrent.only("How use credit card charge", () => {
 			requestLayersStyle.price.amount = 59;
 
 			requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
-			await layers.createTransaction(requestLayersStyle);
+			try {
+				await layers.createTransaction(requestLayersStyle);
+			} catch (error: any) {
+				const errors = JSON.parse(error.value);
+				assert.equal("Bad Request", error.message);
+				assert.equal(400, error.status);
+				assert.equal("The 'amount' field must be the sum of the 'amount' of payments.", errors[0].message);
+				assert.equal("invalidAmounts", errors[0].field);
+			}
 		});
 
 
@@ -358,8 +366,6 @@ describe.concurrent.only("How use credit card charge", () => {
 				assert.equal(2035, refund.refunded_amount);
 				assert.equal("06219385993", refund.customer_id);
 				assert.equal(ChargeStatusTypes.REFUND, refund.status);
-
-
 
 				assert.equal(-1035, paymentRefund.amount);
 				assert.equal(TransactionStatusTypes.REFUND, paymentRefund.status);

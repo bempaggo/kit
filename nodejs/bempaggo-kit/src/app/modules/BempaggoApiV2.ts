@@ -33,8 +33,12 @@ class BempaggoApiV2 implements Bempaggo {
 	}
 	// OK
 	async updateCustomer(document: string, customer: BempaggoCustomerRequest): Promise<BempaggoCustomerResponse> {
-		await this.http.httpPut(`/v2/customers/document/${document}`, customer);
-		return await this.findCustomerByDocument(document);
+		const response = await this.http.httpPut(`/v2/customers/document/${document}`, customer);
+		if(response.ok){
+			return await this.findCustomerByDocument(document);
+		} else {
+			return response.json();
+		}
 	}
 	// OK
 	async tokenizeCard(card: BempaggoCardRequest): Promise<BempaggoCardResponse> {
