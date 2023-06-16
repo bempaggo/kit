@@ -30,7 +30,7 @@ describe("Pix transaction", () => {
         emv: "emv mocked"
       };
 
-      assert.equal(15, Object.keys(pix).length);
+      assert.equal(16, Object.keys(pix).length);
       assert.equal(1, Object.keys(pix.establishment).length);
       assert.equal(3, Object.keys(pix.affiliate!).length);
 
@@ -51,6 +51,7 @@ describe("Pix transaction", () => {
       assert.equal("Bempaggo", pix.affiliate?.businessName);
       assert.equal(1000, pix.paidValue);
       assert.deepEqual([], pix.splits);
+      assert.equal("emv mocked", pix.emv);
     });
 
   });

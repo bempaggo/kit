@@ -352,7 +352,7 @@ describe("Charge Entity", () => {
 			assert.equal(5, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
-			assert.equal(10, Object.keys(chargeResponse.transactions[1]).length);
+			assert.equal(11, Object.keys(chargeResponse.transactions[1]).length);
 			assert.equal(1, Object.keys(chargeResponse.transactions[1].establishment).length);
 			
 			assertType<BempaggoChargeResponse>(chargeResponse);
