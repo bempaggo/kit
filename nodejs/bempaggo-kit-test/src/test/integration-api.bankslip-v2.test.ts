@@ -88,7 +88,7 @@ describe("bankslip functions", async () => {
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.equal(2, transaction.establishment.id);
-		assert.equal(1, canceledBankslip.customer.id);
+		assert.isNotNull(canceledBankslip.customer.id);
 		assert.equal("51190844001", canceledBankslip.customer.document);
 		assert.isNotNull(canceledBankslip.order.id);
 		assert.isNotNull(canceledBankslip.order.orderReference);

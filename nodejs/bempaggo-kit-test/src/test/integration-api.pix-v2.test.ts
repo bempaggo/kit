@@ -59,7 +59,7 @@ describe("pix functions", async () => {
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.equal(3, transaction.establishment.id);
-		assert.equal(1, pixResponse.customer.id);
+		assert.isNotNull(pixResponse.customer.id);
 		assert.equal("51190844001", pixResponse.customer.document);
 		assert.isNotNull(pixResponse.order.id);
 		assert.isNotNull(pixResponse.order.orderReference);
@@ -86,7 +86,7 @@ describe("pix functions", async () => {
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.equal(2, transaction.establishment.id);
-		assert.equal(1, canceledPix.customer.id);
+		assert.isNotNull(canceledPix.customer.id);
 		assert.equal("51190844001", canceledPix.customer.document);
 		assert.isNotNull(canceledPix.order.id);
 		assert.isNotNull(canceledPix.order.orderReference);

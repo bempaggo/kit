@@ -88,14 +88,14 @@ describe("pix", () => {
 		assert.equal(175, payment.emv.length);
 	});
 
-	test("create pix and get  urls of qr cod", async () => {
+	test("create pix and get url of qr code", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 		const url: string = await layers.getExternalQrCode(response);
 		assert.equal(`http://localhost:5000/api/v2/charges/${response.referenceId}/qrcode`, url);
 	});
 
-	test("create pix and get qr cod", async () => {
+	test("create pix and get qr code", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 		const url: string = await layers.getExternalQrCode(response);

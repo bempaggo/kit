@@ -41,11 +41,7 @@
 
 import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 
-<<<<<<< HEAD
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY5MjA5MTQsImV4cCI6MTY4Njk4MDkxNH0.YjfUXYdWKfgpIIO1TF58J5p1uxRT3YEH5Q2DrEUTuOjZNQ6ieu8DMfYkvcOuu2ME2eMyNxxaSPmZ8IASblRIhA";
-=======
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY5MjY2ODQsImV4cCI6MTY4Njk4NjY4NH0.V_Y_HKbxkbWru1vMFfzpHc225jCS1B9DMGLtOw5_A9SQ7gVPhubbz2nsnrjT7l9sATTDnv2Fnk3UxZYC5RNdtA";
->>>>>>> branch 'main' of https://github.com/bempaggo/kit.git
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODcxNzc1NzcsImV4cCI6MTY4NzIzNzU3N30.PqPj44dE-TtDHNs65wo4TRMSihCSB1x0_og4X_12RwiWz89NhaXZ8Yi8jJv5FCggpi9d3LCeAMQuarx66KVkrw";
 // It is necessary to generate a token in portal
 const url = "http://localhost:5000/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(url, tokenLayers);
