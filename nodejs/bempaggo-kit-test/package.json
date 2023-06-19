@@ -15,8 +15,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"bempaggo-kit": "file:../bempaggo-kit",
-		"rimraf": "^5.0.1"
+		"bempaggo-kit": "file:../bempaggo-kit"
 	},
 	"devDependencies": {
 		"typescript": "^5.0.4",
