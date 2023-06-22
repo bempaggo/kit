@@ -12,6 +12,9 @@ describe("Bankslip Payment", () => {
         amount: 1000,
         paymentLimitDate: 1686683096030,
         splits: [],
+        fine: undefined,
+        interest: undefined,
+        ourNumber: undefined
       };
 
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
@@ -26,9 +29,12 @@ describe("Bankslip Payment", () => {
 
     test("Valid request with splits", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
+        fine: undefined,
+        interest: undefined,
+        ourNumber: undefined,
         paymentMethod: PaymentMethodTypes.BOLETO,
         dueDate: new Date().getTime(),
-        paymentLimitDate:1686683096030,
+        paymentLimitDate: 1686683096030,
         amount: 1000,
         splits: [{
           amount: 1000,

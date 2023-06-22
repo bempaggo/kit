@@ -11,6 +11,7 @@ describe("Bankslip transaction", () => {
 					code: "001",
 					agency: "1234",
 				},
+				paymentDate:undefined,
 				dueDate: 1620000000000,
 				paymentInstructions: "Pagar até o vencimento",
 				communityLegalName: "Bempaggo",
@@ -27,6 +28,7 @@ describe("Bankslip transaction", () => {
 						street: "Rua da Consolação",
 						streetNumber: "123",
 						zipCode: "12345678",
+						lineTwo:undefined
 					},
 					document: "12345678901",
 					birthdate: "1620000000000",
@@ -81,22 +83,22 @@ describe("Bankslip transaction", () => {
 			assert.equal("12323424", bankSlip.documentNumber);
 			assert.equal(1, bankSlip.customer.id);
 			assert.equal("João da Silva", bankSlip.customer.name);
-			assert.equal("São Paulo", bankSlip.customer.address?.city);
-			assert.equal("Centro", bankSlip.customer.address?.neighborhood);
-			assert.equal("SP", bankSlip.customer.address?.state);
-			assert.equal("Rua da Consolação", bankSlip.customer.address?.street);
-			assert.equal("123", bankSlip.customer.address?.streetNumber);
-			assert.equal("12345678", bankSlip.customer.address?.zipCode);
+			assert.equal("São Paulo", bankSlip.customer.address!.city);
+			assert.equal("Centro", bankSlip.customer.address!.neighborhood);
+			assert.equal("SP", bankSlip.customer.address!.state);
+			assert.equal("Rua da Consolação", bankSlip.customer.address!.street);
+			assert.equal("123", bankSlip.customer.address!.streetNumber);
+			assert.equal("12345678", bankSlip.customer.address!.zipCode);
 			assert.equal("12345678901", bankSlip.customer.document);
 			assert.equal("1620000000000", bankSlip.customer.birthdate);
 			assert.equal("joaodasilva@bempaggo.com", bankSlip.customer.email);
-			assert.equal("11", bankSlip.customer.phone?.areaCode);
-			assert.equal("55", bankSlip.customer.phone?.countryCode);
-			assert.equal("123456789", bankSlip.customer.phone?.number);
+			assert.equal("11", bankSlip.customer.phone!.areaCode);
+			assert.equal("55", bankSlip.customer.phone!.countryCode);
+			assert.equal("123456789", bankSlip.customer.phone!.number);
 			assert.equal("12345678901234567890123456789012345678901234567890", bankSlip.digitableLine);
 			assert.equal("BOLETO", bankSlip.paymentMethod);
 			assert.equal(1, bankSlip.id);
-			assert.equal(1, bankSlip.establishment?.id);
+			assert.equal(1, bankSlip.establishment!.id);
 			assert.equal("00", bankSlip.returnCode);
 			assert.equal("Transação autorizada", bankSlip.returnMessage);
 			assert.equal("AUTHORIZED", bankSlip.status);
@@ -104,9 +106,9 @@ describe("Bankslip transaction", () => {
 			assert.equal(1620000000000, bankSlip.transactionDate);
 			assert.equal("12345678901234567890", bankSlip.transactionReference);
 			assert.equal("LOOSE", bankSlip.type);
-			assert.equal(1, bankSlip.affiliate?.id);
-			assert.equal("Bempaggo", bankSlip.affiliate?.name);
-			assert.equal("Bempaggo", bankSlip.affiliate?.businessName);
+			assert.equal(1, bankSlip.affiliate!.id);
+			assert.equal("Bempaggo", bankSlip.affiliate!.name);
+			assert.equal("Bempaggo", bankSlip.affiliate!.businessName);
 			assert.equal(1000, bankSlip.paidValue);
 			assert.deepEqual([], bankSlip.splits);
 		});

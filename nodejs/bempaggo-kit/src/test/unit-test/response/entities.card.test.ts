@@ -18,7 +18,8 @@ describe("Card Entity", () => {
 
     test("card holder with only required fields", async () => {
       const cardHolder: BempaggoCardHolderResponse = {
-        name: "Tony Stark",
+        document: undefined,
+        name: "Tony Stark"
       };
 
       assertType<BempaggoCardHolderResponse>(cardHolder);

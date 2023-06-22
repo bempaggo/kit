@@ -1,7 +1,7 @@
 import { CreditCardOperable } from "@/app/modules/Transaction";
+import { BempaggoOrderRequest } from "@/app/modules/entity/BempaggoRequest";
 import { BempaggoChargeResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { BempaggoOrderRequest } from "@/app/modules/entity/BempaggoRequest";
 
 
 export class CreditCardApiV2Mock implements CreditCardOperable {
@@ -16,7 +16,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 			paidValue: 1000,
 			refundValue: 0,
 			transactionKey: "123456",
-			refundRason: RefundReasonTypes.DUPLICATE_CHARGE,
+			refundReason: RefundReasonTypes.DUPLICATE_CHARGE,
 			type: TransactionResponseTypes.LOOSE,
 			status: TransactionStatusTypes.APPROVED,
 			transactionReference: String(123456),
@@ -81,7 +81,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 			paidValue: 1000,
 			refundValue: 0,
 			transactionKey: "123456",
-			refundRason: RefundReasonTypes.DUPLICATE_CHARGE,
+			refundReason: RefundReasonTypes.DUPLICATE_CHARGE,
 			type: TransactionResponseTypes.LOOSE,
 			status: TransactionStatusTypes.APPROVED,
 			transactionReference: String(123456),
@@ -136,7 +136,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 
 		return chargeResponse;
 	}
-	async createCreditCardCharge(sellerId:number,	order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> {
+	async createCreditCardCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse> {
 		const transaction: BempaggoTransactionResponse = {
 			id: 1,
 			returnCode: "00",
@@ -145,7 +145,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 			paidValue: 1000,
 			refundValue: 0,
 			transactionKey: "123456",
-			refundRason: RefundReasonTypes.DUPLICATE_CHARGE,
+			refundReason: RefundReasonTypes.DUPLICATE_CHARGE,
 			type: TransactionResponseTypes.LOOSE,
 			status: TransactionStatusTypes.APPROVED,
 			transactionReference: String(123456),
@@ -209,7 +209,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 			paidValue: 1000,
 			refundValue: 0,
 			transactionKey: "123456",
-			refundRason: RefundReasonTypes.DUPLICATE_CHARGE,
+			refundReason: RefundReasonTypes.DUPLICATE_CHARGE,
 			type: TransactionResponseTypes.LOOSE,
 			status: TransactionStatusTypes.APPROVED,
 			transactionReference: String(123456),
@@ -273,7 +273,7 @@ export class CreditCardApiV2Mock implements CreditCardOperable {
 			paidValue: 1000,
 			refundValue: 0,
 			transactionKey: "123456",
-			refundRason: RefundReasonTypes.DUPLICATE_CHARGE,
+			refundReason: RefundReasonTypes.DUPLICATE_CHARGE,
 			type: TransactionResponseTypes.LOOSE,
 			status: TransactionStatusTypes.APPROVED,
 			transactionReference: String(123456),

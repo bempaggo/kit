@@ -30,25 +30,24 @@ describe("Customer", () => {
       assertType<BempaggoCustomerRequest>(customer);
 
       assert.equal(6, Object.keys(customer).length);
-      assert.equal(7, Object.keys(customer?.address ?? {}).length);
-      assert.equal(3, Object.keys(customer?.phone ?? {}).length);
+      assert.equal(7, Object.keys(customer!.address as {}).length);
+      assert.equal(3, Object.keys(customer!.phone as {}).length);
 
-      assert.equal(55, customer.phone?.countryCode);
-      assert.equal(48, customer.phone?.areaCode);
-      assert.equal(999999999, customer.phone?.number);
+      assert.equal(55, customer.phone!.countryCode);
+      assert.equal(48, customer.phone!.areaCode);
+      assert.equal(999999999, customer.phone!.number);
 
-      assert.equal("Rua Jair Hamms", customer.address?.street);
-      assert.equal("38", customer.address?.streetNumber);
-      assert.equal("Sala 101", customer.address?.lineTwo);
-      assert.equal("Pedra Branca", customer.address?.neighborhood);
-      assert.equal("Palhoça", customer.address?.city);
-      assert.equal("SC", customer.address?.state);
-      assert.equal("88137084", customer.address?.zipCode);
+      assert.equal("Rua Jair Hamms", customer.address!.street);
+      assert.equal("38", customer.address!.streetNumber);
+      assert.equal("Sala 101", customer.address!.lineTwo);
+      assert.equal("Pedra Branca", customer.address!.neighborhood);
+      assert.equal("Palhoça", customer.address!.city);
+      assert.equal("SC", customer.address!.state);
+      assert.equal("88137084", customer.address!.zipCode);
       assert.equal("Tony Stark", customer.name);
       assert.equal("51190844001", customer.document);
       assert.equal("2000-01-01", customer.birthdate);
       assert.equal("tony.stark@bempaggo.com", customer.email);
-     
     });
   });
 });

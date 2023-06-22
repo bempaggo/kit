@@ -4,7 +4,7 @@ import { assert, assertType, describe, expect, test } from "vitest";
 describe("Customer", () => {
   describe("Response", () => {
     test("customerResponse", async () => {
-      const customer:  BempaggoCustomerResponse = {
+      const customer: BempaggoCustomerResponse = {
         id: 1,
         phone: {
           countryCode: "55",
@@ -14,10 +14,11 @@ describe("Customer", () => {
         birthdate: "2023-01-03",
         email: "tony.stark@ligadajustica.com",
         document: "51190844001",
-        name: "Tony Stark"
+        name: "Tony Stark",
+        address: undefined
       };
 
-      assertType< BempaggoPhoneResponse>(customer.phone!);
+      assertType<BempaggoPhoneResponse>(customer.phone!);
       assertType<BempaggoCustomerResponse>(customer);
 
       assert.equal(6, Object.keys(customer).length);
@@ -34,9 +35,15 @@ describe("Customer", () => {
     });
 
     test("customerResponse with only required fields", async () => {
-      const customer:  BempaggoCustomerResponse = {
+      const customer: BempaggoCustomerResponse = {
         id: 1,
-        name: "Tony Stark"
+        name: "Tony Stark",
+        address: undefined,
+        birthdate: undefined,
+        document: undefined,
+        email: undefined,
+        phone: undefined
+
       };
 
       assertType<BempaggoCustomerResponse>(customer);
@@ -46,7 +53,7 @@ describe("Customer", () => {
     });
 
     test("customerResponse with minimal response", async () => {
-      const customerMinimal:  BempaggoMinimalCustomerResponse = {
+      const customerMinimal: BempaggoMinimalCustomerResponse = {
         id: 1,
         document: "51190844001",
       };

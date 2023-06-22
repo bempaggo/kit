@@ -2,9 +2,8 @@
 import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 import { LayersCreditCardPaymentMethod, LayersCustomerPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
-import { fail } from "assert";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
+import { assert, describe, expect, test, vi } from "vitest";
 import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
@@ -15,7 +14,6 @@ const requestLayersStyle: LayersTransactionGroup = {
 		currency: "BRL"
 	},
 	paymentMethods: [{
-		bank_slip: undefined,
 		installments: 2,
 		method: "credit_card",
 		recipients: [{ sourceId: 1, total: { amount: 1035, currency: "BRL" } }],
@@ -49,8 +47,6 @@ const cardLayers: LayersCustomerPaymentMethod = {
 	year: 2028,
 	number: "5448280000000007",
 	brand: "MASTERCARD",
-	token: undefined,
-	document: undefined
 }
 const cardLayersInvalid: LayersCustomerPaymentMethod = {
 	title: "Non used",
@@ -59,8 +55,6 @@ const cardLayersInvalid: LayersCustomerPaymentMethod = {
 	year: 2028,
 	number: "5448280000040807",
 	brand: "MASTERCARD",
-	document: undefined,
-	token: undefined
 }
 describe.concurrent.only("How use credit card charge", () => {
 	test("brands", async () => {
@@ -214,7 +208,6 @@ describe.concurrent.only("How use credit card charge", () => {
 			requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
 			try {
 				await layers.createTransaction(requestLayersStyle);
-				fail("error");
 			} catch (error: any) {
 				const errors = JSON.parse(error.value);
 				assert.equal("Bad Request", error.message);
@@ -234,7 +227,6 @@ describe.concurrent.only("How use credit card charge", () => {
 				},
 				paymentMethods: [{
 					installments: 2,
-					bank_slip: undefined,
 					method: "credit_card",
 					recipients: [{ sourceId: 1, total: { amount: 1035, currency: "BRL" } }],
 					card: {
@@ -251,7 +243,6 @@ describe.concurrent.only("How use credit card charge", () => {
 						token: "aot",
 						securityCode: "123"
 					},
-					bank_slip: undefined,
 					total: { amount: 1000, currency: "BRL" }
 				}
 				],
@@ -272,8 +263,6 @@ describe.concurrent.only("How use credit card charge", () => {
 			};
 
 			const cardLayersSecond: LayersCustomerPaymentMethod = {
-				document: undefined,
-				token: undefined,
 				title: "Non used",
 				name: "Douglas Hiura Longo Visa",
 				month: 1,

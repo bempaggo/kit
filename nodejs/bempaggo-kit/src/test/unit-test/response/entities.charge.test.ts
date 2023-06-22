@@ -9,7 +9,7 @@ describe("Charge Entity", () => {
 			const transactions: BempaggoTransactionResponse[] = [{
 				refundValue: 1000,
 				transactionKey: "12345678901234567890",
-				refundRason: RefundReasonTypes.OTHERS,
+				refundReason: RefundReasonTypes.OTHERS,
 				card: {
 					token: "12345678901234567890",
 					holder: {
@@ -76,7 +76,7 @@ describe("Charge Entity", () => {
 
 			assert.equal(1000, (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundValue);
 			assert.equal("12345678901234567890", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).transactionKey);
-			assert.equal("OTHERS", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason);
+			assert.equal("OTHERS", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason);
 			assert.equal("12345678901234567890", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.token);
 			assert.equal("Teste", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder.name);
 			assert.equal("12345678901", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder.document);
@@ -104,9 +104,9 @@ describe("Charge Entity", () => {
 			
 			assert.equal(123, chargeResponse.order.id);
 			assert.equal("123456", chargeResponse.order.orderReference);
-			assert.equal(1, chargeResponse.order.affiliate?.id);
-			assert.equal("Mega Loja", chargeResponse.order.affiliate?.businessName);
-			assert.equal("Selo A", chargeResponse.order.affiliate?.name);
+			assert.equal(1, chargeResponse.order.affiliate!.id);
+			assert.equal("Mega Loja", chargeResponse.order.affiliate!.businessName);
+			assert.equal("Selo A", chargeResponse.order.affiliate!.name);
 			
 			assert.equal(18, Object.keys(chargeResponse.transactions[0]).length);
 			assert.equal(6, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!).length);
@@ -120,7 +120,7 @@ describe("Charge Entity", () => {
 			
 			assertType<BempaggoChargeResponse>(chargeResponse);
 			assertType<BempaggoTransactionResponse>(chargeResponse.transactions[0]);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason!);
+			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
 			assertType<TransactionResponseTypes>(chargeResponse.transactions[0].type);
 			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
 			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
@@ -142,6 +142,12 @@ describe("Charge Entity", () => {
 				status: TransactionStatusTypes.APPROVED,
 				transactionDate: 1686666750792,
 				paymentMethod: PaymentMethodTypes.CREDIT_CARD,
+				affiliate:undefined,
+				paidValue:undefined,
+				refundReason:undefined,
+				refundValue:undefined,
+				returnMessage:undefined,
+				transactionReference:undefined,
 				establishment: {
 					id: 1
 				},
@@ -151,6 +157,7 @@ describe("Charge Entity", () => {
 						name: "Teste",
 						document: "12345678901"
 					},
+					token:undefined,
 					bin: "123456",
 					lastFour: "1234",
 					expiration: {
@@ -180,7 +187,8 @@ describe("Charge Entity", () => {
 						businessName: "Mega Loja",
 						name: "Selo A"
 					}
-				}
+				},
+				refundedAmount:undefined
 			};
 
 			assert.equal(12, Object.keys(chargeResponse.transactions[0]).length);
@@ -209,9 +217,9 @@ describe("Charge Entity", () => {
 			assert.deepEqual([], chargeResponse.transactions[0].splits);
 			assert.equal(123, chargeResponse.order.id);
 			assert.equal("123456", chargeResponse.order.orderReference);
-			assert.equal(1, chargeResponse.order.affiliate?.id);
-			assert.equal("Mega Loja", chargeResponse.order.affiliate?.businessName);
-			assert.equal("Selo A", chargeResponse.order.affiliate?.name);
+			assert.equal(1, chargeResponse.order.affiliate!.id);
+			assert.equal("Mega Loja", chargeResponse.order.affiliate!.businessName);
+			assert.equal("Selo A", chargeResponse.order.affiliate!.name);
 
 
 			assert.equal(2, Object.keys(chargeResponse.customer).length);
@@ -239,14 +247,20 @@ describe("Charge Entity", () => {
 				returnMessage: "Transação autorizada",
 				value: 1000,
 				transactionKey: "123456",
+				
 				type: TransactionResponseTypes.LOOSE,
 				status: TransactionStatusTypes.APPROVED,
 				transactionReference: String(123456),
 				transactionDate: 1520000000000,
 				paymentMethod: PaymentMethodTypes.CREDIT_CARD,
+				
 				establishment: {
 					id: 1
 				},
+				affiliate:undefined,
+				paidValue:undefined,
+				refundReason:undefined,
+				refundValue:undefined, 
 				installments: 1,
 				card: {
 					holder: {
@@ -259,6 +273,7 @@ describe("Charge Entity", () => {
 						month: 12,
 						year: 2021
 					},
+					token:undefined,
 					brand: CardBrandTypes.VISA
 				},
 				splits: []
@@ -272,6 +287,12 @@ describe("Charge Entity", () => {
 					id: 1,
 				},
 				returnCode: "00",
+				affiliate:undefined,
+				paidValue:undefined,
+				paymentDate:undefined,
+				quickResponseCode:undefined,
+				returnMessage:undefined,
+				transactionReference:"11",
 				status: TransactionStatusTypes.AUTHORIZED,
 				value: 1000,
 				transactionDate: 1620000000000,
@@ -290,14 +311,15 @@ describe("Charge Entity", () => {
 				value: 1000,
 				transactions: transactions,
 				order: {
-					id: 123, 
+					id: 123,
 					orderReference: "123456",
 					affiliate: {
 						id: 1,
 						name: "Selo A",
 						businessName: "Mega Loja",
 					}
-				}
+				},
+				refundedAmount:undefined
 			};
 
 			assert.equal(1, chargeResponse.id);
@@ -340,9 +362,9 @@ describe("Charge Entity", () => {
 
 			assert.equal(123, chargeResponse.order.id);
 			assert.equal("123456", chargeResponse.order.orderReference);
-			assert.equal(1, chargeResponse.order.affiliate?.id);
-			assert.equal("Selo A", chargeResponse.order.affiliate?.name);
-			assert.equal("Mega Loja", chargeResponse.order.affiliate?.businessName);
+			assert.equal(1, chargeResponse.order.affiliate!.id);
+			assert.equal("Selo A", chargeResponse.order.affiliate!.name);
+			assert.equal("Mega Loja", chargeResponse.order.affiliate!.businessName);
 
 			assert.equal(2, Object.keys(chargeResponse.customer).length);
 			assert.equal(3, Object.keys(chargeResponse.order).length);
@@ -357,7 +379,7 @@ describe("Charge Entity", () => {
 			
 			assertType<BempaggoChargeResponse>(chargeResponse);
 			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason!);
+			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
 			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
 			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
 			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);

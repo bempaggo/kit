@@ -20,11 +20,11 @@ const requestLayersStyle: LayersTransactionGroup = {
 		installments: 0,
 		recipients: [{ sourceId: 1, total: { amount: 10035, currency: "BRL" } }],
 		total: { amount: 10035, currency: "BRL" },
-		card: undefined,
+
 		bank_slip: {
 			dueDays: new Date().getTime(),
-			lateFee: 1, // TODO ignoring
-			lateInterestRate: 1, // TODO ignoring
+			lateFee: 1, // TODO ignoring 
+			lateInterestRate: 1, // TODO ignoring 
 			url: "not used?"
 		}
 
@@ -80,7 +80,7 @@ describe("boleto", () => {
 		assert.equal("988657196", payment.customer.phone!.number);
 		assert.equal("48", payment.customer.phone!.areaCode);
 		assert.equal("Rua Laurindo Januario", payment.customer.address!.street);
-		assert.equal("APt01", payment.customer.address!.lineTwo);
+		assert.equal("APt01", payment.customer.address?.lineTwo);
 		assert.equal("Florianopolis", payment.customer.address!.city);
 		assert.equal("88062201", payment.customer.address!.zipCode);
 		assert.equal("23344", payment.customer.address!.streetNumber);
@@ -91,7 +91,7 @@ describe("boleto", () => {
 		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
 		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
 		await layers.cancelBankSlipTransaction(charge);
-		const chargeCancel = await layers.findChargeById(Number(charge.referenceId));
+		const	chargeCancel = await layers.findChargeById(Number(charge.referenceId));
 		const payment: LayersBankSlipPaymentMethod = chargeCancel.payments[0] as LayersBankSlipPaymentMethod;
 		assert.equal(1, chargeCancel.payments.length);
 		assert.equal(10035, chargeCancel.amount);
@@ -113,7 +113,7 @@ describe("boleto", () => {
 		assert.equal("988657196", payment.customer.phone!.number);
 		assert.equal("48", payment.customer.phone!.areaCode);
 		assert.equal("Rua Laurindo Januario", payment.customer.address!.street);
-		assert.equal("APt01", payment.customer.address!.lineTwo);
+		assert.equal("APt01", payment.customer.address?.lineTwo);
 		assert.equal("Florianopolis", payment.customer.address!.city);
 		assert.equal("88062201", payment.customer.address!.zipCode);
 		assert.equal("23344", payment.customer.address!.streetNumber);

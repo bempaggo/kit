@@ -7,7 +7,10 @@ export default defineConfig({
     resolve: {
         alias: [{ find: "@", replacement: "/src" }],
     },
+    define : { "process.env.NODE": "process.env.NODE" },
     test: {
-        globals: true
+        globals: true,
+        deps: { inline: ['totalist'] }
     },
+    
 });

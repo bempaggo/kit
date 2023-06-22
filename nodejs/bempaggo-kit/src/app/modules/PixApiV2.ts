@@ -21,7 +21,6 @@ class PixApiV2 extends BempaggoChargeFinderV2 implements PixOperable {
 	}
 
 	createQuickResponseCodeUrlByChargeId(chagerId: number): URL {
-		//precisa do charge id ou do order reference?, order reference esta vindo por queryparam no java, olhar isso.
 		const url = new URL(`${this.http.getUrl()}/v2/charges/${chagerId}/qrcode`);
 		return url;
 	}

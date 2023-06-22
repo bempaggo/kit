@@ -150,9 +150,6 @@ class RequestsToBempaggo {
 			splits: this.toSplits(payment.recipients),
 			dueDate: payment.bank_slip!.dueDays!,
 			paymentLimitDate: payment.bank_slip!.dueDays!,
-			fine: undefined,
-			interest: undefined,
-			ourNumber: undefined,
 		};
 	};
 	createCreditCard(payment:
@@ -290,7 +287,7 @@ class ResponsesFromBempaggo {
 					pix: {
 						expires_in: new Date(transaction.expirationDate).toLocaleString(undefined, options)
 					},
-					emv: transaction.emv
+					emv:transaction.emv
 				};
 				payments.push(payment);
 			}

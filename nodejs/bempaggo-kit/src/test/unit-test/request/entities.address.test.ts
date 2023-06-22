@@ -36,6 +36,7 @@ describe("Address entity", () => {
         city: "Palhoça",
         state: "SC",
         zipCode: "88137084",
+        lineTwo: undefined
       };
       const zipCodeRegex = /^\d{8}$/;
 

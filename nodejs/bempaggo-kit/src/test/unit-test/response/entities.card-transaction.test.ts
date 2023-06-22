@@ -8,7 +8,7 @@ describe("Credit card transaction", () => {
       const card: BempaggoCreditCardTransactionResponse = {
         refundValue: 1000,
         transactionKey: "12345678901234567890",
-        refundRason: RefundReasonTypes.OTHERS,
+        refundReason: RefundReasonTypes.OTHERS,
         card: {
           token: "12345678901234567890",
           holder: {
@@ -55,7 +55,7 @@ describe("Credit card transaction", () => {
 
       assert.equal(1000, card.refundValue);
       assert.equal("12345678901234567890", card.transactionKey);
-      assert.equal("OTHERS", card.refundRason);
+      assert.equal("OTHERS", card.refundReason);
       assert.equal("12345678901234567890", card.card.token);
       assert.equal("Teste", card.card.holder.name);
       assert.equal("12345678901", card.card.holder.document);
@@ -67,7 +67,7 @@ describe("Credit card transaction", () => {
       assert.equal(1, card.installments);
       assert.equal("CREDIT_CARD", card.paymentMethod);
       assert.equal(1, card.id);
-      assert.equal(1, card.establishment?.id);
+      assert.equal(1, card.establishment!.id);
       assert.equal("00", card.returnCode);
       assert.equal("Transação autorizada", card.returnMessage);
       assert.equal("AUTHORIZED", card.status);
@@ -75,9 +75,9 @@ describe("Credit card transaction", () => {
       assert.equal(1620000000000, card.transactionDate);
       assert.equal("12345678901234567890", card.transactionReference);
       assert.equal("LOOSE", card.type);
-      assert.equal(1, card.affiliate?.id);
-      assert.equal("Bempaggo", card.affiliate?.name);
-      assert.equal("Bempaggo", card.affiliate?.businessName);
+      assert.equal(1, card.affiliate!.id);
+      assert.equal("Bempaggo", card.affiliate!.name);
+      assert.equal("Bempaggo", card.affiliate!.businessName);
       assert.deepEqual([], card.splits);
     });
   });

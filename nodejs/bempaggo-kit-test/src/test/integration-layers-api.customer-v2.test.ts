@@ -5,7 +5,6 @@ import { assert, describe, test } from "vitest";
 import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const card: LayersCustomerPaymentMethod = {
-	token:undefined,
 	brand: CardBrandTypes.AMEX,
 	year: 2028,
 	month: 3, // mar
@@ -182,7 +181,7 @@ describe("How use it extra", () => {
 			assert.equal(3, cardResponse.month);
 			assert.equal("544828...0007", cardResponse.number);
 			assert.equal("Carlos Cartola", cardResponse.title);
-			assert.equal(64, cardResponse.token!.length);
+			assert.equal(64, cardResponse.token?.length);
 			assert.equal(2028, cardResponse.year);
 		});
 
@@ -220,9 +219,9 @@ describe("How use it extra", () => {
 			assert.equal(CardBrandTypes.MASTERCARD, cardResponse.brand);
 			assert.equal(3, cardResponse.month);
 			assert.equal("544828...0007", cardResponse.number);
-			assert.equal(64, cardResponse.token!.length);
+			assert.equal(64, cardResponse.token?.length);
 			assert.equal("Carlos Cartola", cardResponse.title);
 			assert.equal(2028, cardResponse.year);
 		});
 	});
-}, {});
+},{});

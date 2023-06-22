@@ -1,6 +1,6 @@
 {
   "name": "bempaggo-kit",
-  "version": "1.0.70",
+  "version": "1.0.95",
   "description": "Software Development Kit (SDK) to the integration with Bempaggo Payment Gateway",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -14,11 +14,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^5.0.4",
-    "ts-node-dev": "^2.0.0",
-    "vitest": "^0.31.1"
+    "@types/node": "20.3.1",
+    "ts-node-dev": "2.0.0",
+    "typescript": "5.0.2",
+    "vitest": "0.32.2"
   },
   "files": [
     "lib/**/*"
-  ]
+  ],
+  "dependencies": {
+    "node-fetch": "3.3.1"
+  }
 }

@@ -6,6 +6,7 @@ describe("Pix Payment", () => {
   describe("Request", () => {
     test("Valid request", async () => {
       const pixPayment: BempaggoPixPaymentRequest = {
+        description:undefined,
         paymentMethod: PaymentMethodTypes.PIX,
         desiredExpirationDate: 1686681565342,
         amount: 1000,
@@ -22,6 +23,7 @@ describe("Pix Payment", () => {
 
     test("Valid request", async () => {
       const pixPayment: BempaggoPixPaymentRequest = {
+        description: undefined,
         paymentMethod: PaymentMethodTypes.PIX,
         desiredExpirationDate: 1686681565342,
         amount: 1000,

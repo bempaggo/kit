@@ -16,14 +16,10 @@ const requestLayersStyle: LayersTransactionGroup = {
 		installments: 0,
 		method: "pix",
 		recipients: [{ sourceId: 1, total: { amount: 1035, currency: "BRL" } }],
-		bank_slip: undefined,
-		card: undefined,
+
 		total: { amount: 1035, currency: "BRL" }
 
-	}
-
-
-	],
+	}],
 
 	sourceId: sellerId,
 	customerPayload: {
