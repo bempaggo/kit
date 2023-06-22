@@ -1,7 +1,7 @@
-import { CreditCardOperable } from "@/app/modules/Transaction";
-import { BempaggoOrderRequest } from "@/app/modules/entity/BempaggoRequest";
-import { BempaggoChargeResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
+import { CreditCardOperable } from "../../../src/app/modules/Transaction";
+import { BempaggoOrderRequest } from "../../../src/app/modules/entity/BempaggoRequest";
+import { BempaggoChargeResponse, BempaggoTransactionResponse } from "../../../src/app/modules/entity/BempaggoResponse";
+import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "../../../src/app/modules/entity/Enum";
 
 
 export class CreditCardApiV2Mock implements CreditCardOperable {

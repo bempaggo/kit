@@ -1,7 +1,6 @@
-import { BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-import { describe, test } from "node:test";
+import { BempaggoCreditCardPaymentRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 
 describe("Credit card payment", () => {
   describe("Request", () => {

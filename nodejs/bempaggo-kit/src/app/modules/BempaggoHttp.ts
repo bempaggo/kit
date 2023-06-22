@@ -1,7 +1,8 @@
+import fetch, { Headers } from "node-fetch";
 
 class BempaggoHttp {
-	private headers: Headers;
 	private toUrl = (path: string) => new URL(`${this.baseUrl}${path}`);
+	private headers: Headers;
 	constructor(private baseUrl: string, token: string) {
 		this.headers = new Headers();
 		this.headers.set("Content-Type", "application/json");
@@ -9,43 +10,49 @@ class BempaggoHttp {
 	}
 	public httpGet(path: string): Promise<Response> {
 		const url: URL = this.toUrl(path);
-		return fetch(url, {
+		const response = fetch(url, {
 			method: "GET",
 			headers: this.headers,
 		});
+		return new Promise(as => response)
+
 	}
 	public httpGetByLocation(location: string): Promise<Response> {
-		return fetch(location, {
+		const response = fetch(location, {
 			method: "GET",
 			headers: this.headers,
 		});
+		return new Promise(as => response)
 	}
 	public httpGetBy(path: string, query: { name: string, value: any }[]): Promise<Response> {
 		const url: URL = this.toUrl(path);
 		for (const { name, value } of query) {
 			url.searchParams.set(name, value);
 		}
-		return fetch(url, {
+		const response = fetch(url, {
 			method: "GET",
 			headers: this.headers,
 		});
+		return new Promise(as => response)
 	}
 	public httpPut(path: string, body: unknown): Promise<Response> {
 		const url: URL = this.toUrl(path);
-		return fetch(url, {
+		const response = fetch(url, {
 			method: "PUT",
 			headers: this.headers,
 			body: JSON.stringify(body),
 		});
+		return new Promise(as => response)
 	}
 	public httpPost(path: string, body: unknown): Promise<Response> {
 		const url: URL = this.toUrl(path);
-		return fetch(url, {
+		const response = fetch(url, {
 			method: "POST",
 			headers: this.headers,
 			body: JSON.stringify(body),
 			redirect: "manual",
 		});
+		return new Promise(as => response)
 	}
 
 	public getUrl(): string {
