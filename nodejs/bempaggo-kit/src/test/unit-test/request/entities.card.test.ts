@@ -1,6 +1,6 @@
 import { BempaggoCardExpirationRequest, BempaggoCardHolderRequest, BempaggoCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import assert from "node:assert";
-import { describe, test } from "node:test";
+import assert from "assert";
+
 describe("Card Entity", () => {
   describe("Request", () => {
     test("CardHolder", async () => {

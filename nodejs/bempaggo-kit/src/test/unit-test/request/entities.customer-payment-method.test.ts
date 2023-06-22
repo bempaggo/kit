@@ -1,6 +1,6 @@
 import { BempaggoCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import assert from "node:assert";
-import { describe, test } from "node:test";
+import assert from "assert";
+
 describe("Customer", () => {
   describe("Request", () => {
     test("card", async () => {

@@ -1,7 +1,7 @@
 import { BempaggoPixTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import assert from "node:assert";
-import { describe, test } from "node:test";
+import assert from "assert";
+
 describe("Pix transaction", () => {
   describe("Response", () => {
     test("Valid response", async () => {
