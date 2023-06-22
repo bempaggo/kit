@@ -1,3 +1,4 @@
+import assert from "assert";
 import { BempaggoCustomerResponse, BempaggoMinimalCustomerResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 describe("Customer", () => {
   describe("Response", () => {
