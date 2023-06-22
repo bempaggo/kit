@@ -1,6 +1,6 @@
 import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes } from "@/app/modules/entity/Enum";
-import assert from "node:assert";
+import assert from "assert";
 import { describe, test } from "node:test";
 describe("Card Entity", () => {
   describe("Response", () => {

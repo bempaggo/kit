@@ -1,5 +1,5 @@
 import { BempaggoPhoneRequest } from "@/app/modules/entity/BempaggoRequest";
-import assert from "node:assert";
+import assert from "assert";
 import { describe, test } from "node:test";
 describe("Customer", () => {
   describe("Request", () => {
