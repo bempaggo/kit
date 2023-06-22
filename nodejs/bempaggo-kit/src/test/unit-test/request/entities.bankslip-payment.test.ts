@@ -31,7 +31,7 @@ describe("Bankslip Payment", () => {
         interest: undefined,
         ourNumber: undefined,
         paymentMethod: PaymentMethodTypes.BOLETO,
-        dueDate: new Date().getTime(),
+        dueDate: 1686683096030,
         paymentLimitDate: 1686683096030,
         amount: 1000,
         splits: [{

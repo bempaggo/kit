@@ -178,7 +178,7 @@ describe("Charge Entity", () => {
 				refundedAmount: undefined
 			};
 
-			assert.equal(12, Object.keys(chargeResponse.transactions[0]).length);
+			assert.equal(18, Object.keys(chargeResponse.transactions[0]).length);
 			assert.equal(1, chargeResponse.id);
 			assert.equal(1, chargeResponse.customer.id);
 			assert.equal("51190844001", chargeResponse.customer.document);
@@ -213,7 +213,7 @@ describe("Charge Entity", () => {
 			assert.equal(3, Object.keys(chargeResponse.order).length);
 			assert.equal(3, Object.keys(chargeResponse.order.affiliate!).length);
 			assert.equal(1, Object.keys(chargeResponse.transactions[0].establishment).length);
-			assert.equal(5, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
+			assert.equal(6, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
 
@@ -348,12 +348,12 @@ describe("Charge Entity", () => {
 			assert.equal(2, Object.keys(chargeResponse.customer).length);
 			assert.equal(3, Object.keys(chargeResponse.order).length);
 			assert.equal(3, Object.keys(chargeResponse.order.affiliate!).length);
-			assert.equal(14, Object.keys(chargeResponse.transactions[0]).length);
+			assert.equal(18, Object.keys(chargeResponse.transactions[0]).length);
 			assert.equal(1, Object.keys(chargeResponse.transactions[0].establishment).length);
-			assert.equal(5, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
+			assert.equal(6, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
-			assert.equal(10, Object.keys(chargeResponse.transactions[1]).length);
+			assert.equal(17, Object.keys(chargeResponse.transactions[1]).length);
 			assert.equal(1, Object.keys(chargeResponse.transactions[1].establishment).length);
 		});
 
