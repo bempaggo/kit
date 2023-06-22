@@ -1,7 +1,6 @@
-import { BempaggoBankSlipTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
-import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoBankSlipTransactionResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
+import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Bankslip transaction", () => {
 	describe("Response", () => {
 		test("Valid response", async () => {

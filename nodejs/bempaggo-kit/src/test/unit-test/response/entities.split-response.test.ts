@@ -1,6 +1,5 @@
-import { BempaggoSplitResponse } from "@/app/modules/entity/BempaggoResponse";
 import assert from "assert";
-
+import { BempaggoSplitResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 describe("Split payment", () => {
   describe("Response", () => {
     test("Valid response", async () => {

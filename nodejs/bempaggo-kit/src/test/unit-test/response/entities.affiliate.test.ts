@@ -1,6 +1,5 @@
-import { BempaggoAffiliateMinimalResponse } from "@/app/modules/entity/BempaggoResponse";
 import assert from "assert";
-
+import { BempaggoAffiliateMinimalResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 
 
 describe("Affiliate entity", () => {

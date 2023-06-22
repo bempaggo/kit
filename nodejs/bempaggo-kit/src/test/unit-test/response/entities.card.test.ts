@@ -1,7 +1,6 @@
-import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
+import { CardBrandTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Card Entity", () => {
   describe("Response", () => {
     test("cardHolder", async () => {

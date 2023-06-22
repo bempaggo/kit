@@ -1,7 +1,6 @@
 import { BempaggoAddressRequest } from "@/app/modules/entity/BempaggoRequest";
 import assert from "assert";
 
-
 describe("Address entity", () => {
   describe("Request", () => {
     test("valid address", async () => {

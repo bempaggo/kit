@@ -1,6 +1,5 @@
-import { BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
+import { BempaggoTokenCardRequest } from "../../../app/modules/entity/BempaggoRequest";
 import assert from "assert";
-
 describe("Credit card token", () => {
   describe("Request", () => {
     test("Valid request", async () => {
