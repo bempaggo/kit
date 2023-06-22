@@ -15,9 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "20.3.1",
+    "chai": "4.3.7",
     "ts-node-dev": "2.0.0",
-    "typescript": "5.0.2",
-    "vitest": "0.32.2"
+    "typescript": "5.0.2"
   },
   "files": [
     "lib/**/*"

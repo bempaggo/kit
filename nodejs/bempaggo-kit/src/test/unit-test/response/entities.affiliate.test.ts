@@ -1,5 +1,6 @@
 import { BempaggoAffiliateMinimalResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "node:assert";
+import { describe, test } from "node:test";
 
 describe("Affiliate entity", () => {
   describe("Response", () => {

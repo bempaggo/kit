@@ -1,5 +1,6 @@
 import { BempaggoAddressResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "node:assert";
+import { describe, test } from "node:test";
 
 describe("Address entity", () => {
   describe("Response", () => {
@@ -24,7 +25,7 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-      assert.isTrue(zipCodeRegex.test(address.zipCode));
+      assert.equal(true, zipCodeRegex.test(address.zipCode));
     });
 
     test("address with only required fields", async () => {
@@ -48,7 +49,7 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-      assert.isTrue(zipCodeRegex.test(address.zipCode));
+      assert.equal(true, zipCodeRegex.test(address.zipCode));
     });
 
     test("address with empty lineTwo", async () => {
@@ -72,7 +73,7 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-      assert.isTrue(zipCodeRegex.test(address.zipCode));
+      assert.equal(true, zipCodeRegex.test(address.zipCode));
     });
   });
 });
