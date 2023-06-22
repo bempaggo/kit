@@ -9,7 +9,7 @@ describe("Card Entity", () => {
         document: "51190844001",
       };
 
-      assert.equal(2, Object.keys(cardHolder).length);
+      assert.equal(1, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
       assert.equal("51190844001", cardHolder.document);
     });

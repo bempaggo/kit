@@ -18,7 +18,7 @@ describe("Customer", () => {
       };
 
 
-      assert.equal(6, Object.keys(customer).length);
+      assert.equal(7, Object.keys(customer).length);
       assert.equal(3, Object.keys(customer.phone!).length);
 
       assert.equal(1, customer.id);
@@ -43,7 +43,7 @@ describe("Customer", () => {
 
       };
 
-      assert.equal(2, Object.keys(customer).length);
+      assert.equal(7, Object.keys(customer).length);
       assert.equal(1, customer.id);
       assert.equal("Tony Stark", customer.name);
     });

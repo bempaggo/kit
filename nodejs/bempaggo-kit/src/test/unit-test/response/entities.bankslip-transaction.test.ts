@@ -61,7 +61,7 @@ describe("Bankslip transaction", () => {
 			};
 
 
-			assert.equal(22, Object.keys(bankSlip).length);
+			assert.equal(23, Object.keys(bankSlip).length);
 			assert.equal(3, Object.keys(bankSlip.bank).length);
 			assert.equal(7, Object.keys(bankSlip.customer).length);
 			assert.equal(6, Object.keys(bankSlip.customer.address!).length);

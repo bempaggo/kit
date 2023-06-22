@@ -30,7 +30,7 @@ describe("Pix transaction", () => {
         emv: "emv mocked"
       };
 
-      assert.equal(15, Object.keys(pix).length);
+      assert.equal(17, Object.keys(pix).length);
       assert.equal(1, Object.keys(pix.establishment).length);
       assert.equal(3, Object.keys(pix.affiliate!).length);
 

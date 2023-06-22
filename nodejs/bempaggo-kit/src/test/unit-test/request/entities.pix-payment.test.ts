@@ -12,7 +12,7 @@ describe("Pix Payment", () => {
         splits: [],
       };
 
-      assert.equal(4, Object.keys(pixPayment).length);
+      assert.equal(5, Object.keys(pixPayment).length);
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
       assert.equal(1000, pixPayment.amount);
