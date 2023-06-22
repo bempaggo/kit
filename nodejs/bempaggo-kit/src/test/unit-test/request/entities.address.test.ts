@@ -1,5 +1,5 @@
-import { BempaggoAddressRequest } from "@/app/modules/entity/BempaggoRequest";
 import assert from "assert";
+import { BempaggoAddressRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
 
 describe("Address entity", () => {
   describe("Request", () => {

@@ -1,6 +1,6 @@
-import { BempaggoBankSlipPaymentRequest } from "../../../app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "../../../app/modules/entity/Enum";
 import assert from "assert";
+import { BempaggoBankSlipPaymentRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 
 describe("Bankslip Payment", () => {
   describe("Request", () => {

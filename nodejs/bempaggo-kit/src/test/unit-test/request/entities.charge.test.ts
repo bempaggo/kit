@@ -1,8 +1,7 @@
 
 
-import { BempaggoCreditCardPaymentRequest, BempaggoOrderRequest } from "../../../app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "../../../app/modules/entity/Enum";
 import assert from "assert";
+import { BempaggoCreditCardPaymentRequest, BempaggoOrderRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
 describe("Charge Entity", () => {
 	describe("Request", () => {
 
@@ -54,7 +53,7 @@ describe("Charge Entity", () => {
 			assert.equal(7, Object.keys(charge.customer!.address as {}).length);
 			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length);
 			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits[0]).length);
-			
+
 			assert.equal(55, charge.customer.phone!.countryCode);
 			assert.equal(48, charge.customer.phone!.areaCode);
 			assert.equal(999999999, charge.customer.phone!.number);

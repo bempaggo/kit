@@ -1,7 +1,6 @@
-import { BempaggoAbstractPaymentRequest } from "../../../app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "../../../app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoAbstractPaymentRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Abstract Payment", () => {
   describe("Request", () => {
     test("Valid request", async () => {
