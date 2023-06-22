@@ -1,6 +1,5 @@
-import { BempaggoEstablishmentMinimalResponse } from "@/app/modules/entity/BempaggoResponse";
 import assert from "assert";
-import { describe, test } from "node:test";
+import { BempaggoEstablishmentMinimalResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 describe("Establishment entity", () => {
 
   describe("Response", () => {

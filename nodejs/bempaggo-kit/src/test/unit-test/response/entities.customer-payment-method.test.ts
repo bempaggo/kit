@@ -1,7 +1,6 @@
-import { BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-import { describe, test } from "node:test";
+import { BempaggoCardResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
+import { CardBrandTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Customer", () => {
   describe("Response", () => {
     test("customerPaymentMethod", async () => {

@@ -1,7 +1,6 @@
-import { BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoPixTransactionResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-import { describe, test } from "node:test";
+import { BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoPixTransactionResponse, BempaggoTransactionResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
+import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Charge Entity", () => {
 	describe("Response", () => {
 		test("chargeResponse", async () => {
