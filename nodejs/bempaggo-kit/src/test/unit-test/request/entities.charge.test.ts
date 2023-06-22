@@ -2,7 +2,7 @@
 
 import { BempaggoCreditCardPaymentRequest, BempaggoOrderRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert } from "chai";
+import assert from "node:assert";
 import { describe, test } from "node:test";
 describe("Charge Entity", () => {
 	describe("Request", () => {
@@ -76,7 +76,7 @@ describe("Charge Entity", () => {
 			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv);
 			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token);
 			assert.equal(1000, charge.payments[0].amount);
-			assert.lengthOf(charge.payments[0].splits, 1);
+			assert.equal(2, charge.payments[0].splits.length);
 			assert.equal(1000, charge.payments[0].splits[0].amount);
 			assert.equal(1, charge.payments[0].splits[0].sellerId);
 			assert.equal(1000, charge.amount);

@@ -1,6 +1,6 @@
 import { BempaggoAbstractPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert } from "chai";
+import assert from "node:assert";
 import { describe, test } from "node:test";
 describe("Abstract Payment", () => {
   describe("Request", () => {
@@ -36,7 +36,7 @@ describe("Abstract Payment", () => {
       assert.equal(3, Object.keys(abstractPayment).length);
       assert.equal("BOLETO", abstractPayment.paymentMethod);
       assert.equal(1000, abstractPayment.amount);
-      assert.lengthOf(abstractPayment.splits, 2);
+      assert.equal(2, abstractPayment.splits.length);
       assert.equal(1000, abstractPayment.splits[0].amount);
       assert.equal(123456789, abstractPayment.splits[0].sellerId);
       assert.equal(1000, abstractPayment.splits[1].amount);
