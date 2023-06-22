@@ -8,12 +8,13 @@
   "scripts": {
     "clean": "rimraf lib",
     "build": "npm run clean && tsc",
-    "test": "npm run clean && vitest --watch"
+    "test": "npm run clean && node --test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^4.3.5",
     "@types/node": "20.3.1",
     "chai": "4.3.7",
     "ts-node-dev": "2.0.0",

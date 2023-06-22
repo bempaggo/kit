@@ -1,7 +1,7 @@
 import { BempaggoCreditCardTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Credit card transaction", () => {
   describe("Response", () => {
     test("Valid response", async () => {
@@ -45,7 +45,6 @@ describe("Credit card transaction", () => {
         splits: []
       };
 
-      assertType<BempaggoCreditCardTransactionResponse>(card);
 
       assert.equal(18, Object.keys(card).length);
       assert.equal(6, Object.keys(card.card).length);

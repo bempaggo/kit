@@ -1,7 +1,7 @@
 import { BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 
 describe("Credit card payment", () => {
   describe("Request", () => {
@@ -17,7 +17,6 @@ describe("Credit card payment", () => {
         splits: [],
       };
 
-      assertType<BempaggoCreditCardPaymentRequest>(creditCardPayment);
       assert.equal(5, Object.keys(creditCardPayment).length);
       assert.equal(2, Object.keys(creditCardPayment.cardToken).length);
       assert.equal("CREDIT_CARD", creditCardPayment.paymentMethod);
@@ -48,7 +47,6 @@ describe("Credit card payment", () => {
         }],
       };
 
-      assertType<BempaggoCreditCardPaymentRequest>(creditCardPayment);
       assert.equal(5, Object.keys(creditCardPayment).length);
       assert.equal(2, Object.keys(creditCardPayment.cardToken).length);
       assert.equal("CREDIT_CARD", creditCardPayment.paymentMethod);

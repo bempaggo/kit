@@ -1,6 +1,7 @@
 import { BempaggoAffiliateMinimalResponse } from "@/app/modules/entity/BempaggoResponse";
-import assert from "node:assert";
+import { assert } from "chai";
 import { describe, test } from "node:test";
+
 
 describe("Affiliate entity", () => {
   describe("Response", () => {
@@ -10,8 +11,6 @@ describe("Affiliate entity", () => {
         name: "Tony Stark",
         businessName: "Stark Industries"
       };
-
-      assertType<BempaggoAffiliateMinimalResponse>(affiliateMinimal);
       assert.equal(3, Object.keys(affiliateMinimal).length);
       assert.equal(1, affiliateMinimal.id);
       assert.equal("Tony Stark", affiliateMinimal.name);

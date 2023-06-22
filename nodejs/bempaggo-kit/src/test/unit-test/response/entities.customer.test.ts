@@ -1,6 +1,6 @@
-import { BempaggoCustomerResponse, BempaggoMinimalCustomerResponse, BempaggoPhoneResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, expect, test } from "vitest";
-
+import { BempaggoCustomerResponse, BempaggoMinimalCustomerResponse } from "@/app/modules/entity/BempaggoResponse";
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Customer", () => {
   describe("Response", () => {
     test("customerResponse", async () => {
@@ -18,8 +18,6 @@ describe("Customer", () => {
         address: undefined
       };
 
-      assertType<BempaggoPhoneResponse>(customer.phone!);
-      assertType<BempaggoCustomerResponse>(customer);
 
       assert.equal(6, Object.keys(customer).length);
       assert.equal(3, Object.keys(customer.phone!).length);
@@ -46,7 +44,6 @@ describe("Customer", () => {
 
       };
 
-      assertType<BempaggoCustomerResponse>(customer);
       assert.equal(2, Object.keys(customer).length);
       assert.equal(1, customer.id);
       assert.equal("Tony Stark", customer.name);
@@ -58,8 +55,7 @@ describe("Customer", () => {
         document: "51190844001",
       };
 
-      assertType<BempaggoMinimalCustomerResponse>(customerMinimal);
-      expect(Object.keys(customerMinimal).length).toBe(2);
+      assert.equal(2, Object.keys(customerMinimal).length);
       assert.equal(1, customerMinimal.id);
       assert.equal("51190844001", customerMinimal.document);
     });

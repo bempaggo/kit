@@ -1,7 +1,7 @@
-import { BempaggoAffiliateMinimalResponse, BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoEstablishmentMinimalResponse, BempaggoPixTransactionResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
+import { BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoPixTransactionResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Charge Entity", () => {
 	describe("Response", () => {
 		test("chargeResponse", async () => {
@@ -57,7 +57,7 @@ describe("Charge Entity", () => {
 				refundedAmount: 0,
 				transactions: transactions,
 				order: {
-					id: 123, 
+					id: 123,
 					orderReference: "123456",
 					affiliate: {
 						id: 1,
@@ -65,7 +65,7 @@ describe("Charge Entity", () => {
 						name: "Selo A"
 					}
 				}
-				
+
 			};
 			assert.equal(1, chargeResponse.id);
 			assert.equal(1, chargeResponse.customer.id);
@@ -101,13 +101,13 @@ describe("Charge Entity", () => {
 			assert.equal("Bempaggo", chargeResponse.transactions[0].affiliate!.businessName);
 			assert.equal(1000, chargeResponse.transactions[0].paidValue);
 			assert.deepEqual([], (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).splits);
-			
+
 			assert.equal(123, chargeResponse.order.id);
 			assert.equal("123456", chargeResponse.order.orderReference);
 			assert.equal(1, chargeResponse.order.affiliate!.id);
 			assert.equal("Mega Loja", chargeResponse.order.affiliate!.businessName);
 			assert.equal("Selo A", chargeResponse.order.affiliate!.name);
-			
+
 			assert.equal(18, Object.keys(chargeResponse.transactions[0]).length);
 			assert.equal(6, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder).length);
@@ -117,19 +117,7 @@ describe("Charge Entity", () => {
 			assert.equal(2, Object.keys(chargeResponse.customer).length);
 			assert.equal(3, Object.keys(chargeResponse.order).length);
 			assert.equal(3, Object.keys(chargeResponse.order.affiliate!).length);
-			
-			assertType<BempaggoChargeResponse>(chargeResponse);
-			assertType<BempaggoTransactionResponse>(chargeResponse.transactions[0]);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
-			assertType<TransactionResponseTypes>(chargeResponse.transactions[0].type);
-			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
-			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
-			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
-			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
-			assertType<BempaggoCardHolderResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder);
-			assertType<BempaggoCardExpirationResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.expiration);
-			assertType<ChargeStatusTypes>(chargeResponse.status);
+
 		});
 		test("charge response with only required fields", async () => {
 
@@ -142,12 +130,12 @@ describe("Charge Entity", () => {
 				status: TransactionStatusTypes.APPROVED,
 				transactionDate: 1686666750792,
 				paymentMethod: PaymentMethodTypes.CREDIT_CARD,
-				affiliate:undefined,
-				paidValue:undefined,
-				refundReason:undefined,
-				refundValue:undefined,
-				returnMessage:undefined,
-				transactionReference:undefined,
+				affiliate: undefined,
+				paidValue: undefined,
+				refundReason: undefined,
+				refundValue: undefined,
+				returnMessage: undefined,
+				transactionReference: undefined,
 				establishment: {
 					id: 1
 				},
@@ -157,7 +145,7 @@ describe("Charge Entity", () => {
 						name: "Teste",
 						document: "12345678901"
 					},
-					token:undefined,
+					token: undefined,
 					bin: "123456",
 					lastFour: "1234",
 					expiration: {
@@ -188,7 +176,7 @@ describe("Charge Entity", () => {
 						name: "Selo A"
 					}
 				},
-				refundedAmount:undefined
+				refundedAmount: undefined
 			};
 
 			assert.equal(12, Object.keys(chargeResponse.transactions[0]).length);
@@ -230,14 +218,6 @@ describe("Charge Entity", () => {
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
 
-			assertType<BempaggoChargeResponse>(chargeResponse);
-			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
-			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
-			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
-			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
-			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
-			assertType<ChargeStatusTypes>(chargeResponse.status);
 		});
 		test("charge response with two types of transactions", async () => {
 
@@ -247,20 +227,20 @@ describe("Charge Entity", () => {
 				returnMessage: "Transação autorizada",
 				value: 1000,
 				transactionKey: "123456",
-				
+
 				type: TransactionResponseTypes.LOOSE,
 				status: TransactionStatusTypes.APPROVED,
 				transactionReference: String(123456),
 				transactionDate: 1520000000000,
 				paymentMethod: PaymentMethodTypes.CREDIT_CARD,
-				
+
 				establishment: {
 					id: 1
 				},
-				affiliate:undefined,
-				paidValue:undefined,
-				refundReason:undefined,
-				refundValue:undefined, 
+				affiliate: undefined,
+				paidValue: undefined,
+				refundReason: undefined,
+				refundValue: undefined,
 				installments: 1,
 				card: {
 					holder: {
@@ -273,7 +253,7 @@ describe("Charge Entity", () => {
 						month: 12,
 						year: 2021
 					},
-					token:undefined,
+					token: undefined,
 					brand: CardBrandTypes.VISA
 				},
 				splits: []
@@ -287,18 +267,18 @@ describe("Charge Entity", () => {
 					id: 1,
 				},
 				returnCode: "00",
-				affiliate:undefined,
-				paidValue:undefined,
-				paymentDate:undefined,
-				quickResponseCode:undefined,
-				returnMessage:undefined,
-				transactionReference:"11",
+				affiliate: undefined,
+				paidValue: undefined,
+				paymentDate: undefined,
+				quickResponseCode: undefined,
+				returnMessage: undefined,
+				transactionReference: "11",
 				status: TransactionStatusTypes.AUTHORIZED,
 				value: 1000,
 				transactionDate: 1620000000000,
 				type: TransactionResponseTypes.LOOSE,
 				splits: [],
-				emv:"code-emv mocked"
+				emv: "code-emv mocked"
 			} as BempaggoPixTransactionResponse];
 
 			const chargeResponse: BempaggoChargeResponse = {
@@ -319,7 +299,7 @@ describe("Charge Entity", () => {
 						businessName: "Mega Loja",
 					}
 				},
-				refundedAmount:undefined
+				refundedAmount: undefined
 			};
 
 			assert.equal(1, chargeResponse.id);
@@ -348,7 +328,7 @@ describe("Charge Entity", () => {
 			assert.equal(2021, (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration.year);
 			assert.equal("VISA", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.brand);
 			assert.deepEqual([], chargeResponse.transactions[0].splits);
-			
+
 			assert.equal(1620000000000, (chargeResponse.transactions[1] as BempaggoPixTransactionResponse).expirationDate);
 			assert.equal("PIX", chargeResponse.transactions[1].paymentMethod);
 			assert.equal(1, chargeResponse.transactions[1].id);
@@ -376,17 +356,6 @@ describe("Charge Entity", () => {
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
 			assert.equal(10, Object.keys(chargeResponse.transactions[1]).length);
 			assert.equal(1, Object.keys(chargeResponse.transactions[1].establishment).length);
-			
-			assertType<BempaggoChargeResponse>(chargeResponse);
-			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
-			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
-			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
-			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
-			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
-			assertType<ChargeStatusTypes>(chargeResponse.status);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[1].establishment);
 		});
 
 	});

@@ -1,5 +1,5 @@
 import { BempaggoAddressResponse } from "@/app/modules/entity/BempaggoResponse";
-import assert from "node:assert";
+import { assert } from "chai";
 import { describe, test } from "node:test";
 
 describe("Address entity", () => {
@@ -15,8 +15,6 @@ describe("Address entity", () => {
         zipCode: "88137084",
       };
       const zipCodeRegex = /^\d{8}$/;
-
-      assertType<BempaggoAddressResponse>(address);
       assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
@@ -41,7 +39,6 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      assertType<BempaggoAddressResponse>(address);
       assert.equal(6, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
@@ -64,7 +61,6 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      assertType<BempaggoAddressResponse>(address);
       assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);

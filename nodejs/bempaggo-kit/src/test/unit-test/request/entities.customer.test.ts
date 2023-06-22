@@ -1,6 +1,6 @@
-import { BempaggoAddressRequest, BempaggoCustomerRequest, BempaggoPhoneRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assert, assertType, describe, test } from "vitest";
-
+import { BempaggoCustomerRequest } from "@/app/modules/entity/BempaggoRequest";
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Customer", () => {
   describe("Request", () => {
     test("customer", async () => {
@@ -25,9 +25,6 @@ describe("Customer", () => {
         email: "tony.stark@bempaggo.com",
       };
 
-      assertType<BempaggoAddressRequest | undefined>(customer.address);
-      assertType<BempaggoPhoneRequest | undefined>(customer.phone);
-      assertType<BempaggoCustomerRequest>(customer);
 
       assert.equal(6, Object.keys(customer).length);
       assert.equal(7, Object.keys(customer!.address as {}).length);

@@ -1,7 +1,7 @@
 import { BempaggoPixPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Pix Payment", () => {
   describe("Request", () => {
     test("Valid request", async () => {
@@ -13,7 +13,6 @@ describe("Pix Payment", () => {
         splits: [],
       };
 
-      assertType<BempaggoPixPaymentRequest>(pixPayment);
       assert.equal(4, Object.keys(pixPayment).length);
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
@@ -37,7 +36,6 @@ describe("Pix Payment", () => {
         }],
       };
 
-      assertType<BempaggoPixPaymentRequest>(pixPayment);
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
       assert.equal(1000, pixPayment.amount);

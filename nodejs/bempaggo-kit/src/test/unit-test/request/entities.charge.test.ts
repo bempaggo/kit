@@ -1,9 +1,9 @@
 
 
-import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
+import { BempaggoCreditCardPaymentRequest, BempaggoOrderRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Charge Entity", () => {
 	describe("Request", () => {
 
@@ -48,13 +48,6 @@ describe("Charge Entity", () => {
 				amount: 1000,
 				notificationUrl: "https://meusite.com.br/events",
 			};
-
-			assertType<BempaggoCustomerRequest>(charge.customer);
-			assertType<BempaggoOrderRequest>(charge);
-			assertType<BempaggoAddressRequest | undefined>(charge.customer.address);
-			assertType<BempaggoPhoneRequest | undefined>(charge.customer.phone);
-			assertType<BempaggoTokenCardRequest>((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!);
-			assertType<BempaggoSplitPaymentRequest[]>((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits);
 
 			assert.equal(5, Object.keys(charge).length);
 			assert.equal(6, Object.keys(charge.customer).length);

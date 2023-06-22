@@ -1,6 +1,6 @@
 import { BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Credit card token", () => {
   describe("Request", () => {
     test("Valid request", async () => {
@@ -9,7 +9,6 @@ describe("Credit card token", () => {
         token: "123"
       }
 
-      assertType<BempaggoTokenCardRequest>(cardToken);
       assert.equal(2, Object.keys(cardToken).length);
       assert.equal("123", cardToken.cvv);
       assert.equal("123", cardToken.token);

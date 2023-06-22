@@ -1,6 +1,6 @@
-import { BempaggoCardExpirationRequest, BempaggoCardHolderRequest, BempaggoCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assert, assertType, describe, test } from "vitest";
-
+import { BempaggoCardRequest } from "@/app/modules/entity/BempaggoRequest";
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Customer", () => {
   describe("Request", () => {
     test("card", async () => {
@@ -16,9 +16,6 @@ describe("Customer", () => {
         },
       };
 
-      assertType<BempaggoCardRequest>(card);
-      assertType<BempaggoCardHolderRequest>(card.holder);
-      assertType<BempaggoCardExpirationRequest>(card.expiration);
 
       assert.equal(3, Object.keys(card).length);
       assert.equal(2, Object.keys(card.holder).length);

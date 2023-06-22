@@ -1,6 +1,6 @@
 import { BempaggoPhoneRequest } from "@/app/modules/entity/BempaggoRequest";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Customer", () => {
   describe("Request", () => {
     test("Phone", async () => {
@@ -10,7 +10,6 @@ describe("Customer", () => {
         number: 999999999,
       };
 
-      assertType<BempaggoPhoneRequest>(phone);
       assert.equal(3, Object.keys(phone).length);
       assert.equal(55, phone.countryCode);
       assert.equal(48, phone.areaCode);

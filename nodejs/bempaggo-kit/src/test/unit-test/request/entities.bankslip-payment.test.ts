@@ -1,7 +1,7 @@
 import { BempaggoBankSlipPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 
 describe("Bankslip Payment", () => {
   describe("Request", () => {
@@ -17,7 +17,6 @@ describe("Bankslip Payment", () => {
         ourNumber: undefined
       };
 
-      assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
 
 
       assert.equal("BOLETO", bankslipPayment.paymentMethod);
@@ -48,7 +47,6 @@ describe("Bankslip Payment", () => {
 
       assert.equal(PaymentMethodTypes.BOLETO, bankslipPayment.paymentMethod);
       assert.equal(1000, bankslipPayment.amount);
-      assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
       assert.equal("BOLETO", bankslipPayment.paymentMethod);
       assert.equal(1686683096030, bankslipPayment.dueDate);
       assert.equal(1686683096030, bankslipPayment.paymentLimitDate);

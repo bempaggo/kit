@@ -1,7 +1,7 @@
-import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
+import { BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
-
+import { assert } from "chai";
+import { describe, test } from "node:test";
 describe("Customer", () => {
   describe("Response", () => {
     test("customerPaymentMethod", async () => {
@@ -20,9 +20,6 @@ describe("Customer", () => {
         brand: CardBrandTypes.MASTERCARD,
       };
 
-      assertType<BempaggoCardResponse>(paymentMethod);
-      assertType<BempaggoCardHolderResponse>(paymentMethod.holder);
-      assertType<BempaggoCardExpirationResponse>(paymentMethod.expiration);
 
       assert.equal(6, Object.keys(paymentMethod).length);
       assert.equal(2, Object.keys(paymentMethod.holder).length);
