@@ -15,7 +15,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"bempaggo-kit": "file:../bempaggo-kit"
+		"bempaggo-kit": "^1.0.113"
 	},
 	"devDependencies": {
 		"typescript": "^5.0.4",

@@ -205,7 +205,7 @@ describe("credit card functions", async () => {
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Sucesso.", transaction.returnMessage);
 			assert.isNotNull(transaction.transactionKey);
-			assert.isNull(transaction.refundRason);
+			assert.isNull(transaction.refundReason);
 			assert.isNotNull(transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
@@ -267,7 +267,7 @@ describe("credit card functions", async () => {
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Sucesso.", transaction.returnMessage);
 			assert.isNotNull(transaction.transactionKey);
-			assert.isNull(transaction.refundRason);
+			assert.isNull(transaction.refundReason);
 			assert.isNotNull(transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
@@ -331,7 +331,7 @@ describe("credit card functions", async () => {
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Estorno realizado com sucesso.", transaction.returnMessage);
 			assert.isNotNull(transaction.transactionKey);
-			assert.equal("OTHERS", transaction.refundRason);
+			assert.equal("OTHERS", transaction.refundReason);
 			assert.isNotNull(transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
@@ -398,7 +398,7 @@ describe("credit card functions", async () => {
 			assert.equal("58", transaction.returnCode);
 			assert.equal("Não autorizado. Entre em contato com o emissor.", transaction.returnMessage);
 			assert.isNotNull(transaction.transactionKey);
-			assert.isNull(transaction.refundRason);
+			assert.isNull(transaction.refundReason);
 			assert.isNotNull(transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
@@ -555,7 +555,7 @@ describe("credit card functions", async () => {
 				assert.equal("00", transaction2.returnCode);
 				assert.equal("Sucesso.", transaction2.returnMessage);
 				assert.isNotNull(transaction2.transactionKey);
-				assert.isNull(transaction2.refundRason);
+				assert.isNull(transaction2.refundReason);
 				assert.isNotNull(transaction2.transactionReference);
 				assert.equal("423564", transaction2.card.bin);
 				assert.equal("VISA", transaction2.card.brand);
@@ -582,7 +582,7 @@ describe("credit card functions", async () => {
 				assert.equal("00", transaction.returnCode);
 				assert.equal("Sucesso.", transaction.returnMessage);
 				assert.isNotNull(transaction.transactionKey);
-				assert.isNull(transaction.refundRason);
+				assert.isNull(transaction.refundReason);
 				assert.isNotNull(transaction.transactionReference);
 				assert.equal("544828", transaction.card.bin);
 				assert.equal("MASTERCARD", transaction.card.brand);
@@ -630,7 +630,7 @@ describe("credit card functions", async () => {
 				assert.equal("00", transaction1.returnCode);
 				assert.equal("Sucesso.", transaction1.returnMessage);
 				assert.isNotNull(transaction1.transactionKey);
-				assert.isNull(transaction1.refundRason);
+				assert.isNull(transaction1.refundReason);
 				assert.isNotNull(transaction1.transactionReference);
 				assert.equal("544828", transaction1.card.bin);
 				assert.equal("MASTERCARD", transaction1.card.brand);
@@ -657,7 +657,7 @@ describe("credit card functions", async () => {
 				assert.equal("00", transaction2.returnCode);
 				assert.equal("Sucesso.", transaction2.returnMessage);
 				assert.isNotNull(transaction2.transactionKey);
-				assert.isNull(transaction2.refundRason);
+				assert.isNull(transaction2.refundReason);
 				assert.isNotNull(transaction2.transactionReference);
 				assert.equal("423564", transaction2.card.bin);
 				assert.equal("VISA", transaction2.card.brand);
@@ -707,7 +707,7 @@ describe("credit card functions", async () => {
 				assert.equal("REFUND", transactionRefund.type);
 				assert.equal("REFUND", transactionRefund.status);
 				assert.isNotNull(transactionRefund.transactionKey);
-				assert.equal("OTHERS", transactionRefund.refundRason);
+				assert.equal("OTHERS", transactionRefund.refundReason);
 				assert.isNotNull(transactionRefund.transactionReference);
 				assert.equal(cardToken.token, transactionRefund.card.token!);
 				assert.isNull(transactionRefund.installments);
@@ -720,7 +720,7 @@ describe("credit card functions", async () => {
 				assert.equal("REFUND", transactionRefund2.type);
 				assert.equal("REFUND", transactionRefund2.status);
 				assert.isNotNull(transactionRefund2.transactionKey);
-				assert.equal("OTHERS", transactionRefund2.refundRason);
+				assert.equal("OTHERS", transactionRefund2.refundReason);
 				assert.isNotNull(transactionRefund2.transactionReference);
 				assert.equal(cardTokenSecond.token, transactionRefund2.card.token!);
 				assert.isNull(transactionRefund2.installments);
@@ -733,7 +733,7 @@ describe("credit card functions", async () => {
 				assert.equal("LOOSE", transaction1.type);
 				assert.equal("APPROVED", transaction1.status);
 				assert.isNotNull(transaction1.transactionKey);
-				assert.isNull(transaction1.refundRason);
+				assert.isNull(transaction1.refundReason);
 				assert.isNotNull(transaction1.transactionReference);
 				assert.equal(cardToken.token, transaction1.card.token!);
 				assert.equal(1, transaction1.installments);
@@ -746,7 +746,7 @@ describe("credit card functions", async () => {
 				assert.equal("LOOSE", transaction2.type);
 				assert.equal("APPROVED", transaction2.status);
 				assert.isNotNull(transaction2.transactionKey);
-				assert.isNull(transaction2.refundRason);
+				assert.isNull(transaction2.refundReason);
 				assert.isNotNull(transaction2.transactionReference);
 				assert.equal(cardTokenSecond.token, transaction2.card.token!);
 				assert.equal(2, transaction2.installments);

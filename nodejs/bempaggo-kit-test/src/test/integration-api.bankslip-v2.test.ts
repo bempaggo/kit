@@ -1,7 +1,7 @@
 import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoBankSlipPaymentRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
-import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { Environments, MathTypes, PaymentMethodTypes, PeriodicityTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, expect, test } from "vitest";
 import { token } from "./setup";
 
@@ -34,6 +34,18 @@ const order: BempaggoOrderRequest = {
 			amount: 1000,
 			paymentLimitDate: 1686683096030,
 			splits: [],
+			ourNumber: 123456789,
+			fine: {
+				amount: 100,
+				type: MathTypes.FLAT,
+				days: 1,
+			},
+			interest: {
+				amount: 100,
+				type: MathTypes.FLAT,
+				days: 1,
+				frequency: PeriodicityTypes.MONTHLY,
+			},
 		}
 	],
 	amount: 1000,
