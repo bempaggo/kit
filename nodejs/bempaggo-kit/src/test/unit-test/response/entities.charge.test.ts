@@ -9,7 +9,7 @@ describe("Charge Entity", () => {
 			const transactions: BempaggoTransactionResponse[] = [{
 				refundValue: 1000,
 				transactionKey: "12345678901234567890",
-				refundRason: RefundReasonTypes.OTHERS,
+				refundReason: RefundReasonTypes.OTHERS,
 				card: {
 					token: "12345678901234567890",
 					holder: {
@@ -76,7 +76,7 @@ describe("Charge Entity", () => {
 
 			assert.equal(1000, (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundValue);
 			assert.equal("12345678901234567890", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).transactionKey);
-			assert.equal("OTHERS", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason);
+			assert.equal("OTHERS", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason);
 			assert.equal("12345678901234567890", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.token);
 			assert.equal("Teste", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder.name);
 			assert.equal("12345678901", (chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder.document);
@@ -120,7 +120,7 @@ describe("Charge Entity", () => {
 			
 			assertType<BempaggoChargeResponse>(chargeResponse);
 			assertType<BempaggoTransactionResponse>(chargeResponse.transactions[0]);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason!);
+			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
 			assertType<TransactionResponseTypes>(chargeResponse.transactions[0].type);
 			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
 			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
@@ -357,7 +357,7 @@ describe("Charge Entity", () => {
 			
 			assertType<BempaggoChargeResponse>(chargeResponse);
 			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundRason!);
+			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
 			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
 			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
 			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);

@@ -148,6 +148,12 @@ describe("credit card functions", async () => {
 			assert.equal("MASTERCARD", cardResponse.brand);
 			assert.equal(64, cardResponse.token!.length);
 		});
+
+		test("find order not found", async () => {
+			const charge: BempaggoChargeResponse[] = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getChargeFinder().findChargesByOrderReferenceId("not-found");
+
+			assert.deepEqual([], charge);
+		});
 		test("tokenize a card", async () => {
 			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).tokenizeCard(card, "no");
 			//TODO: o tokenizeCard devolve um cardResponse sem id. Seria o certo devolver so o token? Ou fazer igual o createCustomerPaymentMethod e devolver um CardResponse completo?

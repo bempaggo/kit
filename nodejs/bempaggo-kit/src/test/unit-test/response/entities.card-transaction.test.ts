@@ -8,7 +8,7 @@ describe("Credit card transaction", () => {
       const card: BempaggoCreditCardTransactionResponse = {
         refundValue: 1000,
         transactionKey: "12345678901234567890",
-        refundRason: RefundReasonTypes.OTHERS,
+        refundReason: RefundReasonTypes.OTHERS,
         card: {
           token: "12345678901234567890",
           holder: {
@@ -55,7 +55,7 @@ describe("Credit card transaction", () => {
 
       assert.equal(1000, card.refundValue);
       assert.equal("12345678901234567890", card.transactionKey);
-      assert.equal("OTHERS", card.refundRason);
+      assert.equal("OTHERS", card.refundReason);
       assert.equal("12345678901234567890", card.card.token);
       assert.equal("Teste", card.card.holder.name);
       assert.equal("12345678901", card.card.holder.document);

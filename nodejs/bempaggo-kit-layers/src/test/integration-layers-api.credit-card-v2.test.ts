@@ -162,6 +162,12 @@ describe.concurrent.only("How use credit card charge", () => {
 			assert.equal("06219385993", charge.customer_id);
 		});
 
+		// test("find order not found", async () => {
+		// 	const chargeFind: LayersTransaction = await layers.findTransactionsByReferenceId("not-found");
+		// 	assert.equal(34, chargeFind);
+
+		// });
+
 		test("create authorize and capture and refund", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			requestLayersStyle.paymentMethods[0].card!.token = cardToken;
