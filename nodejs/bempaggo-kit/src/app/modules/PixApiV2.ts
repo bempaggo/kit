@@ -1,10 +1,10 @@
+import { Response } from "node-fetch";
 import { BempaggoChargeFinderV2 } from "./BempaggoChargeFinder";
 import { BempaggoHttp } from "./BempaggoHttp";
 import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
 import { getByUrlResponse } from "./entity/Exceptions";
 import { PixOperable } from "./Transaction";
-
 class PixApiV2 extends BempaggoChargeFinderV2 implements PixOperable {
 	constructor(http: BempaggoHttp) {
 		super(http);

@@ -1,3 +1,4 @@
+import { Response } from "node-fetch";
 import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
 interface BempaggoTransactionServiceable {
@@ -27,7 +28,7 @@ interface PixOperable extends ChargeFindable {
 	createPixCharge(sellerId: number, order: BempaggoOrderRequest): Promise<BempaggoChargeResponse>;
 	cancelPix(chargeId: number): Promise<BempaggoChargeResponse>;
 	createQuickResponseCodeUrlByChargeId(chargeId: number): URL;
-	getQuickResponseCodeUrlByChargeId(chargeId: number): Promise<Response> ;
+	getQuickResponseCodeUrlByChargeId(chargeId: number): Promise<Response>;
 }
 
 export {
