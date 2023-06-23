@@ -1,6 +1,6 @@
 {
   "name": "bempaggo-kit-express",
-  "version": "1.0.65",
+  "version": "0.0.130",
   "description": "",
   "main": "index.js",
   "type": "commonjs",
@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-     "bempaggo-kit": "file:../bempaggo-kit",
+    "bempaggo-kit": "file:../bempaggo-kit",
     "express": "^4.18.2"
   },
   "devDependencies": {
