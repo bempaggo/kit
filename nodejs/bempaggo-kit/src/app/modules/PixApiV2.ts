@@ -20,8 +20,8 @@ class PixApiV2 extends BempaggoChargeFinderV2 implements PixOperable {
 		return await getByUrlResponse(response, this.http);// /v2/charges/${chargeId} //OK
 	}
 
-	createQuickResponseCodeUrlByChargeId(chagerId: number): URL {
-		const url = new URL(`${this.http.getUrl()}/v2/charges/${chagerId}/qrcode`);
+	createQuickResponseCodeUrlByChargeId(chargeId: number): URL {
+		const url = new URL(`${this.http.getUrl()}/v2/charges/${chargeId}/qrcode`);
 		return url;
 	}
 

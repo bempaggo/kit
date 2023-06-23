@@ -216,6 +216,8 @@ describe("How use credit card charge", () => {
 				assert.equal("The 'amount' field must be the sum of the 'amount' of payments.", errors[0].message);
 				assert.equal("invalidAmounts", errors[0].field);
 			}
+			expect(async () => await layers.createTransaction(requestLayersStyle)).rejects.toThrowError("Bad Request");
+
 		});
 
 
