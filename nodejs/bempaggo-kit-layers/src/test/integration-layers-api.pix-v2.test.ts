@@ -84,14 +84,14 @@ describe("pix", () => {
 	test("create pix and get  urls of qr cod", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		const url: string = await layers.getExternalQrCode(response);
+		const url: string = layers.getExternalQrCode(response);
 		assert.equal(`http://localhost:5000/api/v2/charges/${response.referenceId}/qrcode`, url);
 	});
 
 	test("create pix and get qr cod", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		const url: string = await layers.getExternalQrCode(response);
+		const url: string = layers.getExternalQrCode(response);
 		const headers = new Headers();
 		headers.set("Authorization", `Bearer ${tokenLayers}`);
 		const responseQuickResponseCode = await fetch(url, { method: "GET", headers });
