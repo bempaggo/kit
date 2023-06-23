@@ -1,7 +1,8 @@
 
+import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { LayersPixPaymentMethod, LayersTransaction } from "../app/modules//layers/interfaces";
 import { LayersTransactionGroup } from "../app/modules//layers/transactionGroup";
-import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+
 import assert from "assert";
 import { layers, simulation, tokenLayers } from "./setup";
 // with ❤️ feeling the bad smell on the air
