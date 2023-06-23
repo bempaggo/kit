@@ -96,11 +96,13 @@ enum MathTypes {
 	/**When PERCENTAGE use the amount, using five position to the decimal
 	 * Examples:
 	 * 	percent		= amount to send bempaggo
+	 * 	0.50%  		= 5000
 	 *  1.00%  		= 100000
 	 *  1.50%  		= 150000
 	 *  5.00%  		= 500000
 	 *  10.00% 		= 1000000
 	 *  10.98% 		= 1098000
+	 *  10.987% 	= 1098700
 	*/
 
 }
