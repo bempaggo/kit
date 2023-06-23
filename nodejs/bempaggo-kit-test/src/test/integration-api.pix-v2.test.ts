@@ -1,5 +1,5 @@
 import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
-import { BempaggoBankSlipPaymentRequest, BempaggoOrderRequest, BempaggoPixPaymentRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
+import { BempaggoOrderRequest, BempaggoPixPaymentRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse, BempaggoPixTransactionResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, expect, test } from "vitest";
@@ -32,7 +32,8 @@ const order: BempaggoOrderRequest = {
 			paymentMethod: PaymentMethodTypes.PIX,
 			desiredExpirationDate: 1686681565342,
 			amount: 1000,
-			splits: []
+			splits: [],
+			description: "Pagamento de teste",
 		}
 	],
 	amount: 1000,
