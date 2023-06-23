@@ -2,7 +2,6 @@
 import { LayersPixPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
 import { layers, simulation, tokenLayers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
