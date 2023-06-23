@@ -8,18 +8,24 @@
   "scripts": {
     "clean": "rimraf lib",
     "build": "npm run clean && tsc",
-    "test": "npm run clean && vitest --no-threads --watch ",
-    "t": "npx vitest run --no-threads -t "
+    "test": "jest --runInBand --testTimeout=10000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bempaggo-kit": "1.0.102"
+    "node-fetch": "^2.6.11",
+    "bempaggo-kit": "1.0.113"
   },
   "devDependencies": {
+    "@types/node": "20.3.1",
+    "@types/node-fetch": "^2.6.4",
     "typescript": "5.0.2",
-    "vitest": "^0.31.1"
+    "@types/jest": "^28.0.0",
+    "assert": "^2.0.0",
+    "jest": "^28.0.0",
+    "ts-jest": "^28.0.0",
+    "ts-node-dev": "2.0.0"
   },
   "files": [
     "lib/**/*"
