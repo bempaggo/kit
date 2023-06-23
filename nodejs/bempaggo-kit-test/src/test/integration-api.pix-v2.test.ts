@@ -40,7 +40,7 @@ const order: BempaggoOrderRequest = {
 	amount: 1000,
 	notificationUrl: "https://meusite.com.br/events",
 }
-describe("pix functions", async () => {
+describe("pix functions", () => {
 	test("create pix", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
 		const pixResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getPixServiceable().createPixCharge(1, order);

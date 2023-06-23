@@ -90,9 +90,9 @@ const order: BempaggoOrderRequest = {
 	amount: 1000,
 	notificationUrl: "https://meusite.com.br/events",
 }
-describe("credit card functions", async () => {
+describe("credit card functions", () => {
 
-	describe("customer", async () => {
+	describe("customer", () => {
 		test("create a customer", async () => {
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
@@ -116,7 +116,7 @@ describe("credit card functions", async () => {
 		});
 	});
 
-	describe("credit card methods", async () => {
+	describe("credit card methods", () => {
 		test("brands", async () => {
 			assert.equal("VISA", CardBrandTypes.VISA);
 			assert.equal("MASTERCARD", CardBrandTypes.MASTERCARD);

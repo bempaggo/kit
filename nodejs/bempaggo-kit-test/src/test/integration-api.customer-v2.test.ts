@@ -5,7 +5,6 @@ import { Environments, CardBrandTypes } from "bempaggo-kit/lib/app/modules/entit
 import { token } from "./setup";
 import assert from "assert";
 
-
 const customer: BempaggoCustomerRequest = {
 	name: "Carlos Cartola",
 	document: "06219385993",
@@ -49,9 +48,9 @@ const paymentMethod: BempaggoCardRequest = {
 	},
 	cardNumber: "5448280000000007",// master number
 }
-describe("customer functions", async () => {
+describe("customer functions", () => {
 
-	describe("customer", async () => {
+	describe("customer", () => {
 		test("create a customer", async () => {
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
@@ -141,7 +140,7 @@ describe("customer functions", async () => {
 		});
 	});
 
-	describe("customer payment method", async () => {
+	describe("customer payment method", () => {
 		test("brands", async () => {
 			assert.equal("VISA", CardBrandTypes.VISA);
 			assert.equal("MASTERCARD", CardBrandTypes.MASTERCARD);

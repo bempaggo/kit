@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rimraf lib",
     "build": "npm run clean && tsc",
-    "test": "jest --runInBand --testTimeout=10000"
+    "test": "npm run clean && jest --runInBand --testTimeout=10000"
   },
   "keywords": [],
   "author": "",
