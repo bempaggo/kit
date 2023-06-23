@@ -128,7 +128,7 @@ interface BempaggoCreditCardTransactionResponse extends BempaggoAbstractTransact
 	 */
 	transactionKey: string;
 
-	refundReason: RefundReasonTypes | undefined;
+	refundReason?: RefundReasonTypes;
 
 	card: BempaggoCardResponse;
 

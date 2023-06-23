@@ -3,6 +3,7 @@ import { BempaggoBankSlipPaymentRequest, BempaggoOrderRequest } from "bempaggo-k
 import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, PaymentMethodTypes, MathTypes, PeriodicityTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import assert from "assert";
+
 import { token } from "./setup";
 
 const order: BempaggoOrderRequest = {
@@ -41,9 +42,9 @@ const order: BempaggoOrderRequest = {
 				amount: 100,
 			},
 			interest: {
-				days: 1,
-				type: MathTypes.FLAT,
 				amount: 100,
+				type: MathTypes.FLAT,
+				days: 1,
 				frequency: PeriodicityTypes.MONTHLY,
 			},
 		}

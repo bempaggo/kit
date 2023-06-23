@@ -4,23 +4,11 @@ import { PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
 import { LayersAddress, LayersBankSlipPaymentMethod, LayersCustomer, LayersCustomerPaymentMethod, LayersPixPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
+import { Util } from "./Util";
 
 // TODO esta classe eh uma desgraca, os objetos de (request e response) parecem ser a mesma coisa, mas nao sao.
 // Tem transactionGroup que parcece ser os objetos de request. sao??
 // Ai tem essas classes da interface.ts que parecem ser os responses, mas falta muitos campos.
-class Util {
-	static getDateAsString(data: Date): string | undefined {
-		if (data) {
-			const year = data.getFullYear().toString();
-			const month = (data.getMonth() + 1).toString().padStart(2, "0");
-			const day = data.getDate().toString().padStart(2, "0");
-			return `${year}-${month}-${day}`;
-		} else {
-			return undefined
-		}
-	}
-}
-
 class Layers {
 	request: RequestsToBempaggo;
 	response: ResponsesFromBempaggo;
@@ -29,7 +17,6 @@ class Layers {
 		this.request = new RequestsToBempaggo();
 	}
 }
-
 
 class RequestsToBempaggo {
 

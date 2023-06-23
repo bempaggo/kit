@@ -165,6 +165,44 @@ describe("How use credit card charge", () => {
 			assert.equal(cardToken, payment.credit_card.token);
 			assert.equal("06219385993", charge.customer_id);
 		});
+		test("create authorize one card and find order", async () => {
+			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
+			requestLayersStyle.paymentMethods[0].card!.token = cardToken;
+			requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
+			const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
+			const chargeFind: LayersTransaction = await layers.findTransactionsByReferenceId(requestLayersStyle.code);
+			const payment: LayersCreditCardPaymentMethod = charge.payments[0] as LayersCreditCardPaymentMethod;
+
+			assert.equal(1, chargeFind.payments.length);
+			assert.equal(1035, chargeFind.amount);
+			assert.equal(1, charge.payments.length);
+			assert.equal(1035, charge.amount);
+			assert.equal(null, charge.refunded_amount);
+			assert.equal(ChargeStatusTypes.AUTHORIZED, charge.status);
+			/*
+				payment.referenceId is the reference of the bempaggo transaction,
+				this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
+				This number is repeated only when there are refunds, disputes...
+			*/
+			assert.equal(1035, payment.amount);
+			assert.equal(TransactionStatusTypes.AUTHORIZED, payment.status);
+			assert.equal(0, payment.refunded_value);
+			assert.equal('credit_card', payment.payment_method);
+			assert.equal(sellerId.toString(), payment.recipient_id);
+			assert.equal(2, payment.credit_card.installments);
+			assert.equal(cardToken, payment.credit_card.token);
+			assert.equal("06219385993", charge.customer_id);
+		});
+
+		test("find order not found", async () => {
+			try {
+				await layers.findTransactionsByReferenceId("not-found");
+				assert.fail("should not be here");
+			} catch (error: any) {
+				assert.equal("No transaction found", error.message);
+			}
+		});
+
 		test("create authorize and capture and refund", async () => {
 			const cardToken: string = await layers.tokenizeCard(cardLayers, "Not Used");
 			requestLayersStyle.paymentMethods[0].card!.token = cardToken;
