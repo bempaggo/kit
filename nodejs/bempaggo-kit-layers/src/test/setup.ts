@@ -39,6 +39,7 @@
 	 * */
 
 
+import fetch, { Headers } from "node-fetch";
 import BemPaggoSdk from "../app/modules/layers/BemPaggoSDK";
 
 const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODc1MjIxMDYsImV4cCI6MTY4NzU4MjEwNn0.R-ONjUSZzWpQ-VekZIGB-RcKeggF-yiUn2kmd81lObxBNA32B6GvSOS10pbWVsQG6l-j2Stvuc7-AftANdg1XQ";
@@ -53,3 +54,4 @@ const simulation = async (chargeId: number): Promise<void> => {
 	await fetch(`${url}/v2/charges/${chargeId}/simulation`, { method: "POST", headers }); // Doesn't work in production.
 }
 export { layers, simulation, tokenLayers };
+

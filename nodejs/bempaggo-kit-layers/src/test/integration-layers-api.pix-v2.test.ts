@@ -19,12 +19,7 @@ const requestLayersStyle: LayersTransactionGroup = {
 		bank_slip: undefined,
 		card: undefined,
 		total: { amount: 1035, currency: "BRL" }
-
-	}
-
-
-	],
-
+	}],
 	sourceId: sellerId,
 	customerPayload: {
 		name: "Douglas Hiuara Longo Customer",
