@@ -1,7 +1,7 @@
 
-import { BankSlipRenderingData } from "../app/modules/Layers";
+import { BankSlipRenderingData } from "../app/modules/layers/BankSlipRenderinData";
 import { LayersBankSlipPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
-import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
+import { LayersTransactionGroup } from "../app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { layers } from "./setup";
 import assert from "assert";
