@@ -1,3 +1,4 @@
+import { Response } from "node-fetch";
 import { BempaggoHttp } from "../BempaggoHttp";
 
 const errors: ((value: string) => BempaggoError)[] = [];
@@ -92,12 +93,10 @@ class BempaggoInternalServerErrorException extends BempaggoError {
 }
 
 export {
-  BempaggoError,
-  BempaggoBadRequestException,
-  BempaggoForbiddenException,
+  BempaggoBadRequestException, BempaggoError, BempaggoForbiddenException,
   BempaggoInternalServerErrorException,
   BempaggoNotFoundException,
   BempaggoUnauthorizedException,
-  BempaggoUnprocessableEntityException, errors, assertNotError, getByUrlResponse
+  BempaggoUnprocessableEntityException, assertNotError, errors, getByUrlResponse
 };
 
