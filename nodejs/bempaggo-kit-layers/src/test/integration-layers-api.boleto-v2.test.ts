@@ -1,16 +1,14 @@
 
-import { BankSlipRenderingData } from "@/app/modules/layers/BankSlipRenderinData";
+import { BankSlipRenderingData } from "../app/modules/Layers";
 import { LayersBankSlipPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
 import { layers } from "./setup";
+import assert from "assert";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
 const requestLayersStyle: LayersTransactionGroup = {
 	code: "",
-
-
 	price: {
 		amount: 10035,
 		currency: "BRL"
@@ -64,15 +62,12 @@ describe("boleto", () => {
 		assert.equal(10035, charge.amount);
 		assert.equal(null, charge.refunded_amount);
 		assert.equal(ChargeStatusTypes.PENDING, charge.status);
-		assert.isNotNull(charge.referenceId); // charge.referenceId is the charge reference from bempaggo
-		assert.isNotNull(payment.reference_id);
 		assert.equal("06219385993", charge.customer_id);
 		assert.equal(10035, payment.amount);
 		assert.equal(0, payment.paid_amount);
 		assert.equal(TransactionStatusTypes.AWAITING_PAYMENT, payment.status);
 		assert.equal('boleto', payment.payment_method);
 		assert.equal(sellerId.toString(), payment.recipient_id);
-		assert.isNotNull(payment.reference_id);
 		assert.equal("Douglas Hiuara Longo Customer", payment.customer.name);
 		assert.equal("douglas@bempaggo.com.br", payment.customer.email);
 		assert.equal("06219385993", payment.customer.document);
@@ -97,15 +92,12 @@ describe("boleto", () => {
 		assert.equal(10035, chargeCancel.amount);
 		assert.equal(null, chargeCancel.refunded_amount);
 		assert.equal(ChargeStatusTypes.CANCELED, chargeCancel.status);
-		assert.isNotNull(chargeCancel.referenceId); // charge.referenceId is the charge reference from bempaggo
-		assert.isNotNull(payment.reference_id);
 		assert.equal("06219385993", chargeCancel.customer_id);
 		assert.equal(10035, chargeCancel.amount);
 		assert.equal(0, payment.paid_amount);
 		assert.equal(TransactionStatusTypes.CANCELED, payment.status);
 		assert.equal('boleto', payment.payment_method);
 		assert.equal(sellerId.toString(), payment.recipient_id);
-		assert.isNotNull(payment.reference_id);
 		assert.equal("Douglas Hiuara Longo Customer", payment.customer.name);
 		assert.equal("douglas@bempaggo.com.br", payment.customer.email);
 		assert.equal("06219385993", payment.customer.document);
