@@ -3,6 +3,8 @@ import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/a
 import { BempaggoCardResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, CardBrandTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { assert, describe, test } from "vitest";
+import { token } from "./setup";
+
 
 const customer: BempaggoCustomerRequest = {
 	name: "Carlos Cartola",
@@ -35,7 +37,6 @@ const card: BempaggoCardRequest = {
 	},
 	cardNumber: "5448280000000007",// master number
 }
-const token: string = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODY4MzU0MDEsImV4cCI6MTY4Njg5NTQwMX0.kCGdb5dQicqy3fmfZkDctz2SUCq1H-7Q3ciaAuM8Ong0pVTcPn5NpASn5rGgssrDBE06wx6Phg0hhf-OVc0bAw"
 const document: string = "06219385993"
 const paymentMethod: BempaggoCardRequest = {
 	expiration: {
