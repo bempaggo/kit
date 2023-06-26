@@ -1,5 +1,5 @@
 #!/bin/bash
-sub_version=70
+sub_version=131
 version="1.0.$sub_version"
 sub_version_release=$((sub_version+1))
 update="1.0.$sub_version_release"
@@ -12,6 +12,9 @@ cd bempaggo-kit-express
 sed -i "s/$version/$update/g" package.json 
 cd ..
 cd bempaggo-kit-layers
+sed -i "s/$version/$update/g" package.json 
+cd ..
+cd bempaggo-kit-test
 sed -i "s/$version/$update/g" package.json 
 cd ..
 sed -i "s/=$sub_version/=$sub_version_release/g" update.sh 

@@ -109,6 +109,9 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	async findTransactionsByReferenceId(referenceId: string): Promise<LayersTransaction> {
 		const finder: ChargeFindable = this.bempaggo!.getChargeService().getChargeFinder();
 		const response: BempaggoChargeResponse[] = await finder.findChargesByOrderReferenceId(referenceId);
+		if (response.length === 0) {
+			throw new Error("No transaction found");
+		}
 		return this.layers.response.fromCharge(response[0]);
 	}
 

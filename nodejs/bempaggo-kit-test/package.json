@@ -1,6 +1,6 @@
 {
 	"name": "bempaggo-kit-layers",
-	"version": "1.0.50",
+	"version": "0.0.130",
 	"description": "Layers on Bempaggo Payment Gateway",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -8,7 +8,7 @@
 	"scripts": {
 		"clean": "rimraf lib",
 		"build": "npm run clean && tsc",
-		"test": "npm run clean && vitest --no-threads --watch ",
+		"test": "npm run clean && vitest --no-threads --watch --test-timeout=10000 ",
 		"t": "npx vitest run --no-threads -t "
 	},
 	"keywords": [],

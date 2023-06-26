@@ -27,7 +27,7 @@ describe("Bankslip Payment", () => {
     test("Valid request with splits", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
         paymentMethod: PaymentMethodTypes.BOLETO,
-        dueDate: new Date().getTime(),
+        dueDate: 1686943332671,
         paymentLimitDate:1686683096030,
         amount: 1000,
         splits: [{
@@ -44,7 +44,7 @@ describe("Bankslip Payment", () => {
       assert.equal(1000, bankslipPayment.amount);
       assertType<BempaggoBankSlipPaymentRequest>(bankslipPayment);
       assert.equal("BOLETO", bankslipPayment.paymentMethod);
-      assert.equal(1686683096030, bankslipPayment.dueDate);
+      assert.equal(1686943332671, bankslipPayment.dueDate);
       assert.equal(1686683096030, bankslipPayment.paymentLimitDate);
       assert.ok(bankslipPayment.dueDate > 0);
       assert.lengthOf(bankslipPayment.splits, 2);
