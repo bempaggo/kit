@@ -5,3 +5,4 @@
 /src/test/**/*.map
 /src/test/**/*.js
 /package-lock.json/
+/package-lock.json
