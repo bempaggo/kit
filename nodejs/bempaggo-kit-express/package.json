@@ -17,11 +17,11 @@
   "dependencies": {
     "bempaggo-kit": "file:../bempaggo-kit",
     "express": "^3.0.0",
-    "node-fetch": "^2.6.11"
+    "node-fetch": "2.6.11"
   },
   "devDependencies": {
-    "@types/express": "4.17.17",
-    "ts-node-dev": "2.0.0",
+    "@types/express": "^4.0.0",
+    "ts-node-dev": "^2.0.0",
     "typescript": "5.0.2"
   }
 }
