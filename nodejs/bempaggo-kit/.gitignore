@@ -4,3 +4,4 @@
 **/*.spec.ts
 /src/test/**/*.map
 /src/test/**/*.js
+/package-lock.json/
