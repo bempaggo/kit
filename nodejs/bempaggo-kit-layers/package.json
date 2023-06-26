@@ -1,6 +1,6 @@
 {
   "name": "bempaggo-kit-layers",
-  "version": "0.0.130",
+  "version": "1.0.70",
   "description": "Layers on Bempaggo Payment Gateway",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bempaggo-kit": "0.0.130"
+    "bempaggo-kit": "1.0.70"   
   },
   "devDependencies": {
     "typescript": "^5.0.4",
