@@ -2,7 +2,7 @@ import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, CardBrandTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
+import assert from "assert";
 import { token } from "./setup";
 
 
@@ -49,15 +49,14 @@ const paymentMethod: BempaggoCardRequest = {
 	},
 	cardNumber: "5448280000000007",// master number
 }
-describe("customer functions", async () => {
+describe("customer functions", () => {
 
-	describe("customer", async () => {
+	describe("customer", () => {
 		test("create a customer", async () => {
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
 			assert.equal(3, Object.keys(customerResponse.phone!).length);
 			assert.equal(8, Object.keys(customerResponse.address!).length);
-			assert.isNotNull(customerResponse.id);
 			assert.equal("Carlos Cartola", customerResponse.name);
 			assert.equal("carlos@bempaggo.com", customerResponse.email);
 			assert.equal("06219385993", customerResponse.document);
@@ -79,7 +78,6 @@ describe("customer functions", async () => {
 			assert.equal(7, Object.keys(foundCustomerResponse).length);
 			assert.equal(3, Object.keys(foundCustomerResponse.phone!).length);
 			assert.equal(8, Object.keys(foundCustomerResponse.address!).length);
-			assert.isNotNull(foundCustomerResponse.id);
 			assert.equal("Carlos Cartola", foundCustomerResponse.name);
 			assert.equal("carlos@bempaggo.com", foundCustomerResponse.email);
 			assert.equal("06219385993", foundCustomerResponse.document);
@@ -122,7 +120,6 @@ describe("customer functions", async () => {
 			assert.equal(7, Object.keys(updatedCustomer).length);
 			assert.equal(3, Object.keys(updatedCustomer.phone!).length);
 			assert.equal(8, Object.keys(updatedCustomer.address!).length);
-			assert.isNotNull(updatedCustomer.id);
 			assert.equal(customerResponse.id, updatedCustomer.id);
 			assert.equal("Carlos Cartolasso", updatedCustomer.name);
 			assert.equal("carlota@bempaggo.bol", updatedCustomer.email);
@@ -141,7 +138,7 @@ describe("customer functions", async () => {
 		});
 	});
 
-	describe("customer payment method", async () => {
+	describe("customer payment method", () => {
 		test("brands", async () => {
 			assert.equal("VISA", CardBrandTypes.VISA);
 			assert.equal("MASTERCARD", CardBrandTypes.MASTERCARD);

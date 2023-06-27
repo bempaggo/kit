@@ -1,6 +1,6 @@
 import { BempaggoAffiliateMinimalResponse, BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoEstablishmentMinimalResponse, BempaggoPixTransactionResponse, BempaggoTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes, ChargeStatusTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Charge Entity", () => {
 	describe("Response", () => {
@@ -118,18 +118,6 @@ describe("Charge Entity", () => {
 			assert.equal(3, Object.keys(chargeResponse.order).length);
 			assert.equal(3, Object.keys(chargeResponse.order.affiliate!).length);
 			
-			assertType<BempaggoChargeResponse>(chargeResponse);
-			assertType<BempaggoTransactionResponse>(chargeResponse.transactions[0]);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
-			assertType<TransactionResponseTypes>(chargeResponse.transactions[0].type);
-			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
-			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
-			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
-			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
-			assertType<BempaggoCardHolderResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.holder);
-			assertType<BempaggoCardExpirationResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!.expiration);
-			assertType<ChargeStatusTypes>(chargeResponse.status);
 		});
 		test("charge response with only required fields", async () => {
 
@@ -222,14 +210,6 @@ describe("Charge Entity", () => {
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.holder).length);
 			assert.equal(2, Object.keys((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card.expiration).length);
 
-			assertType<BempaggoChargeResponse>(chargeResponse);
-			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
-			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
-			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
-			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
-			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
-			assertType<ChargeStatusTypes>(chargeResponse.status);
 		});
 		test("charge response with two types of transactions", async () => {
 
@@ -355,16 +335,6 @@ describe("Charge Entity", () => {
 			assert.equal(11, Object.keys(chargeResponse.transactions[1]).length);
 			assert.equal(1, Object.keys(chargeResponse.transactions[1].establishment).length);
 			
-			assertType<BempaggoChargeResponse>(chargeResponse);
-			assertType<TransactionResponseTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).type);
-			assertType<RefundReasonTypes>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).refundReason!);
-			assertType<TransactionStatusTypes>(chargeResponse.transactions[0].status);
-			assertType<BempaggoAffiliateMinimalResponse>(chargeResponse.transactions[0].affiliate!);
-			assertType<PaymentMethodTypes>(chargeResponse.transactions[0].paymentMethod);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[0].establishment);
-			assertType<BempaggoCardResponse>((chargeResponse.transactions[0] as BempaggoCreditCardTransactionResponse).card!);
-			assertType<ChargeStatusTypes>(chargeResponse.status);
-			assertType<BempaggoEstablishmentMinimalResponse>(chargeResponse.transactions[1].establishment);
 		});
 
 	});

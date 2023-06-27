@@ -41,7 +41,7 @@
 
 import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODc1NDQ3MDYsImV4cCI6MTY4NzYwNDcwNn0.ispOBQIxLbk_19QG5KNLw_eF0Xn8lej-rRr8HD8HtCPXmkBMCwA52CGDfLQB2k0TsQwUqCdvZoCmqAl4NvYEkQ";
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODc4NzA0ODgsImV4cCI6MTY4NzkzMDQ4OH0.Uwbime7bU4tNaojCJR6lulZqL8N-yx_fJyCWLfHeHz0yL3Bj9OgGRXqLszKTje_EUinYIKlB8FhDsE1neI9VGg";
 // It is necessary to generate a token in portal
 const url = "http://localhost:5000/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(url, tokenLayers);

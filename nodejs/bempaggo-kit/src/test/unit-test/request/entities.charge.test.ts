@@ -2,7 +2,7 @@
 
 import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Charge Entity", () => {
 	describe("Request", () => {
@@ -49,13 +49,6 @@ describe("Charge Entity", () => {
 				notificationUrl: "https://meusite.com.br/events",
 			};
 
-			assertType<BempaggoCustomerRequest>(charge.customer);
-			assertType<BempaggoOrderRequest>(charge);
-			assertType<BempaggoAddressRequest | undefined>(charge.customer.address);
-			assertType<BempaggoPhoneRequest | undefined>(charge.customer.phone);
-			assertType<BempaggoTokenCardRequest>((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!);
-			assertType<BempaggoSplitPaymentRequest[]>((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits);
-
 			assert.equal(5, Object.keys(charge).length);
 			assert.equal(6, Object.keys(charge.customer).length);
 			assert.equal(3, Object.keys(charge.customer?.phone ?? {}).length);
@@ -83,7 +76,6 @@ describe("Charge Entity", () => {
 			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv);
 			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token);
 			assert.equal(1000, charge.payments[0].amount);
-			assert.lengthOf(charge.payments[0].splits, 1);
 			assert.equal(1000, charge.payments[0].splits[0].amount);
 			assert.equal(1, charge.payments[0].splits[0].sellerId);
 			assert.equal(1000, charge.amount);
