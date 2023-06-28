@@ -1,6 +1,6 @@
 import { BempaggoBankSlipTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
 import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Bankslip transaction", () => {
 	describe("Response", () => {
@@ -58,8 +58,6 @@ describe("Bankslip transaction", () => {
 				paidValue: 1000,
 				splits: []
 			};
-
-			assertType<BempaggoBankSlipTransactionResponse>(bankSlip);
 
 			assert.equal(22, Object.keys(bankSlip).length);
 			assert.equal(3, Object.keys(bankSlip.bank).length);

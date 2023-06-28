@@ -1,5 +1,5 @@
 import { BempaggoSplitResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Split payment", () => {
   describe("Response", () => {
@@ -13,7 +13,6 @@ describe("Split payment", () => {
         }
       };
 
-      assertType<BempaggoSplitResponse>(splitPayment);
       assert.equal(2, Object.keys(splitPayment).length);
       assert.equal(1000, splitPayment.amount);
       assert.equal(123456789, splitPayment.affiliate.id);

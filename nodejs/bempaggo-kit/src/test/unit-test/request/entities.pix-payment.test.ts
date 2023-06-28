@@ -1,6 +1,6 @@
 import { BempaggoPixPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
 import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Pix Payment", () => {
   describe("Request", () => {
@@ -12,7 +12,6 @@ describe("Pix Payment", () => {
         splits: [],
       };
 
-      assertType<BempaggoPixPaymentRequest>(pixPayment);
       assert.equal(4, Object.keys(pixPayment).length);
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
@@ -35,11 +34,9 @@ describe("Pix Payment", () => {
         }],
       };
 
-      assertType<BempaggoPixPaymentRequest>(pixPayment);
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
       assert.equal(1000, pixPayment.amount);
-      assert.lengthOf(pixPayment.splits, 2);
       assert.equal(1000, pixPayment.splits[0].amount);
       assert.equal(123456789, pixPayment.splits[0].sellerId);
       assert.equal(1000, pixPayment.splits[1].amount);

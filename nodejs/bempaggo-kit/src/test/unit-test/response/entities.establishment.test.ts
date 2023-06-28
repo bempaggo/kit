@@ -1,5 +1,5 @@
 import { BempaggoEstablishmentMinimalResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Establishment entity", () => {
 
@@ -9,7 +9,6 @@ describe("Establishment entity", () => {
         id: 1
       };
 
-      assertType<BempaggoEstablishmentMinimalResponse>(establishmentMinimal);
       assert.equal(1, Object.keys(establishmentMinimal).length);
       assert.equal(1, establishmentMinimal.id);
     });

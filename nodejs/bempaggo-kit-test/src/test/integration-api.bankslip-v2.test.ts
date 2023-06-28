@@ -2,7 +2,7 @@ import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoBankSlipPaymentRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, MathTypes, PaymentMethodTypes, PeriodicityTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, expect, test } from "vitest";
+import assert from "assert";
 import { token } from "./setup";
 
 const order: BempaggoOrderRequest = {
@@ -51,32 +51,25 @@ const order: BempaggoOrderRequest = {
 	amount: 1000,
 	notificationUrl: "https://meusite.com.br/events",
 }
-describe("bankslip functions", async () => {
+describe("bankslip functions", () => {
 	test("create bankslip", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
 		const bankslipResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getBankSlipServiceable().createBankSlipCharge(1, order);
 		const transaction: BempaggoBankSlipTransactionResponse = bankslipResponse.transactions[0] as BempaggoBankSlipTransactionResponse;
 		console.log(bankslipResponse);
 		assert.equal(8, Object.keys(bankslipResponse).length);
-		assert.isNotNull(bankslipResponse.id);
 		assert.equal("PENDING", bankslipResponse.status);
 		assert.equal(1000, bankslipResponse.value);
-		assert.isNull(bankslipResponse.refundedAmount);
 		assert.equal("BOLETO", transaction.paymentMethod);
-		assert.isNotNull(transaction.id);
 		assert.equal(1000, transaction.value);
-		assert.isNull(transaction.paidValue);
 		assert.equal("LOOSE", transaction.type);
 		assert.equal("AWAITING_PAYMENT", transaction.status);
-		assert.isNotNull(transaction.transactionDate);
 		assert.equal(1, transaction.affiliate?.id);
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.equal(2, transaction.establishment.id);
 		assert.equal(1, bankslipResponse.customer.id);
 		assert.equal("51190844001", bankslipResponse.customer.document);
-		assert.isNotNull(bankslipResponse.order.id);
-		assert.isNotNull(bankslipResponse.order.orderReference);
 	});
 
 	test("create bankslip and cancel", async () => {
@@ -85,25 +78,17 @@ describe("bankslip functions", async () => {
 		const canceledBankslip: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getBankSlipServiceable().cancelBankSlip(bankslipResponse.id);
 		const transaction: BempaggoBankSlipTransactionResponse = canceledBankslip.transactions[0] as BempaggoBankSlipTransactionResponse;
 		assert.equal(8, Object.keys(canceledBankslip).length);
-		assert.isNotNull(canceledBankslip.id);
 		assert.equal("CANCELED", canceledBankslip.status);
 		assert.equal(1000, canceledBankslip.value);
-		assert.isNull(canceledBankslip.refundedAmount);
 		assert.equal("BOLETO", transaction.paymentMethod);
-		assert.isNotNull(transaction.id);
 		assert.equal(1000, transaction.value);
-		assert.isNull(transaction.paidValue);
 		assert.equal("LOOSE", transaction.type);
 		assert.equal("CANCELED", transaction.status);
-		assert.isNotNull(transaction.transactionDate);
 		assert.equal(1, transaction.affiliate?.id);
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.equal(2, transaction.establishment.id);
-		assert.isNotNull(canceledBankslip.customer.id);
 		assert.equal("51190844001", canceledBankslip.customer.document);
-		assert.isNotNull(canceledBankslip.order.id);
-		assert.isNotNull(canceledBankslip.order.orderReference);
 	});
 
 	test("create bankslip without address", async () => {

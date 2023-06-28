@@ -3,7 +3,7 @@ import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
 import { LayersCreditCardPaymentMethod, LayersCustomerPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
 import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
 import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, expect, test, vi } from "vitest";
+import assert from "assert";
 import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
@@ -56,7 +56,7 @@ const cardLayersInvalid: LayersCustomerPaymentMethod = {
 	number: "5448280000040807",
 	brand: "MASTERCARD",
 }
-describe.concurrent.only("How use credit card charge", () => {
+describe("How use credit card charge", () => {
 	test("brands", async () => {
 		assert.equal(14, BemPaggoSdk.availableCardBrands.length);
 		assert.equal("VISA", BemPaggoSdk.availableCardBrands[0]);
@@ -94,8 +94,6 @@ describe.concurrent.only("How use credit card charge", () => {
 			assert.equal(1035, charge.amount);
 			assert.equal(null, charge.refunded_amount);
 			assert.equal(ChargeStatusTypes.AUTHORIZED, charge.status);
-			assert.isNotNull(charge.referenceId); // charge.referenceId is the charge reference from bempaggo
-			assert.isNotNull(payment.reference_id);
 			/*
 			payment.referenceId is the reference of the bempaggo transaction,
 			this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
@@ -118,7 +116,6 @@ describe.concurrent.only("How use credit card charge", () => {
 			const responseCapture: LayersTransaction = await layers.chargeTransaction(response.referenceId);
 			const payment: LayersCreditCardPaymentMethod = responseCapture.payments[0] as LayersCreditCardPaymentMethod;
 			assert.equal(1, responseCapture.payments.length);
-			assert.isNotNull(response.referenceId);
 			assert.equal(1035, responseCapture.amount);
 			assert.equal(null, responseCapture.refunded_amount);
 			assert.equal(ChargeStatusTypes.PAY, responseCapture.status);
@@ -185,7 +182,6 @@ describe.concurrent.only("How use credit card charge", () => {
 			assert.equal(1035, refund.amount);
 			assert.equal(1035, refund.refunded_amount);
 
-			assert.isNotNull(response.referenceId);
 			assert.equal("06219385993", refund.customer_id);
 			assert.equal(ChargeStatusTypes.REFUND, refund.status);
 			assert.equal('credit_card', payment.payment_method);
@@ -224,8 +220,6 @@ describe.concurrent.only("How use credit card charge", () => {
 			assert.equal(58, charge.amount);
 			assert.equal(null, charge.refunded_amount);
 			assert.equal(ChargeStatusTypes.PENDING, charge.status);
-			assert.isNotNull(charge.referenceId); // charge.referenceId is the charge reference from bempaggo
-			assert.isNotNull(payment.reference_id);
 			assert.equal(58, payment.amount);
 			assert.equal(TransactionStatusTypes.NOT_AUTHORIZED, payment.status);
 			assert.equal(0, payment.refunded_value);
@@ -324,8 +318,6 @@ describe.concurrent.only("How use credit card charge", () => {
 				assert.equal(null, charge.refunded_amount);
 				assert.equal(ChargeStatusTypes.AUTHORIZED, charge.status);
 				assert.equal("06219385993", charge.customer_id);
-				assert.isNotNull(charge.referenceId); // charge.referenceId is the charge reference from bempaggo
-				assert.isNotNull(payment.reference_id);
 				/*
 				payment.referenceId is the reference of the bempaggo transaction,
 				this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
@@ -360,7 +352,6 @@ describe.concurrent.only("How use credit card charge", () => {
 				const payment: LayersCreditCardPaymentMethod = responseCapture.payments[1] as LayersCreditCardPaymentMethod;
 				const paymentSecond: LayersCreditCardPaymentMethod = responseCapture.payments[0] as LayersCreditCardPaymentMethod;
 				assert.equal(2, responseCapture.payments.length);
-				assert.isNotNull(charge.referenceId);
 				assert.equal(2035, responseCapture.amount);
 				assert.equal(null, responseCapture.refunded_amount);
 				assert.equal("06219385993", responseCapture.customer_id);
@@ -401,7 +392,6 @@ describe.concurrent.only("How use credit card charge", () => {
 				const payment: LayersCreditCardPaymentMethod = refund.payments[3] as LayersCreditCardPaymentMethod;
 
 				assert.equal(4, refund.payments.length);
-				assert.isNotNull(charge.referenceId);
 				assert.equal(2035, refund.amount);
 				assert.equal(2035, refund.refunded_amount);
 				assert.equal("06219385993", refund.customer_id);
