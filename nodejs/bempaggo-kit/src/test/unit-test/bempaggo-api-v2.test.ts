@@ -32,6 +32,7 @@ describe("BempaggoApiV2", () => {
     });
     test("create bempaggo object", () => {
       const bempaggo: BempaggoApiV2 = new BempaggoApiV2("", "");
+      assert.notEqual(null, bempaggo.getUrl());
       assert.notEqual(null, bempaggo);
     });
     test("create bempaggo services", () => {

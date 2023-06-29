@@ -1,10 +1,8 @@
-import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
+import assert from "assert";
 import { BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoChargeResponse, BempaggoCreditCardTransactionResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes, Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import assert from "assert";
-import { token } from "./setup";
-
+import { CardBrandTypes, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { bempaggoFactory } from "./setup";
 
 const customer: BempaggoCustomerRequest = {
 	name: "Carlos Cartola",
@@ -94,7 +92,7 @@ describe("credit card functions", () => {
 
 	describe("customer", () => {
 		test("create a customer", async () => {
-			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
 			assert.equal(3, Object.keys(customerResponse.phone!).length);
 			assert.equal(8, Object.keys(customerResponse.address!).length);
@@ -134,7 +132,8 @@ describe("credit card functions", () => {
 			assert.equal("CREDZ", CardBrandTypes.CREDZ);
 		});
 		test("create a card", async () => {
-			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomerPaymentMethod(document, paymentMethod);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory
+.createCustomerPaymentMethod(document, paymentMethod);
 			//TODO: o response que vem é na verdade o response do CardV2Response e não do BempaggoCardResponse. Id, year e month diferem. 
 			assert.equal(7, Object.keys(cardResponse).length);
 			assert.equal(2, Object.keys(cardResponse.holder).length);
@@ -150,12 +149,14 @@ describe("credit card functions", () => {
 		});
 
 		test("find order not found", async () => {
-			const charge: BempaggoChargeResponse[] = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getChargeFinder().findChargesByOrderReferenceId("not-found");
+			const charge: BempaggoChargeResponse[] = await bempaggoFactory
+.getChargeService().getChargeFinder().findChargesByOrderReferenceId("not-found");
 
 			assert.deepEqual([], charge);
 		});
 		test("tokenize a card", async () => {
-			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).tokenizeCard(card, "no");
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory
+.tokenizeCard(card, "no");
 			//TODO: o tokenizeCard devolve um cardResponse sem id. Seria o certo devolver so o token? Ou fazer igual o createCustomerPaymentMethod e devolver um CardResponse completo?
 			assert.equal(7, Object.keys(cardResponse).length);
 			assert.equal(2, Object.keys(cardResponse.holder).length);
@@ -173,12 +174,15 @@ describe("credit card functions", () => {
 
 		// TODO: response do back retorna atributos a mais que nao possui na nossa interface BempaggoChargeResponse
 		test("create and authorize a card", async () => {
-			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
-			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory
+.createCustomer(customer);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory
+.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 			const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 			payment.cardToken.token = cardResponse.token!;
 			order.orderReference = `o-${new Date().getTime().toString()}`
-			const authorizedCard: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
+			const authorizedCard: BempaggoChargeResponse = await bempaggoFactory
+.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
 			const transaction = authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse;
 
 			assert.equal(8, Object.keys(authorizedCard).length);
@@ -233,14 +237,13 @@ describe("credit card functions", () => {
 
 		// TODO: response do back retorna atributos a mais que nao possui na nossa interface BempaggoChargeResponse
 		test("create, authorize and capture card", async () => {
-			const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-			const customerResponse: BempaggoCustomerResponse = await bempaggo.createCustomer(customer);
-			const cardResponse: BempaggoCardResponse = await bempaggo.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 			const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 			payment.cardToken.token = cardResponse.token!;
 			order.orderReference = `o-${new Date().getTime().toString()}`
-			const authorizedCharge: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
-			const capturedCharge: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().captureCreditCardCharge(authorizedCharge.id);
+			const authorizedCharge: BempaggoChargeResponse = await bempaggoFactory.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
+			const capturedCharge: BempaggoChargeResponse = await bempaggoFactory.getChargeService().getCreditCardServiceable().captureCreditCardCharge(authorizedCharge.id);
 
 			const transaction: BempaggoCreditCardTransactionResponse = capturedCharge.transactions[0] as BempaggoCreditCardTransactionResponse;
 			assert.equal(8, Object.keys(capturedCharge).length);
@@ -295,10 +298,9 @@ describe("credit card functions", () => {
 
 		// TODO: response do back retorna atributos a mais que nao possui na nossa interface BempaggoChargeResponse
 		test("create authorize and capture and refund", async () => {
-			const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-			const creditCardServiceable = bempaggo.getChargeService().getCreditCardServiceable();
-			const customerResponse: BempaggoCustomerResponse = await bempaggo.createCustomer(customer);
-			const cardResponse: BempaggoCardResponse = await bempaggo.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
+			const creditCardServiceable = bempaggoFactory.getChargeService().getCreditCardServiceable();
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 			const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 			payment.cardToken.token = cardResponse.token!;
 			order.orderReference = `o-${new Date().getTime().toString()}`
@@ -323,6 +325,7 @@ describe("credit card functions", () => {
 			assert.equal(1000, refundedCharge.value);
 			assert.equal(1000, refundedCharge.refundedAmount);
 			assert.equal("CREDIT_CARD", transaction.paymentMethod);
+
 			assert.notEqual(null, transaction.id);
 			assert.equal(-1000, transaction.value);
 			assert.equal(1000, transaction.paidValue);
@@ -336,8 +339,10 @@ describe("credit card functions", () => {
 			assert.equal(1, transaction.establishment.id);
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Estorno realizado com sucesso.", transaction.returnMessage);
+
 			assert.notEqual(null, transaction.transactionKey);
 			assert.equal("OTHERS", transaction.refundReason);
+
 			assert.notEqual(null, transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
@@ -359,10 +364,9 @@ describe("credit card functions", () => {
 
 		// TODO: response do back retorna atributos a mais que nao possui na nossa interface BempaggoChargeResponse
 		test("create unauthorized", async () => {
-			const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-			const creditCardServiceable = bempaggo.getChargeService().getCreditCardServiceable();
-			const customerResponse: BempaggoCustomerResponse = await bempaggo.createCustomer(customer);
-			const cardResponse: BempaggoCardResponse = await bempaggo.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
+			const creditCardServiceable = bempaggoFactory.getChargeService().getCreditCardServiceable();
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 
 			const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 			payment.cardToken.token = cardResponse.token!;
@@ -425,10 +429,9 @@ describe("credit card functions", () => {
 		});
 
 		test("bad request", async () => {
-			const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-			const creditCardServiceable = bempaggo.getChargeService().getCreditCardServiceable();
-			const customerResponse: BempaggoCustomerResponse = await bempaggo.createCustomer(customer);
-			const cardResponse: BempaggoCardResponse = await bempaggo.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
+			const creditCardServiceable = bempaggoFactory.getChargeService().getCreditCardServiceable();
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 			const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest;
 
 			payment.cardToken.token = cardResponse.token!;
@@ -528,16 +531,15 @@ describe("credit card functions", () => {
 			}
 
 			test("create authorize two card", async () => {
-				const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-				const cardToken = await bempaggo.tokenizeCard(card, "Not used");
-				const cardTokenSecond = await bempaggo.tokenizeCard(secondCard, "Not used");
+				const cardToken = await bempaggoFactory.tokenizeCard(card, "Not used");
+				const cardTokenSecond = await bempaggoFactory.tokenizeCard(secondCard, "Not used");
 
 				const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 				const payment2: BempaggoCreditCardPaymentRequest = order.payments[1] as BempaggoCreditCardPaymentRequest
 				payment.cardToken.token = cardToken.token!;
 				payment2.cardToken.token = cardTokenSecond.token!;
 				order.orderReference = `o-${new Date().getTime().toString()}`
-				const charge: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
+				const charge: BempaggoChargeResponse = await bempaggoFactory.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
 				const transaction: BempaggoCreditCardTransactionResponse = charge.transactions[1] as BempaggoCreditCardTransactionResponse;
 				const transaction2: BempaggoCreditCardTransactionResponse = charge.transactions[0] as BempaggoCreditCardTransactionResponse;
 				assert.equal(26, Object.keys(transaction).length);
@@ -602,17 +604,16 @@ describe("credit card functions", () => {
 			});
 
 			test("create authorize and capture two cards", async () => {
-				const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-				const cardToken = await bempaggo.tokenizeCard(card, "Not used");
-				const cardTokenSecond = await bempaggo.tokenizeCard(secondCard, "Not used");
+				const cardToken = await bempaggoFactory.tokenizeCard(card, "Not used");
+				const cardTokenSecond = await bempaggoFactory.tokenizeCard(secondCard, "Not used");
 
 				const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 				const payment2: BempaggoCreditCardPaymentRequest = order.payments[1] as BempaggoCreditCardPaymentRequest
 				payment.cardToken.token = cardToken.token!;
 				payment2.cardToken.token = cardTokenSecond.token!;
 				order.orderReference = `o-${new Date().getTime().toString()}`
-				const charge: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
-				const responseCapture: BempaggoChargeResponse = await bempaggo.getChargeService().getCreditCardServiceable().captureCreditCardCharge(charge.id);
+				const charge: BempaggoChargeResponse = await bempaggoFactory.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
+				const responseCapture: BempaggoChargeResponse = await bempaggoFactory.getChargeService().getCreditCardServiceable().captureCreditCardCharge(charge.id);
 				const transaction1: BempaggoCreditCardTransactionResponse = responseCapture.transactions[1] as BempaggoCreditCardTransactionResponse;
 				const transaction2: BempaggoCreditCardTransactionResponse = responseCapture.transactions[0] as BempaggoCreditCardTransactionResponse;
 				assert.equal(26, Object.keys(transaction1).length);
@@ -677,10 +678,9 @@ describe("credit card functions", () => {
 			});
 
 			test("create authorize and capture and refund two cards", async () => {
-				const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-				const creditCardServiceable = bempaggo.getChargeService().getCreditCardServiceable()
-				const cardToken = await bempaggo.tokenizeCard(card, "Not used");
-				const cardTokenSecond = await bempaggo.tokenizeCard(secondCard, "Not used");
+				const creditCardServiceable = bempaggoFactory.getChargeService().getCreditCardServiceable()
+				const cardToken = await bempaggoFactory.tokenizeCard(card, "Not used");
+				const cardTokenSecond = await bempaggoFactory.tokenizeCard(secondCard, "Not used");
 
 				const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 				const payment2: BempaggoCreditCardPaymentRequest = order.payments[1] as BempaggoCreditCardPaymentRequest

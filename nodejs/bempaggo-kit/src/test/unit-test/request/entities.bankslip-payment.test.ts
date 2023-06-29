@@ -17,7 +17,6 @@ describe("Bankslip Payment", () => {
       };
 
 
-
       assert.equal("BOLETO", bankslipPayment.paymentMethod);
       assert.equal(1686683096030, bankslipPayment.dueDate);
       assert.equal(1000, bankslipPayment.amount);
@@ -32,7 +31,7 @@ describe("Bankslip Payment", () => {
         ourNumber: undefined,
         paymentMethod: PaymentMethodTypes.BOLETO,
         dueDate: 1686943332671,
-        paymentLimitDate:1686683096030,
+        paymentLimitDate: 1686683096030,
         amount: 1000,
         splits: [{
           amount: 1000,

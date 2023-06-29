@@ -38,7 +38,6 @@ describe("Address entity", () => {
         lineTwo: undefined
       };
       const zipCodeRegex = /^\d{8}$/;
-
       assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);

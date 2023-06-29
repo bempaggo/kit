@@ -19,7 +19,6 @@ describe("Card Entity", () => {
         document: undefined,
         name: "Tony Stark"
       };
-
       assert.equal(2, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
     })
@@ -50,7 +49,6 @@ describe("Card Entity", () => {
         },
         brand: CardBrandTypes.MASTERCARD,
       };
-
 
       assert.equal(6, Object.keys(card).length);
       assert.equal(2, Object.keys(card.holder).length);
