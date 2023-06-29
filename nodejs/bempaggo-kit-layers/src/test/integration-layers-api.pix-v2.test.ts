@@ -63,6 +63,29 @@ describe("pix", () => {
 		assert.equal("06219385993", charge.customer_id);
 		assert.equal(175, payment.emv.length);
 	});
+
+	test("create pix only find order", async () => {
+		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
+		const chargeFind: LayersTransaction = await layers.findTransactionsByReferenceId(requestLayersStyle.code);
+
+		const payment: LayersPixPaymentMethod = chargeFind.payments[0] as LayersPixPaymentMethod;
+
+		assert.equal(1, chargeFind.payments.length);
+		assert.equal(1035, chargeFind.amount);
+		assert.equal(null, chargeFind.refunded_amount);
+		assert.equal(ChargeStatusTypes.PENDING, chargeFind.status);
+		/*
+		payment.referenceId is the reference of the bempaggo transaction,
+		this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
+		This number is repeated only when there are refunds, disputes...
+		*/
+		assert.equal(1035, payment.amount);
+		assert.equal(TransactionStatusTypes.AWAITING_PAYMENT, payment.status);
+		assert.equal('pix', payment.payment_method);
+		assert.equal(sellerId.toString(), payment.recipient_id);
+		assert.equal("06219385993", chargeFind.customer_id);
+		assert.equal(175, payment.emv.length);
+	});
 	test("create pix paid simulation", async () => {
 		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
 		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
