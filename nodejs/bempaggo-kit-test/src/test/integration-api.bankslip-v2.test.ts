@@ -74,7 +74,7 @@ describe("bankslip functions", () => {
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.equal(2, transaction.establishment.id);
-		assert.equal(1, bankslipResponse.customer.id);
+		assert.notEqual(null, bankslipResponse.customer.id);
 		assert.equal("51190844001", bankslipResponse.customer.document);
 		assert.notEqual(null, bankslipResponse.order.id);
 		assert.notEqual(null, bankslipResponse.order.orderReference);

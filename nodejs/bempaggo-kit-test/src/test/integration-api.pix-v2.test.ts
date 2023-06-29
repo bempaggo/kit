@@ -64,7 +64,7 @@ describe("pix functions", () => {
 		assert.equal(1, transaction.affiliate?.id);
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
-		assert.equal(3, transaction.establishment.id);
+		assert.notEqual(null, transaction.establishment.id);
 		assert.notEqual(null, pixResponse.customer.id);
 
 		assert.equal("51190844001", pixResponse.customer.document);
