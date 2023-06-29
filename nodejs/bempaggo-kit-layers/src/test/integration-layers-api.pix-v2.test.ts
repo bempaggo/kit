@@ -65,7 +65,8 @@ describe("pix", () => {
 	});
 
 	test("create pix only find order", async () => {
-		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
+		requestLayersStyle.code = `op-${new Date().getTime().toString()}`;
+		 await layers.createTransaction(requestLayersStyle);
 		const chargeFind: LayersTransaction = await layers.findTransactionsByReferenceId(requestLayersStyle.code);
 
 		const payment: LayersPixPaymentMethod = chargeFind.payments[0] as LayersPixPaymentMethod;
