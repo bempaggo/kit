@@ -38,21 +38,15 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-<<<<<<< HEAD
       assert.equal(6, Object.keys(address).length);
-=======
       assert.equal(7, Object.keys(address).length);
->>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
       assert.equal("Pedra Branca", address.neighborhood);
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-<<<<<<< HEAD
-=======
       assert.equal(true, zipCodeRegex.test(address.zipCode));
->>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
     });
 
     test("address with empty lineTwo", async () => {
@@ -75,10 +69,7 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-<<<<<<< HEAD
-=======
       assert.equal(true, zipCodeRegex.test(address.zipCode));
->>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
     });
   });
 });
