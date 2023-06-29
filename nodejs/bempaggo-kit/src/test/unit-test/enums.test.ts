@@ -1,5 +1,5 @@
-import { CardBrandTypes, ChargeStatusTypes, Environments, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
+import { CardBrandTypes, ChargeStatusTypes, Environments, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "../../../src/app/modules/entity/Enum";
 
 
 describe("Enums", () => {

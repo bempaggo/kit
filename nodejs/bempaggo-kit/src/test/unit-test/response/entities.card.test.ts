@@ -1,7 +1,6 @@
-import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
+import { CardBrandTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Card Entity", () => {
   describe("Response", () => {
     test("cardHolder", async () => {
@@ -17,10 +16,10 @@ describe("Card Entity", () => {
 
     test("card holder with only required fields", async () => {
       const cardHolder: BempaggoCardHolderResponse = {
-        name: "Tony Stark",
+        document: undefined,
+        name: "Tony Stark"
       };
-
-      assert.equal(1, Object.keys(cardHolder).length);
+      assert.equal(2, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
     })
 

@@ -1,7 +1,8 @@
+import fetch, { Headers, Response } from "node-fetch";
 
 class BempaggoHttp {
-	private headers: Headers;
 	private toUrl = (path: string) => new URL(`${this.baseUrl}${path}`);
+	private headers: Headers;
 	constructor(private baseUrl: string, token: string) {
 		this.headers = new Headers();
 		this.headers.set("Content-Type", "application/json");
@@ -13,6 +14,7 @@ class BempaggoHttp {
 			method: "GET",
 			headers: this.headers,
 		});
+
 	}
 	public httpGetByLocation(location: string): Promise<Response> {
 		return fetch(location, {

@@ -1,18 +1,18 @@
-import { BempaggoPixPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoPixPaymentRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Pix Payment", () => {
   describe("Request", () => {
     test("Valid request", async () => {
       const pixPayment: BempaggoPixPaymentRequest = {
+        description: undefined,
         paymentMethod: PaymentMethodTypes.PIX,
         desiredExpirationDate: 1686681565342,
         amount: 1000,
         splits: [],
       };
 
-      assert.equal(4, Object.keys(pixPayment).length);
+      assert.equal(5, Object.keys(pixPayment).length);
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
       assert.equal(1000, pixPayment.amount);
@@ -21,6 +21,7 @@ describe("Pix Payment", () => {
 
     test("Valid request", async () => {
       const pixPayment: BempaggoPixPaymentRequest = {
+        description: undefined,
         paymentMethod: PaymentMethodTypes.PIX,
         desiredExpirationDate: 1686681565342,
         amount: 1000,
@@ -37,6 +38,7 @@ describe("Pix Payment", () => {
       assert.equal("PIX", pixPayment.paymentMethod);
       assert.equal(1686681565342, pixPayment.desiredExpirationDate);
       assert.equal(1000, pixPayment.amount);
+      assert.equal(2, pixPayment.splits.length);
       assert.equal(1000, pixPayment.splits[0].amount);
       assert.equal(123456789, pixPayment.splits[0].sellerId);
       assert.equal(1000, pixPayment.splits[1].amount);

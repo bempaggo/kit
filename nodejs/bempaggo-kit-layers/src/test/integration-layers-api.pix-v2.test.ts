@@ -1,8 +1,10 @@
 
-import { LayersPixPaymentMethod, LayersTransaction } from "@/app/modules/layers/interfaces";
-import { LayersTransactionGroup } from "@/app/modules/layers/transactionGroup";
-import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import assert from "assert";
+import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import fetch, { Headers } from "node-fetch";
+import { LayersPixPaymentMethod, LayersTransaction } from "../app/modules//layers/interfaces";
+import { LayersTransactionGroup } from "../app/modules//layers/transactionGroup";
+
 import { layers, simulation, tokenLayers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const sellerId: number = 1;
@@ -16,11 +18,10 @@ const requestLayersStyle: LayersTransactionGroup = {
 		installments: 0,
 		method: "pix",
 		recipients: [{ sourceId: 1, total: { amount: 1035, currency: "BRL" } }],
-
+		bank_slip: undefined,
+		card: undefined,
 		total: { amount: 1035, currency: "BRL" }
-
 	}],
-
 	sourceId: sellerId,
 	customerPayload: {
 		name: "Douglas Hiuara Longo Customer",
@@ -83,14 +84,14 @@ describe("pix", () => {
 	test("create pix and get url of qr code", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		const url: string = await layers.getExternalQrCode(response);
+		const url: string = layers.getExternalQrCode(response);
 		assert.equal(`http://localhost:5000/api/v2/charges/${response.referenceId}/qrcode`, url);
 	});
 
 	test("create pix and get qr code", async () => {
 		requestLayersStyle.code = new Date().getTime().toString();
 		const response: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		const url: string = await layers.getExternalQrCode(response);
+		const url: string = layers.getExternalQrCode(response);
 		const headers = new Headers();
 		headers.set("Authorization", `Bearer ${tokenLayers}`);
 		const responseQuickResponseCode = await fetch(url, { method: "GET", headers });

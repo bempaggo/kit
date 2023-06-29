@@ -1,6 +1,6 @@
-import { BempaggoCreditCardPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
+import { BempaggoCreditCardPaymentRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 
 describe("Credit card payment", () => {
   describe("Request", () => {
@@ -53,6 +53,7 @@ describe("Credit card payment", () => {
       assert.equal("123", creditCardPayment.cardToken.token);
       assert.equal(1, creditCardPayment.installments);
       assert.equal(1000, creditCardPayment.amount);
+      assert.equal(2, creditCardPayment.splits.length);
       assert.equal(1000, creditCardPayment.splits[0].amount);
       assert.equal(123456789, creditCardPayment.splits[0].sellerId);
       assert.equal(1000, creditCardPayment.splits[1].amount);

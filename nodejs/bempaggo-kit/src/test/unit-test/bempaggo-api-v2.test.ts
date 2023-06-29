@@ -1,8 +1,8 @@
-import { Bempaggo, BempaggoFactory } from "@/app/modules/Bempaggo";
-import { BempaggoApiV2 } from "@/app/modules/BempaggoApiV2";
-import { BempaggoTransactionServiceable, CreditCardOperable } from "@/app/modules/Transaction";
-import { Environments } from "@/app/modules/entity/Enum";
 import assert from "assert";
+import { Bempaggo, BempaggoFactory } from "../../../src/app/modules/Bempaggo";
+import { BempaggoApiV2 } from "../../../src/app/modules/BempaggoApiV2";
+import { BempaggoTransactionServiceable, CreditCardOperable } from "../../../src/app/modules/Transaction";
+import { Environments } from "../../../src/app/modules/entity/Enum";
 
 describe("BempaggoApiV2", () => {
   describe("create", () => {
@@ -33,6 +33,7 @@ describe("BempaggoApiV2", () => {
     test("create bempaggo object", () => {
       const bempaggo: BempaggoApiV2 = new BempaggoApiV2("", "");
       assert.notEqual(null, bempaggo.getUrl());
+      assert.notEqual(null, bempaggo);
     });
     test("create bempaggo services", () => {
       const bempaggo: BempaggoApiV2 = new BempaggoApiV2("", "");

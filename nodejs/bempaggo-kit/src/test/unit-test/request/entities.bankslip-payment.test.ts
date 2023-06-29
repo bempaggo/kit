@@ -1,6 +1,6 @@
-import { BempaggoBankSlipPaymentRequest } from "@/app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
+import { BempaggoBankSlipPaymentRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 
 describe("Bankslip Payment", () => {
   describe("Request", () => {
@@ -11,7 +11,11 @@ describe("Bankslip Payment", () => {
         amount: 1000,
         paymentLimitDate: 1686683096030,
         splits: [],
+        fine: undefined,
+        interest: undefined,
+        ourNumber: undefined
       };
+
 
       assert.equal("BOLETO", bankslipPayment.paymentMethod);
       assert.equal(1686683096030, bankslipPayment.dueDate);
@@ -22,6 +26,9 @@ describe("Bankslip Payment", () => {
 
     test("Valid request with splits", async () => {
       const bankslipPayment: BempaggoBankSlipPaymentRequest = {
+        fine: undefined,
+        interest: undefined,
+        ourNumber: undefined,
         paymentMethod: PaymentMethodTypes.BOLETO,
         dueDate: 1686943332671,
         paymentLimitDate: 1686683096030,
@@ -42,6 +49,7 @@ describe("Bankslip Payment", () => {
       assert.equal(1686943332671, bankslipPayment.dueDate);
       assert.equal(1686683096030, bankslipPayment.paymentLimitDate);
       assert.ok(bankslipPayment.dueDate > 0);
+      assert.equal(2, bankslipPayment.splits.length);
       assert.equal(1000, bankslipPayment.splits[0].amount);
       assert.equal(123456789, bankslipPayment.splits[0].sellerId);
       assert.equal(1000, bankslipPayment.splits[1].amount);

@@ -1,10 +1,10 @@
+import { Response } from "node-fetch";
 import { BempaggoChargeFinderV2 } from "./BempaggoChargeFinder";
 import { BempaggoHttp } from "./BempaggoHttp";
+import { CreditCardOperable } from "./Transaction";
 import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
 import { getByUrlResponse } from "./entity/Exceptions";
-import { CreditCardOperable } from "./Transaction";
-
 class CreditCardApiV2 extends BempaggoChargeFinderV2 implements CreditCardOperable {
 	constructor(http: BempaggoHttp) {
 		super(http);

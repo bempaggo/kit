@@ -1,3 +1,4 @@
+import { Response } from "node-fetch";
 import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
 interface BempaggoTransactionServiceable {

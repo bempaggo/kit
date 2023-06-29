@@ -92,12 +92,13 @@ const order: BempaggoOrderRequest = {
 }
 describe("credit card functions", () => {
 
-	describe("customer",  () => {
+	describe("customer", () => {
 		test("create a customer", async () => {
 			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
 			assert.equal(3, Object.keys(customerResponse.phone!).length);
 			assert.equal(8, Object.keys(customerResponse.address!).length);
+			assert.notEqual(null, customerResponse.id);
 			assert.equal("Carlos Cartola", customerResponse.name);
 			assert.equal("carlos@bempaggo.com", customerResponse.email);
 			assert.equal("06219385993", customerResponse.document);
@@ -191,17 +192,27 @@ describe("credit card functions", () => {
 			assert.equal(3, Object.keys(authorizedCard.order).length);
 			assert.equal(3, Object.keys(authorizedCard.order.affiliate!).length);
 
+			assert.notEqual(null, authorizedCard.id);
 			assert.equal("AUTHORIZED", authorizedCard.status);
 			assert.equal(1000, authorizedCard.value);
+			assert.equal(null, authorizedCard.refundedAmount);
 			assert.equal("CREDIT_CARD", transaction.paymentMethod);
+			assert.notEqual(null, transaction.id);
 			assert.equal(1000, transaction.value);
+			assert.equal(null, transaction.paidValue);
+			assert.equal(null, transaction.refundValue);
 			assert.equal("LOOSE", transaction.type);
 			assert.equal("AUTHORIZED", transaction.status);
+			assert.notEqual(null, transaction.transactionDate);
+			assert.notEqual(null, transaction.affiliate?.id);
 			assert.equal("Up Negócios", transaction.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 			assert.equal(1, transaction.establishment.id);
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Sucesso.", transaction.returnMessage);
+			assert.notEqual(null, transaction.transactionKey);
+			assert.equal(null, transaction.refundReason);
+			assert.notEqual(null, transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
 			assert.equal(1, transaction.card.expiration.month);
@@ -209,8 +220,12 @@ describe("credit card functions", () => {
 			assert.equal("Carlos Cartola", transaction.card.holder.name);
 			assert.equal("06219385993", transaction.card.holder.document);
 			assert.equal("0007", transaction.card.lastFour);
+			assert.notEqual(null, transaction.card.token);
 			assert.equal(1, transaction.installments);
+			assert.notEqual(null, authorizedCard.customer.id);
 			assert.equal("51190844001", authorizedCard.customer.document);
+			assert.notEqual(null, authorizedCard.order.id);
+			assert.notEqual(null, authorizedCard.order.orderReference);
 			assert.equal(1, authorizedCard.order.affiliate?.id);
 			assert.equal("Up Negócios", authorizedCard.order.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", authorizedCard.order.affiliate?.businessName);
@@ -239,18 +254,27 @@ describe("credit card functions", () => {
 			assert.equal(3, Object.keys(capturedCharge.order).length);
 			assert.equal(3, Object.keys(capturedCharge.order.affiliate!).length);
 
+			assert.notEqual(null, capturedCharge.id);
 			assert.equal("PAY", capturedCharge.status);
 			assert.equal(1000, capturedCharge.value);
+			assert.equal(null, capturedCharge.refundedAmount);
 			assert.equal("CREDIT_CARD", transaction.paymentMethod);
+			assert.notEqual(null, transaction.id);
 			assert.equal(1000, transaction.value);
 			assert.equal(1000, transaction.paidValue);
+			assert.equal(null, transaction.refundValue);
 			assert.equal("LOOSE", transaction.type);
 			assert.equal("APPROVED", transaction.status);
+			assert.notEqual(null, transaction.transactionDate);
+			assert.notEqual(null, transaction.affiliate?.id);
 			assert.equal("Up Negócios", transaction.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 			assert.equal(1, transaction.establishment.id);
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Sucesso.", transaction.returnMessage);
+			assert.notEqual(null, transaction.transactionKey);
+			assert.equal(null, transaction.refundReason);
+			assert.notEqual(null, transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
 			assert.equal(1, transaction.card.expiration.month);
@@ -258,8 +282,12 @@ describe("credit card functions", () => {
 			assert.equal("Carlos Cartola", transaction.card.holder.name);
 			assert.equal("06219385993", transaction.card.holder.document);
 			assert.equal("0007", transaction.card.lastFour);
+			assert.notEqual(null, transaction.card.token);
 			assert.equal(1, transaction.installments);
+			assert.notEqual(null, capturedCharge.customer.id);
 			assert.equal("51190844001", capturedCharge.customer.document);
+			assert.notEqual(null, capturedCharge.order.id);
+			assert.notEqual(null, capturedCharge.order.orderReference);
 			assert.equal(1, capturedCharge.order.affiliate?.id);
 			assert.equal("Up Negócios", capturedCharge.order.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", capturedCharge.order.affiliate?.businessName);
@@ -290,21 +318,30 @@ describe("credit card functions", () => {
 			assert.equal(3, Object.keys(refundedCharge.order).length);
 			assert.equal(3, Object.keys(refundedCharge.order.affiliate!).length);
 
+			assert.notEqual(null, refundedCharge.id);
 			assert.equal("REFUND", refundedCharge.status);
 			assert.equal(1000, refundedCharge.value);
 			assert.equal(1000, refundedCharge.refundedAmount);
 			assert.equal("CREDIT_CARD", transaction.paymentMethod);
+
+			assert.notEqual(null, transaction.id);
 			assert.equal(-1000, transaction.value);
 			assert.equal(1000, transaction.paidValue);
 			assert.equal(1000, transaction.refundValue);
 			assert.equal("REFUND", transaction.type);
 			assert.equal("REFUND", transaction.status);
+			assert.notEqual(null, transaction.transactionDate);
+			assert.notEqual(null, transaction.affiliate?.id);
 			assert.equal("Up Negócios", transaction.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 			assert.equal(1, transaction.establishment.id);
 			assert.equal("00", transaction.returnCode);
 			assert.equal("Estorno realizado com sucesso.", transaction.returnMessage);
+
+			assert.notEqual(null, transaction.transactionKey);
 			assert.equal("OTHERS", transaction.refundReason);
+
+			assert.notEqual(null, transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
 			assert.equal(1, transaction.card.expiration.month);
@@ -312,7 +349,12 @@ describe("credit card functions", () => {
 			assert.equal("Carlos Cartola", transaction.card.holder.name);
 			assert.equal("06219385993", transaction.card.holder.document);
 			assert.equal("0007", transaction.card.lastFour);
+			assert.notEqual(null, transaction.card.token);
+			assert.equal(null, transaction.installments);
+			assert.notEqual(null, refundedCharge.customer.id);
 			assert.equal("51190844001", refundedCharge.customer.document);
+			assert.notEqual(null, refundedCharge.order.id);
+			assert.notEqual(null, refundedCharge.order.orderReference);
 			assert.equal(1, refundedCharge.order.affiliate?.id);
 			assert.equal("Up Negócios", refundedCharge.order.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", refundedCharge.order.affiliate?.businessName);
@@ -346,17 +388,27 @@ describe("credit card functions", () => {
 			assert.equal(3, Object.keys(unauthorizedCharge.order).length);
 			assert.equal(3, Object.keys(unauthorizedCharge.order.affiliate!).length);
 
+			assert.notEqual(null, unauthorizedCharge.id);
 			assert.equal("PENDING", unauthorizedCharge.status);
 			assert.equal(58, unauthorizedCharge.value);
+			assert.equal(null, unauthorizedCharge.refundedAmount);
 			assert.equal("CREDIT_CARD", transaction.paymentMethod);
+			assert.notEqual(null, transaction.id);
 			assert.equal(58, transaction.value);
+			assert.equal(null, transaction.paidValue);
+			assert.equal(null, transaction.refundValue);
 			assert.equal("LOOSE", transaction.type);
 			assert.equal("NOT_AUTHORIZED", transaction.status);
+			assert.notEqual(null, transaction.transactionDate);
+			assert.notEqual(null, transaction.affiliate?.id);
 			assert.equal("Up Negócios", transaction.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 			assert.equal(1, transaction.establishment.id);
 			assert.equal("58", transaction.returnCode);
 			assert.equal("Não autorizado. Entre em contato com o emissor.", transaction.returnMessage);
+			assert.notEqual(null, transaction.transactionKey);
+			assert.equal(null, transaction.refundReason);
+			assert.notEqual(null, transaction.transactionReference);
 			assert.equal("544828", transaction.card.bin);
 			assert.equal("MASTERCARD", transaction.card.brand);
 			assert.equal(1, transaction.card.expiration.month);
@@ -364,8 +416,13 @@ describe("credit card functions", () => {
 			assert.equal("Carlos Cartola", transaction.card.holder.name);
 			assert.equal("06219385993", transaction.card.holder.document);
 			assert.equal("0007", transaction.card.lastFour);
+			assert.notEqual(null, transaction.card.token);
 			assert.equal(1, transaction.installments);
+			assert.notEqual(null, unauthorizedCharge.customer.id);
 			assert.equal("51190844001", unauthorizedCharge.customer.document);
+			assert.notEqual(null, unauthorizedCharge.order.id);
+			assert.notEqual(null, unauthorizedCharge.order.orderReference);
+			assert.notEqual(null, unauthorizedCharge.order.affiliate?.id);
 			assert.equal("Up Negócios", unauthorizedCharge.order.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", unauthorizedCharge.order.affiliate?.businessName);
 		});
@@ -493,14 +550,22 @@ describe("credit card functions", () => {
 				assert.equal(2500, charge.value);
 				assert.equal("AUTHORIZED", charge.status);
 				assert.equal("CREDIT_CARD", transaction2.paymentMethod);
+				assert.notEqual(null, transaction2.id);
 				assert.equal(1500, transaction2.value);
+				assert.equal(null, transaction2.paidValue);
+				assert.equal(null, transaction2.refundValue);
 				assert.equal("LOOSE", transaction2.type);
 				assert.equal("AUTHORIZED", transaction2.status);
+				assert.notEqual(null, transaction2.transactionDate);
+				assert.notEqual(null, transaction2.affiliate?.id);
 				assert.equal("Up Negócios", transaction2.affiliate?.name);
 				assert.equal("Up Negócios LTDA.", transaction2.affiliate?.businessName);
 				assert.equal(1, transaction2.establishment.id);
 				assert.equal("00", transaction2.returnCode);
 				assert.equal("Sucesso.", transaction2.returnMessage);
+				assert.notEqual(null, transaction2.transactionKey);
+				assert.equal(null, transaction2.refundReason);
+				assert.notEqual(null, transaction2.transactionReference);
 				assert.equal("423564", transaction2.card.bin);
 				assert.equal("VISA", transaction2.card.brand);
 				assert.equal(1, transaction2.card.expiration.month);
@@ -508,17 +573,26 @@ describe("credit card functions", () => {
 				assert.equal("Douglas Hiura Longo Visa", transaction2.card.holder.name);
 				assert.equal("06219385993", transaction2.card.holder.document);
 				assert.equal("5682", transaction2.card.lastFour);
+				assert.notEqual(null, transaction2.card.token);
 				assert.equal(2, transaction2.installments);
 
 				assert.equal("CREDIT_CARD", transaction.paymentMethod);
+				assert.notEqual(null, transaction.id);
 				assert.equal(1000, transaction.value);
+				assert.equal(null, transaction.paidValue);
+				assert.equal(null, transaction.refundValue);
 				assert.equal("LOOSE", transaction.type);
 				assert.equal("AUTHORIZED", transaction.status);
+				assert.notEqual(null, transaction.transactionDate);
+				assert.notEqual(null, transaction.affiliate?.id);
 				assert.equal("Up Negócios", transaction.affiliate?.name);
 				assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 				assert.equal(1, transaction.establishment.id);
 				assert.equal("00", transaction.returnCode);
 				assert.equal("Sucesso.", transaction.returnMessage);
+				assert.notEqual(null, transaction.transactionKey);
+				assert.equal(null, transaction.refundReason);
+				assert.notEqual(null, transaction.transactionReference);
 				assert.equal("544828", transaction.card.bin);
 				assert.equal("MASTERCARD", transaction.card.brand);
 				assert.equal(1, transaction.card.expiration.month);
@@ -526,6 +600,7 @@ describe("credit card functions", () => {
 				assert.equal("Carlos Cartola", transaction.card.holder.name);
 				assert.equal("06219385993", transaction.card.holder.document);
 				assert.equal("0007", transaction.card.lastFour);
+				assert.notEqual(null, transaction.card.token);
 				assert.equal(1, transaction.installments);
 			});
 
@@ -550,15 +625,28 @@ describe("credit card functions", () => {
 				assert.equal(2500, responseCapture.value);
 				assert.equal("PAY", responseCapture.status);
 				assert.equal("CREDIT_CARD", transaction1.paymentMethod);
+<<<<<<< HEAD
+=======
+				assert.notEqual(null, transaction1.id);
+>>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
 				assert.equal(1000, transaction1.value);
 				assert.equal(1000, transaction1.paidValue);
+<<<<<<< HEAD
+=======
+				assert.equal(null, transaction1.refundValue);
+>>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
 				assert.equal("LOOSE", transaction1.type);
 				assert.equal("APPROVED", transaction1.status);
+				assert.notEqual(null, transaction1.transactionDate);
+				assert.notEqual(null, transaction1.affiliate?.id);
 				assert.equal("Up Negócios", transaction1.affiliate?.name);
 				assert.equal("Up Negócios LTDA.", transaction1.affiliate?.businessName);
 				assert.equal(1, transaction1.establishment.id);
 				assert.equal("00", transaction1.returnCode);
 				assert.equal("Sucesso.", transaction1.returnMessage);
+				assert.notEqual(null, transaction1.transactionKey);
+				assert.equal(null, transaction1.refundReason);
+				assert.notEqual(null, transaction1.transactionReference);
 				assert.equal("544828", transaction1.card.bin);
 				assert.equal("MASTERCARD", transaction1.card.brand);
 				assert.equal(1, transaction1.card.expiration.month);
@@ -570,15 +658,22 @@ describe("credit card functions", () => {
 				assert.equal(1, transaction1.installments);
 
 				assert.equal("CREDIT_CARD", transaction2.paymentMethod);
+				assert.notEqual(null, transaction2.id);
 				assert.equal(1500, transaction2.value);
 				assert.equal(1500, transaction2.paidValue);
+				assert.equal(null, transaction2.refundValue);
 				assert.equal("LOOSE", transaction2.type);
 				assert.equal("APPROVED", transaction2.status);
+				assert.notEqual(null, transaction2.transactionDate);
+				assert.notEqual(null, transaction2.affiliate?.id);
 				assert.equal("Up Negócios", transaction2.affiliate?.name);
 				assert.equal("Up Negócios LTDA.", transaction2.affiliate?.businessName);
 				assert.equal(1, transaction2.establishment.id);
 				assert.equal("00", transaction2.returnCode);
 				assert.equal("Sucesso.", transaction2.returnMessage);
+				assert.notEqual(null, transaction2.transactionKey);
+				assert.equal(null, transaction2.refundReason);
+				assert.notEqual(null, transaction2.transactionReference);
 				assert.equal("423564", transaction2.card.bin);
 				assert.equal("VISA", transaction2.card.brand);
 				assert.equal(1, transaction2.card.expiration.month);
@@ -620,37 +715,54 @@ describe("credit card functions", () => {
 				assert.equal("REFUND", refundResponse.status);
 
 				assert.equal("CREDIT_CARD", transactionRefund.paymentMethod);
+				assert.notEqual(null, transactionRefund.id);
 				assert.equal(-1000, transactionRefund.value);
 				assert.equal(1000, transactionRefund.paidValue);
 				assert.equal(1000, transactionRefund.refundValue);
 				assert.equal("REFUND", transactionRefund.type);
 				assert.equal("REFUND", transactionRefund.status);
+				assert.notEqual(null, transactionRefund.transactionKey);
 				assert.equal("OTHERS", transactionRefund.refundReason);
+				assert.notEqual(null, transactionRefund.transactionReference);
 				assert.equal(cardToken.token, transactionRefund.card.token!);
+				assert.equal(null, transactionRefund.installments);
 
 				assert.equal("CREDIT_CARD", transactionRefund2.paymentMethod);
+				assert.notEqual(null, transactionRefund2.id);
 				assert.equal(-1500, transactionRefund2.value);
 				assert.equal(1500, transactionRefund2.paidValue);
 				assert.equal(1500, transactionRefund2.refundValue);
 				assert.equal("REFUND", transactionRefund2.type);
 				assert.equal("REFUND", transactionRefund2.status);
+				assert.notEqual(null, transactionRefund2.transactionKey);
 				assert.equal("OTHERS", transactionRefund2.refundReason);
+				assert.notEqual(null, transactionRefund2.transactionReference);
 				assert.equal(cardTokenSecond.token, transactionRefund2.card.token!);
+				assert.equal(null, transactionRefund2.installments);
 
 				assert.equal("CREDIT_CARD", transaction1.paymentMethod);
+				assert.notEqual(null, transaction1.id);
 				assert.equal(1000, transaction1.value);
 				assert.equal(1000, transaction1.paidValue);
 				assert.equal(1000, transaction1.refundValue);
 				assert.equal("LOOSE", transaction1.type);
 				assert.equal("APPROVED", transaction1.status);
+				assert.notEqual(null, transaction1.transactionKey);
+				assert.equal(null, transaction1.refundReason);
+				assert.notEqual(null, transaction1.transactionReference);
+				assert.equal(cardToken.token, transaction1.card.token!);
 				assert.equal(1, transaction1.installments);
 
 				assert.equal("CREDIT_CARD", transaction2.paymentMethod);
+				assert.notEqual(null, transaction2.id);
 				assert.equal(1500, transaction2.value);
 				assert.equal(1500, transaction2.paidValue);
 				assert.equal(1500, transaction2.refundValue);
 				assert.equal("LOOSE", transaction2.type);
 				assert.equal("APPROVED", transaction2.status);
+				assert.notEqual(null, transaction2.transactionKey);
+				assert.equal(null, transaction2.refundReason);
+				assert.notEqual(null, transaction2.transactionReference);
 				assert.equal(cardTokenSecond.token, transaction2.card.token!);
 				assert.equal(2, transaction2.installments);
 			});

@@ -1,8 +1,9 @@
 #!/bin/bash
 sub_version=134
-version="18.0.$sub_version"
+version="12.0.$sub_version"
 sub_version_release=$((sub_version+1))
-update="18.0.$sub_version_release"
+update="12.0.$sub_version_release"
+>>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
 echo $version
 echo $update
 cd bempaggo-kit

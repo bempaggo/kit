@@ -1,9 +1,8 @@
 
 
-import { BempaggoAddressRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPhoneRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "@/app/modules/entity/BempaggoRequest";
-import { PaymentMethodTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoCreditCardPaymentRequest, BempaggoOrderRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
+import { PaymentMethodTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Charge Entity", () => {
 	describe("Request", () => {
 
@@ -51,21 +50,21 @@ describe("Charge Entity", () => {
 
 			assert.equal(5, Object.keys(charge).length);
 			assert.equal(6, Object.keys(charge.customer).length);
-			assert.equal(3, Object.keys(charge.customer?.phone ?? {}).length);
-			assert.equal(7, Object.keys(charge.customer?.address ?? {}).length);
+			assert.equal(3, Object.keys(charge.customer!.phone as {}).length);
+			assert.equal(7, Object.keys(charge.customer!.address as {}).length);
 			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!).length);
 			assert.equal(2, Object.keys((charge.payments[0] as BempaggoCreditCardPaymentRequest).splits[0]).length);
-			
-			assert.equal(55, charge.customer.phone?.countryCode);
-			assert.equal(48, charge.customer.phone?.areaCode);
-			assert.equal(999999999, charge.customer.phone?.number);
-			assert.equal("Rua Jair Hamms", charge.customer.address?.street);
-			assert.equal("38", charge.customer.address?.streetNumber);
-			assert.equal("Sala 101", charge.customer.address?.lineTwo);
-			assert.equal("Pedra Branca", charge.customer.address?.neighborhood);
-			assert.equal("Palhoça", charge.customer.address?.city);
-			assert.equal("SC", charge.customer.address?.state);
-			assert.equal("88137084", charge.customer.address?.zipCode);
+
+			assert.equal(55, charge.customer.phone!.countryCode);
+			assert.equal(48, charge.customer.phone!.areaCode);
+			assert.equal(999999999, charge.customer.phone!.number);
+			assert.equal("Rua Jair Hamms", charge.customer.address!.street);
+			assert.equal("38", charge.customer.address!.streetNumber);
+			assert.equal("Sala 101", charge.customer.address!.lineTwo);
+			assert.equal("Pedra Branca", charge.customer.address!.neighborhood);
+			assert.equal("Palhoça", charge.customer.address!.city);
+			assert.equal("SC", charge.customer.address!.state);
+			assert.equal("88137084", charge.customer.address!.zipCode);
 			assert.equal("Tony Stark", charge.customer.name);
 			assert.equal("51190844001", charge.customer.document);
 			assert.equal("2000-01-01", charge.customer.birthdate);
@@ -76,6 +75,7 @@ describe("Charge Entity", () => {
 			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.cvv);
 			assert.equal("123", (charge.payments[0] as BempaggoCreditCardPaymentRequest).cardToken!.token);
 			assert.equal(1000, charge.payments[0].amount);
+			assert.equal(1, charge.payments[0].splits.length);
 			assert.equal(1000, charge.payments[0].splits[0].amount);
 			assert.equal(1, charge.payments[0].splits[0].sellerId);
 			assert.equal(1000, charge.amount);

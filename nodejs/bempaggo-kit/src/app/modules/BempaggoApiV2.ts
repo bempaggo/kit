@@ -1,3 +1,4 @@
+import { Response } from "node-fetch";
 import { Bempaggo } from "./Bempaggo";
 import { BempaggoHttp } from "./BempaggoHttp";
 import { BempaggoTransactionApiV2 } from "./BempaggoTransactionApiV2";
@@ -34,7 +35,7 @@ class BempaggoApiV2 implements Bempaggo {
 	// OK
 	async updateCustomer(document: string, customer: BempaggoCustomerRequest): Promise<BempaggoCustomerResponse> {
 		const response = await this.http.httpPut(`/v2/customers/document/${document}`, customer);
-		if(response.ok){
+		if (response.ok) {
 			return await this.findCustomerByDocument(document);
 		} else {
 			return response.json();

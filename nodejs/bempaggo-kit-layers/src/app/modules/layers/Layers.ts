@@ -277,7 +277,7 @@ class ResponsesFromBempaggo {
 					pix: {
 						expires_in: new Date(transaction.expirationDate).toLocaleString(undefined, options)
 					},
-					emv:transaction.emv
+					emv: transaction.emv
 				};
 				payments.push(payment);
 			}

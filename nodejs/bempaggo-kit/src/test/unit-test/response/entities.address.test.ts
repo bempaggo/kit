@@ -1,5 +1,5 @@
-import { BempaggoAddressResponse } from "@/app/modules/entity/BempaggoResponse";
 import assert from "assert";
+import { BempaggoAddressResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 
 describe("Address entity", () => {
   describe("Response", () => {
@@ -14,7 +14,6 @@ describe("Address entity", () => {
         zipCode: "88137084",
       };
       const zipCodeRegex = /^\d{8}$/;
-
       assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
@@ -23,6 +22,7 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
+      assert.equal(true, zipCodeRegex.test(address.zipCode));
     });
 
     test("address with only required fields", async () => {
@@ -33,16 +33,26 @@ describe("Address entity", () => {
         city: "Palhoça",
         state: "SC",
         zipCode: "88137084",
+        lineTwo: undefined
+
       };
       const zipCodeRegex = /^\d{8}$/;
 
+<<<<<<< HEAD
       assert.equal(6, Object.keys(address).length);
+=======
+      assert.equal(7, Object.keys(address).length);
+>>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
       assert.equal("Pedra Branca", address.neighborhood);
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
+<<<<<<< HEAD
+=======
+      assert.equal(true, zipCodeRegex.test(address.zipCode));
+>>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
     });
 
     test("address with empty lineTwo", async () => {
@@ -65,6 +75,10 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
+<<<<<<< HEAD
+=======
+      assert.equal(true, zipCodeRegex.test(address.zipCode));
+>>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
     });
   });
 });

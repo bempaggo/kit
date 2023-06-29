@@ -1,6 +1,5 @@
-import { BempaggoBankResponse } from "@/app/modules/entity/BempaggoResponse";
 import assert from "assert";
-
+import { BempaggoBankResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 describe("Bank entity", () => {
   describe("Response", () => {
     test("BempaggoBank", async () => {

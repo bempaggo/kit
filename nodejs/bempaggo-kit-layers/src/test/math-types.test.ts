@@ -1,4 +1,4 @@
-import { Util } from "@/app/modules/layers/Util";
+import { Util } from "../app/modules/layers/Util";
 import assert from "assert";
 
 describe("Math types", () => {

@@ -1,7 +1,6 @@
-import { BempaggoPixTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
-import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoPixTransactionResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
+import { PaymentMethodTypes, TransactionResponseTypes, TransactionStatusTypes } from "../../../../src/app/modules/entity/Enum";
 describe("Pix transaction", () => {
   describe("Response", () => {
     test("Valid response", async () => {
@@ -13,6 +12,7 @@ describe("Pix transaction", () => {
         establishment: {
           id: 1,
         },
+        paymentDate:undefined,
         returnCode: "00",
         returnMessage: "Transação autorizada",
         status: TransactionStatusTypes.AUTHORIZED,
@@ -30,7 +30,7 @@ describe("Pix transaction", () => {
         emv: "emv mocked"
       };
 
-      assert.equal(16, Object.keys(pix).length);
+      assert.equal(17, Object.keys(pix).length);
       assert.equal(1, Object.keys(pix.establishment).length);
       assert.equal(3, Object.keys(pix.affiliate!).length);
 
@@ -38,7 +38,7 @@ describe("Pix transaction", () => {
       assert.equal(1620000000000, pix.expirationDate);
       assert.equal("PIX", pix.paymentMethod);
       assert.equal(1, pix.id);
-      assert.equal(1, pix.establishment?.id);
+      assert.equal(1, pix.establishment!.id);
       assert.equal("00", pix.returnCode);
       assert.equal("Transação autorizada", pix.returnMessage);
       assert.equal("AUTHORIZED", pix.status);
@@ -46,9 +46,9 @@ describe("Pix transaction", () => {
       assert.equal(1620000000000, pix.transactionDate);
       assert.equal("12345678901234567890", pix.transactionReference);
       assert.equal("LOOSE", pix.type);
-      assert.equal(1, pix.affiliate?.id);
-      assert.equal("Bempaggo", pix.affiliate?.name);
-      assert.equal("Bempaggo", pix.affiliate?.businessName);
+      assert.equal(1, pix.affiliate!.id);
+      assert.equal("Bempaggo", pix.affiliate!.name);
+      assert.equal("Bempaggo", pix.affiliate!.businessName);
       assert.equal(1000, pix.paidValue);
       assert.deepEqual([], pix.splits);
       assert.equal("emv mocked", pix.emv);

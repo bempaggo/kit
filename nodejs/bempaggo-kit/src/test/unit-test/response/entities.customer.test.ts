@@ -1,10 +1,9 @@
-import { BempaggoCustomerResponse, BempaggoMinimalCustomerResponse, BempaggoPhoneResponse } from "@/app/modules/entity/BempaggoResponse";
 import assert from "assert";
-
+import { BempaggoCustomerResponse, BempaggoMinimalCustomerResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 describe("Customer", () => {
   describe("Response", () => {
     test("customerResponse", async () => {
-      const customer:  BempaggoCustomerResponse = {
+      const customer: BempaggoCustomerResponse = {
         id: 1,
         phone: {
           countryCode: "55",
@@ -14,10 +13,12 @@ describe("Customer", () => {
         birthdate: "2023-01-03",
         email: "tony.stark@ligadajustica.com",
         document: "51190844001",
-        name: "Tony Stark"
+        name: "Tony Stark",
+        address: undefined
       };
 
-      assert.equal(6, Object.keys(customer).length);
+
+      assert.equal(7, Object.keys(customer).length);
       assert.equal(3, Object.keys(customer.phone!).length);
       assert.equal(1, customer.id);
       assert.equal("55", customer.phone!.countryCode);
@@ -30,23 +31,29 @@ describe("Customer", () => {
     });
 
     test("customerResponse with only required fields", async () => {
-      const customer:  BempaggoCustomerResponse = {
+      const customer: BempaggoCustomerResponse = {
         id: 1,
-        name: "Tony Stark"
+        name: "Tony Stark",
+        address: undefined,
+        birthdate: undefined,
+        document: undefined,
+        email: undefined,
+        phone: undefined
+
       };
 
-      assert.equal(2, Object.keys(customer).length);
+      assert.equal(7, Object.keys(customer).length);
       assert.equal(1, customer.id);
       assert.equal("Tony Stark", customer.name);
     });
 
     test("customerResponse with minimal response", async () => {
-      const customerMinimal:  BempaggoMinimalCustomerResponse = {
+      const customerMinimal: BempaggoMinimalCustomerResponse = {
         id: 1,
         document: "51190844001",
       };
 
-      expect(Object.keys(customerMinimal).length).toBe(2);
+      assert.equal(2, Object.keys(customerMinimal).length);
       assert.equal(1, customerMinimal.id);
       assert.equal("51190844001", customerMinimal.document);
     });

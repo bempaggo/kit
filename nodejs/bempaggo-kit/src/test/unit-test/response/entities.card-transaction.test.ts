@@ -1,7 +1,6 @@
-import { BempaggoCreditCardTransactionResponse } from "@/app/modules/entity/BempaggoResponse";
-import { CardBrandTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "@/app/modules/entity/Enum";
+import { CardBrandTypes, PaymentMethodTypes, RefundReasonTypes, TransactionResponseTypes, TransactionStatusTypes } from "../../../app/modules/entity/Enum";
 import assert from "assert";
-
+import { BempaggoCreditCardTransactionResponse } from "../../../../src/app/modules/entity/BempaggoResponse";
 describe("Credit card transaction", () => {
   describe("Response", () => {
     test("Valid response", async () => {
@@ -45,6 +44,7 @@ describe("Credit card transaction", () => {
         splits: []
       };
 
+
       assert.equal(18, Object.keys(card).length);
       assert.equal(6, Object.keys(card.card).length);
       assert.equal(2, Object.keys(card.card.holder).length);
@@ -65,7 +65,7 @@ describe("Credit card transaction", () => {
       assert.equal(1, card.installments);
       assert.equal("CREDIT_CARD", card.paymentMethod);
       assert.equal(1, card.id);
-      assert.equal(1, card.establishment?.id);
+      assert.equal(1, card.establishment!.id);
       assert.equal("00", card.returnCode);
       assert.equal("Transação autorizada", card.returnMessage);
       assert.equal("AUTHORIZED", card.status);
@@ -73,9 +73,9 @@ describe("Credit card transaction", () => {
       assert.equal(1620000000000, card.transactionDate);
       assert.equal("12345678901234567890", card.transactionReference);
       assert.equal("LOOSE", card.type);
-      assert.equal(1, card.affiliate?.id);
-      assert.equal("Bempaggo", card.affiliate?.name);
-      assert.equal("Bempaggo", card.affiliate?.businessName);
+      assert.equal(1, card.affiliate!.id);
+      assert.equal("Bempaggo", card.affiliate!.name);
+      assert.equal("Bempaggo", card.affiliate!.businessName);
       assert.deepEqual([], card.splits);
     });
   });

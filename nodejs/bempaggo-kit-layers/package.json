@@ -1,28 +1,31 @@
 {
   "name": "bempaggo-kit-layers",
-  "version": "18.0.134",
+  "version": "12.0.134",
   "description": "Layers on Bempaggo Payment Gateway",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "type": "commonjs",
   "scripts": {
     "clean": "rimraf lib",
     "build": "npm run clean && tsc",
-    "test": "npm run clean && jest --runInBand"
+    "test": "jest --runInBand --testTimeout=10000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bempaggo-kit": "18.0.134"   
+    "node-fetch": "^2.6.11",
+    "bempaggo-kit": "12.0.134"
   },
   "devDependencies": {
-    "@types/jest": "^28.0.0",
+    "@types/node": "20.3.1",
     "@types/node-fetch": "^2.6.4",
+    "typescript": "5.0.2",
+    "@types/jest": "^28.0.0",
     "assert": "^2.0.0",
     "jest": "^28.0.0",
     "ts-jest": "^28.0.0",
-    "typescript": "^5.0.4"
+    "ts-node-dev": "2.0.0"
   },
   "files": [
     "lib/**/*"

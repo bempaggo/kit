@@ -1,10 +1,10 @@
+import { Response } from "node-fetch";
 import { BempaggoChargeFinderV2 } from "./BempaggoChargeFinder";
 import { BempaggoHttp } from "./BempaggoHttp";
 import { BempaggoOrderRequest } from "./entity/BempaggoRequest";
 import { BempaggoChargeResponse } from "./entity/BempaggoResponse";
 import { getByUrlResponse } from "./entity/Exceptions";
 import { BankSlipOperable } from "./Transaction";
-
 class BankSlipApiV2 extends BempaggoChargeFinderV2 implements BankSlipOperable {
 	constructor(http: BempaggoHttp) {
 		super(http);

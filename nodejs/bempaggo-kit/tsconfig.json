@@ -3,12 +3,12 @@
         "moduleResolution": "node",
         "target": "ES2019",
         "module": "CommonJS",
+        "preserveConstEnums": true,
         "lib": [
             "ES2019",
             "DOM",
             "DOM.Iterable"
         ],
-        
         "sourceMap": true,
         "outDir": "./lib",
         "rootDir": "./src",
@@ -43,7 +43,6 @@
     "include": [
         "src"
     ],
-    
     "exclude": [
         "lib"
     ]

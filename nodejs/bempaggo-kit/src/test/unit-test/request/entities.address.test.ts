@@ -1,5 +1,5 @@
-import { BempaggoAddressRequest } from "@/app/modules/entity/BempaggoRequest";
 import assert from "assert";
+import { BempaggoAddressRequest } from "../../../../src/app/modules/entity/BempaggoRequest";
 
 describe("Address entity", () => {
   describe("Request", () => {
@@ -35,10 +35,10 @@ describe("Address entity", () => {
         city: "Palhoça",
         state: "SC",
         zipCode: "88137084",
+        lineTwo: undefined
       };
       const zipCodeRegex = /^\d{8}$/;
-
-      assert.equal(6, Object.keys(address).length);
+      assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
       assert.equal("Pedra Branca", address.neighborhood);

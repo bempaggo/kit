@@ -1,6 +1,5 @@
 cd bempaggo-kit
 npm i
-npm ci
 npm run build
 npm run test
 cd ..
@@ -15,8 +14,3 @@ npm ci
 npm run build
 npm run test
 cd ..
-cd bempaggo-kit-test
-npm i
-npm ci
-npm run build
-npm run test

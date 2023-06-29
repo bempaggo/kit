@@ -39,9 +39,10 @@
 	 * */
 
 
-import BemPaggoSdk from "@/app/modules/layers/BemPaggoSDK";
+import fetch, { Headers } from "node-fetch";
+import BemPaggoSdk from "../app/modules/layers/BemPaggoSDK";
 
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODc5ODUwNDMsImV4cCI6MTY4ODA0NTA0M30.iJI-T1OtUgJOBOGy6hd85ztXb7e6CwdrfLuLq3wEgEJAlAzRILhq0cEnENPx2z5SXHW3ofB4FLuIB363gsZKDA";
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODc5MTkxMDgsImV4cCI6MTY4Nzk3OTEwOH0.Cqc28nC7cWa3Yakcr3ApIZugiqAkrVD5UcQfPlYHXhcghMh18k6vPAFvbyYqiyjwp7e32FZiVoJecfN0qUNbtw";
 // It is necessary to generate a token in portal
 const url = "http://localhost:5000/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(url, tokenLayers);
@@ -53,3 +54,4 @@ const simulation = async (chargeId: number): Promise<void> => {
 	await fetch(`${url}/v2/charges/${chargeId}/simulation`, { method: "POST", headers }); // Doesn't work in production.
 }
 export { layers, simulation, tokenLayers };
+

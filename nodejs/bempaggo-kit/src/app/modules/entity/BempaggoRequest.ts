@@ -11,7 +11,7 @@ interface BempaggoTokenCardRequest {
 }
 interface BempaggoCardHolderRequest {
 	name: string;
-	document?: string | undefined;
+	document: string | undefined;
 }
 
 interface BempaggoCardExpirationRequest {
@@ -28,7 +28,7 @@ interface BempaggoPhoneRequest {
 interface BempaggoAddressRequest {
 	street: string;
 	streetNumber: string;
-	lineTwo?: string;
+	lineTwo: string | undefined;
 	neighborhood: string;
 	city: string;
 	state: string;
@@ -37,10 +37,10 @@ interface BempaggoAddressRequest {
 interface BempaggoCustomerRequest {
 	name: string;
 	document: string;
-	birthdate?: string | undefined;
-	phone?: BempaggoPhoneRequest | undefined;
-	email?: string;
-	address?: BempaggoAddressRequest | undefined;
+	birthdate: string | undefined;
+	phone: BempaggoPhoneRequest | undefined;
+	email: string;
+	address: BempaggoAddressRequest | undefined;
 }
 interface BempaggoOrderRequest {
 	customer: BempaggoCustomerRequest;
@@ -58,7 +58,7 @@ interface BempaggoOrderRequest {
 	/* notificationUrl is the url that Bempaggo sends HTTP POST when the order has updates. 
 	* The body of request is filled with "Bempaggo"
 	*/
-	notificationUrl?: string | undefined;
+	notificationUrl: string | undefined;
 }
 
 type BempaggoPaymentRequest =
@@ -99,9 +99,9 @@ interface BempaggoBankSlipPaymentRequest extends BempaggoAbstractPaymentRequest 
 
 	dueDate: number
 	paymentLimitDate: number,
-	ourNumber?: number,
-	fine?: BempaggoBankSlipPaymentV2FineRequest;
-	interest?: BempaggoBankSlipPaymentV2InterestRequest;
+	ourNumber: number | undefined,
+	fine: BempaggoBankSlipPaymentV2FineRequest | undefined;
+	interest: BempaggoBankSlipPaymentV2InterestRequest | undefined;
 }
 
 interface BempaggoBankSlipPaymentV2FineRequest {
@@ -149,7 +149,7 @@ interface BempaggoPixPaymentRequest extends BempaggoAbstractPaymentRequest {
 	 * @TIMESTEMP
 	 */
 	desiredExpirationDate: number,
-	description?: string;
+	description: string | undefined;
 }
 
 interface BempaggoSplitPaymentRequest {
