@@ -1,7 +1,7 @@
 
 import { LayersCustomer, LayersCustomerPaymentMethod } from "@/app/modules/layers/interfaces";
 import { CardBrandTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { assert, describe, test } from "vitest";
+import assert from "assert";
 import { layers } from "./setup";
 // with ❤️ feeling the bad smell on the air
 const card: LayersCustomerPaymentMethod = {
@@ -14,7 +14,7 @@ const card: LayersCustomerPaymentMethod = {
 	document: "06219385993",
 }
 describe("How use it extra", () => {
-	describe("credit card extra", async () => {
+	describe("credit card extra", () => {
 		test("create customer", async () => {
 			const carlos: LayersCustomer = {
 				document: "06219385993",
@@ -224,4 +224,4 @@ describe("How use it extra", () => {
 			assert.equal(2028, cardResponse.year);
 		});
 	});
-},{});
+});

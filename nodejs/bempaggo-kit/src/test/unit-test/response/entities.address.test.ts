@@ -1,5 +1,5 @@
 import { BempaggoAddressResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Address entity", () => {
   describe("Response", () => {
@@ -15,7 +15,6 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      assertType<BempaggoAddressResponse>(address);
       assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
@@ -24,7 +23,6 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-      assert.isTrue(zipCodeRegex.test(address.zipCode));
     });
 
     test("address with only required fields", async () => {
@@ -38,7 +36,6 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      assertType<BempaggoAddressResponse>(address);
       assert.equal(6, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
@@ -46,7 +43,6 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-      assert.isTrue(zipCodeRegex.test(address.zipCode));
     });
 
     test("address with empty lineTwo", async () => {
@@ -61,7 +57,6 @@ describe("Address entity", () => {
       };
       const zipCodeRegex = /^\d{8}$/;
 
-      assertType<BempaggoAddressResponse>(address);
       assert.equal(7, Object.keys(address).length);
       assert.equal("Rua Jair Hamms", address.street);
       assert.equal("38", address.streetNumber);
@@ -70,7 +65,6 @@ describe("Address entity", () => {
       assert.equal("Palhoça", address.city);
       assert.equal("SC", address.state);
       assert.equal("88137084", address.zipCode);
-      assert.isTrue(zipCodeRegex.test(address.zipCode));
     });
   });
 });

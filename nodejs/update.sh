@@ -1,8 +1,8 @@
 #!/bin/bash
-sub_version=131
-version="1.0.$sub_version"
+sub_version=134
+version="18.0.$sub_version"
 sub_version_release=$((sub_version+1))
-update="1.0.$sub_version_release"
+update="18.0.$sub_version_release"
 echo $version
 echo $update
 cd bempaggo-kit

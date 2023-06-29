@@ -1,6 +1,6 @@
 import { BempaggoCardExpirationResponse, BempaggoCardHolderResponse, BempaggoCardResponse } from "@/app/modules/entity/BempaggoResponse";
 import { CardBrandTypes } from "@/app/modules/entity/Enum";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Card Entity", () => {
   describe("Response", () => {
@@ -10,7 +10,6 @@ describe("Card Entity", () => {
         document: "51190844001",
       };
 
-      assertType<BempaggoCardHolderResponse>(cardHolder);
       assert.equal(2, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
       assert.equal("51190844001", cardHolder.document);
@@ -21,7 +20,6 @@ describe("Card Entity", () => {
         name: "Tony Stark",
       };
 
-      assertType<BempaggoCardHolderResponse>(cardHolder);
       assert.equal(1, Object.keys(cardHolder).length);
       assert.equal("Tony Stark", cardHolder.name);
     })
@@ -32,7 +30,6 @@ describe("Card Entity", () => {
         month: 1
       };
 
-      assertType<BempaggoCardExpirationResponse>(cardExpiration);
       assert.equal(2, Object.keys(cardExpiration).length);
       assert.equal(2035, cardExpiration.year);
       assert.equal(1, cardExpiration.month);
@@ -53,10 +50,6 @@ describe("Card Entity", () => {
         },
         brand: CardBrandTypes.MASTERCARD,
       };
-
-      assertType<BempaggoCardResponse>(card);
-      assertType<BempaggoCardHolderResponse>(card.holder);
-      assertType<BempaggoCardExpirationResponse>(card.expiration);
 
       assert.equal(6, Object.keys(card).length);
       assert.equal(2, Object.keys(card.holder).length);

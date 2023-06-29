@@ -1,5 +1,5 @@
 import { BempaggoBankResponse } from "@/app/modules/entity/BempaggoResponse";
-import { assert, assertType, describe, test } from "vitest";
+import assert from "assert";
 
 describe("Bank entity", () => {
   describe("Response", () => {
@@ -10,7 +10,6 @@ describe("Bank entity", () => {
         account: "123456"
       };
 
-      assertType<BempaggoBankResponse>(bank);
       assert.equal(3, Object.keys(bank).length);
       assert.equal("001", bank.code);
       assert.equal("1234", bank.agency);
