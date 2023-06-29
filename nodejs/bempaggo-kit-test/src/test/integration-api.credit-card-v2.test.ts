@@ -625,16 +625,10 @@ describe("credit card functions", () => {
 				assert.equal(2500, responseCapture.value);
 				assert.equal("PAY", responseCapture.status);
 				assert.equal("CREDIT_CARD", transaction1.paymentMethod);
-<<<<<<< HEAD
-=======
 				assert.notEqual(null, transaction1.id);
->>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
 				assert.equal(1000, transaction1.value);
 				assert.equal(1000, transaction1.paidValue);
-<<<<<<< HEAD
-=======
 				assert.equal(null, transaction1.refundValue);
->>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
 				assert.equal("LOOSE", transaction1.type);
 				assert.equal("APPROVED", transaction1.status);
 				assert.notEqual(null, transaction1.transactionDate);

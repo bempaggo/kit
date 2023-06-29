@@ -56,10 +56,7 @@ describe("How use it extra", () => {
 		assert.equal("BRA", customer.address.country);
 		assert.equal("23344", customer.address.number);
 		assert.equal("SC", customer.address.state);
->>>>>>> branch 'node-12' of https://github.com/bempaggo/kit.git
 	});
-<<<<<<< HEAD
-=======
 
 	test("create customer and find by document", async () => {
 		const carlos: LayersCustomer = {
