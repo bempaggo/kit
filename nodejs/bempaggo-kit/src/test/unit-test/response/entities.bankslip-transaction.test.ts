@@ -10,7 +10,7 @@ describe("Bankslip transaction", () => {
 					code: "001",
 					agency: "1234",
 				},
-				paymentDate:undefined,
+				paymentDate: undefined,
 				dueDate: 1620000000000,
 				paymentInstructions: "Pagar até o vencimento",
 				communityLegalName: "Bempaggo",
@@ -27,7 +27,7 @@ describe("Bankslip transaction", () => {
 						street: "Rua da Consolação",
 						streetNumber: "123",
 						zipCode: "12345678",
-						lineTwo:undefined
+						lineTwo: undefined
 					},
 					document: "12345678901",
 					birthdate: "1620000000000",
@@ -39,6 +39,7 @@ describe("Bankslip transaction", () => {
 					}
 				},
 				digitableLine: "12345678901234567890123456789012345678901234567890",
+				barCode: "12345678901234567890123456789012345678901234567890",
 				paymentMethod: PaymentMethodTypes.BOLETO,
 				id: 1,
 				establishment: {

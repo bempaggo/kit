@@ -42,16 +42,17 @@
 import fetch, { Headers } from "node-fetch";
 import BemPaggoSdk from "../app/modules/layers/BemPaggoSDK";
 
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODgwNDA4MTYsImV4cCI6MTY4ODEwMDgxNn0.iy9ebUXVRj6P4BQt4j8UHRaYtlqrhS74_uDXKDiHYZui8VvIDc7yBAd1YfpCBdBU1m9bPTOsE93Q0YwlTPWBOQ";
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDI1IiwidGVuYW50IjoiYmVtcGFnZ29fbGF5ZXJzbHRkYV8iLCJpYXQiOjE2ODgwNzM5MzEsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.Mw41cNwT0QViz6Vb6NDi01CHTfqFPjiH0qd1NiIVzCvCVsJPfmdRebc73p6GyLrUxHHusee2_IhH_tDeIrth6A";
+// local const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDI1IiwidGVuYW50IjoiYmVtcGFnZ29fbGF5ZXJzbHRkYV8iLCJpYXQiOjE2ODgwNjM1MDEsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.PNIRaWLagdyN0I51XFin_D4z6v6J0BzWf8GVfmi8pxIZn0B3PyfzqZF7ElB3VRunboXtq0hW4kO53gvCLSYyXA";
 // It is necessary to generate a token in portal
-const url = "http://localhost:5000/api"
-const layers: BemPaggoSdk = new BemPaggoSdk(url, tokenLayers);
+const urlSetup = "https://api-sandbox.bempaggo.io/api"
+const layers: BemPaggoSdk = new BemPaggoSdk(urlSetup, tokenLayers);
 
 const simulation = async (chargeId: number): Promise<void> => {
 	const headers = new Headers();
 	headers.set("Content-Type", "application/json");
 	headers.set("Authorization", `Bearer ${tokenLayers}`);
-	await fetch(`${url}/v2/charges/${chargeId}/simulation`, { method: "POST", headers }); // Doesn't work in production.
+	await fetch(`${urlSetup}/v2/charges/${chargeId}/simulation`, { method: "POST", headers }); // Doesn't work in production.
 }
-export { layers, simulation, tokenLayers };
+export { layers, simulation, tokenLayers, urlSetup };
 
