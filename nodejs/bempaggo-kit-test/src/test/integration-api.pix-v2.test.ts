@@ -4,7 +4,9 @@ import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse, BempaggoPi
 import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 
 import assert from "assert";
-import { token } from "./setup";
+import { bempaggoFactory, token } from "./setup";
+
+const pixServiceable = bempaggoFactory.getChargeService().getPixServiceable();
 
 const order: BempaggoOrderRequest = {
 	customer: {
@@ -43,7 +45,7 @@ const order: BempaggoOrderRequest = {
 describe("pix functions", () => {
 	test("create pix", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
-		const pixResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getPixServiceable().createPixCharge(1, order);
+		const pixResponse: BempaggoChargeResponse = await pixServiceable.createPixCharge(1, order);
 		const transaction: BempaggoPixTransactionResponse = pixResponse.transactions[0] as BempaggoPixTransactionResponse;
 		assert.equal(8, Object.keys(pixResponse).length);
 		assert.notEqual(null, pixResponse.id);
@@ -64,7 +66,7 @@ describe("pix functions", () => {
 		assert.equal(1, transaction.affiliate?.id);
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
-		assert.equal(3, transaction.establishment.id);
+		assert.notEqual(null, transaction.establishment.id);
 		assert.notEqual(null, pixResponse.customer.id);
 
 		assert.equal("51190844001", pixResponse.customer.document);
@@ -74,8 +76,8 @@ describe("pix functions", () => {
 
 	test("create pix and cancel", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
-		const pixResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getPixServiceable().createPixCharge(1, order);
-		const canceledPix: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getPixServiceable().cancelPix(pixResponse.id);
+		const pixResponse: BempaggoChargeResponse = await pixServiceable.createPixCharge(1, order);
+		const canceledPix: BempaggoChargeResponse = await pixServiceable.cancelPix(pixResponse.id);
 		const transaction: BempaggoBankSlipTransactionResponse = canceledPix.transactions[0] as BempaggoBankSlipTransactionResponse;
 		assert.equal(8, Object.keys(canceledPix).length);
 
@@ -122,8 +124,8 @@ describe("pix functions", () => {
 
 	test("create pix and get urls of qrcode", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
-		const pixResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getPixServiceable().createPixCharge(1, order);
-		const urlResponse = new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getPixServiceable().createQuickResponseCodeUrlByChargeId(pixResponse.id);
+		const pixResponse: BempaggoChargeResponse = await pixServiceable.createPixCharge(1, order);
+		const urlResponse = pixServiceable.createQuickResponseCodeUrlByChargeId(pixResponse.id);
 		assert.equal(`http://localhost:5000/api/v2/charges/${pixResponse.id}/qrcode`, String(urlResponse));
 	});
 

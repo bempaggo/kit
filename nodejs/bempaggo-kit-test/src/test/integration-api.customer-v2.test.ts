@@ -1,9 +1,8 @@
-import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
+import assert from "assert";
 import { BempaggoCardRequest, BempaggoCustomerRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoCardResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
-import { Environments, CardBrandTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import { token } from "./setup";
-import assert from "assert";
+import { CardBrandTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { bempaggoFactory } from "./setup";
 
 const customer: BempaggoCustomerRequest = {
 	name: "Carlos Cartola",
@@ -52,7 +51,7 @@ describe("customer functions", () => {
 
 	describe("customer", () => {
 		test("create a customer", async () => {
-			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
 			assert.equal(7, Object.keys(customerResponse).length);
 			assert.equal(3, Object.keys(customerResponse.phone!).length);
 			assert.equal(8, Object.keys(customerResponse.address!).length);
@@ -73,8 +72,8 @@ describe("customer functions", () => {
 			assert.equal("Centro", customerResponse.address?.neighborhood);
 		});
 		test("find a customer by document", async () => {
-			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
-			const foundCustomerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).findCustomerByDocument(customerResponse.document as string);
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
+			const foundCustomerResponse: BempaggoCustomerResponse = await bempaggoFactory.findCustomerByDocument(customerResponse.document as string);
 			assert.equal(7, Object.keys(foundCustomerResponse).length);
 			assert.equal(3, Object.keys(foundCustomerResponse.phone!).length);
 			assert.equal(8, Object.keys(foundCustomerResponse.address!).length);
@@ -115,8 +114,8 @@ describe("customer functions", () => {
 					lineTwo: "casa 2"
 				}
 			};
-			const customerResponse: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomer(customer);
-			const updatedCustomer: BempaggoCustomerResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).updateCustomer(customerResponse.document!, newCustomer);
+			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory.createCustomer(customer);
+			const updatedCustomer: BempaggoCustomerResponse = await bempaggoFactory.updateCustomer(customerResponse.document!, newCustomer);
 
 			assert.equal(7, Object.keys(updatedCustomer).length);
 			assert.equal(3, Object.keys(updatedCustomer.phone!).length);
@@ -158,7 +157,7 @@ describe("customer functions", () => {
 			assert.equal("CREDZ", CardBrandTypes.CREDZ);
 		});
 		test("create a card", async () => {
-			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).createCustomerPaymentMethod(document, paymentMethod);
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory.createCustomerPaymentMethod(document, paymentMethod);
 			//TODO: o response que vem é na verdade o response do CardV2Response e não do BempaggoCardResponse. Id, year e month diferem. 
 			assert.equal(7, Object.keys(cardResponse).length);
 			assert.equal(2, Object.keys(cardResponse.holder).length);
@@ -173,7 +172,7 @@ describe("customer functions", () => {
 			assert.equal(64, cardResponse.token!.length);
 		});
 		test("tokenize a card", async () => {
-			const cardResponse: BempaggoCardResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).tokenizeCard(card, "no");
+			const cardResponse: BempaggoCardResponse = await bempaggoFactory.tokenizeCard(card, "no");
 			//TODO: o tokenizeCard devolve um cardResponse sem id. Seria o certo devolver so o token? Ou fazer igual o createCustomerPaymentMethod e devolver um CardResponse completo?
 			assert.equal(7, Object.keys(cardResponse).length);
 			assert.equal(2, Object.keys(cardResponse.holder).length);
