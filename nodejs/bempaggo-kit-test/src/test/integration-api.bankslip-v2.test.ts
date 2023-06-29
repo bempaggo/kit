@@ -1,10 +1,10 @@
-import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
+import assert from "assert";
 import { BempaggoBankSlipPaymentRequest, BempaggoOrderRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
-import { Environments, PaymentMethodTypes, MathTypes, PeriodicityTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
-import assert from "assert";
+import { MathTypes, PaymentMethodTypes, PeriodicityTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { bempaggoFactory } from "./setup";
 
-import { token } from "./setup";
+const bankslipServiceable = bempaggoFactory.getChargeService().getBankSlipServiceable();
 
 const order: BempaggoOrderRequest = {
 	customer: {
@@ -55,7 +55,7 @@ const order: BempaggoOrderRequest = {
 describe("bankslip functions", () => {
 	test("create bankslip", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
-		const bankslipResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getBankSlipServiceable().createBankSlipCharge(1, order);
+		const bankslipResponse: BempaggoChargeResponse = await bankslipServiceable.createBankSlipCharge(1, order);
 		const transaction: BempaggoBankSlipTransactionResponse = bankslipResponse.transactions[0] as BempaggoBankSlipTransactionResponse;
 		console.log(bankslipResponse);
 		assert.equal(8, Object.keys(bankslipResponse).length);
@@ -82,8 +82,8 @@ describe("bankslip functions", () => {
 
 	test("create bankslip and cancel", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
-		const bankslipResponse: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getBankSlipServiceable().createBankSlipCharge(1, order);
-		const canceledBankslip: BempaggoChargeResponse = await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getBankSlipServiceable().cancelBankSlip(bankslipResponse.id);
+		const bankslipResponse: BempaggoChargeResponse = await bankslipServiceable.createBankSlipCharge(1, order);
+		const canceledBankslip: BempaggoChargeResponse = await bankslipServiceable.cancelBankSlip(bankslipResponse.id);
 		const transaction: BempaggoBankSlipTransactionResponse = canceledBankslip.transactions[0] as BempaggoBankSlipTransactionResponse;
 		assert.equal(8, Object.keys(canceledBankslip).length);
 		assert.notEqual(null, canceledBankslip.id);
@@ -111,7 +111,7 @@ describe("bankslip functions", () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
 		order.customer.address = undefined;
 		try {
-			await new BempaggoFactory().create(Environments.DEVELOPMENT, token).getChargeService().getBankSlipServiceable().createBankSlipCharge(1, order);
+			await bankslipServiceable.createBankSlipCharge(1, order);
 		} catch (error: any) {
 			const errors = JSON.parse(error.value);
 			assert.equal("Bad Request", error.message);
@@ -123,8 +123,6 @@ describe("bankslip functions", () => {
 
 
 	test("bad request", async () => {
-		const bempaggo = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
-		const bankslipServiceable = bempaggo.getChargeService().getBankSlipServiceable();
 		const payment: BempaggoBankSlipPaymentRequest = order.payments[0] as BempaggoBankSlipPaymentRequest;
 		payment.amount = 58;
 		order.amount = 57;
