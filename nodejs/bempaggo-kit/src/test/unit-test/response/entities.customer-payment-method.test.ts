@@ -18,8 +18,6 @@ describe("Customer", () => {
         },
         brand: CardBrandTypes.MASTERCARD,
       };
-
-
       assert.equal(6, Object.keys(paymentMethod).length);
       assert.equal(2, Object.keys(paymentMethod.holder).length);
       assert.equal(2, Object.keys(paymentMethod.expiration).length);

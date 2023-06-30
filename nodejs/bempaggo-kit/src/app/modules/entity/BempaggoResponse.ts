@@ -108,6 +108,7 @@ interface BempaggoBankSlipTransactionResponse extends BempaggoAbstractTransactio
 	documentNumber: string;
 	customer: BempaggoCustomerResponse;
 	digitableLine: string;
+	barCode: string;
 }
 interface BempaggoPixTransactionResponse extends BempaggoAbstractTransactionResponse {
 	paymentMethod: PaymentMethodTypes.PIX;

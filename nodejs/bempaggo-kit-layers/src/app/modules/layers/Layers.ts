@@ -1,10 +1,10 @@
 import { BempaggoAddressRequest, BempaggoBankSlipPaymentRequest, BempaggoCardRequest, BempaggoCreditCardPaymentRequest, BempaggoCustomerRequest, BempaggoOrderRequest, BempaggoPaymentRequest, BempaggoPhoneRequest, BempaggoPixPaymentRequest, BempaggoSplitPaymentRequest, BempaggoTokenCardRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
 import { BempaggoBankSlipTransactionResponse, BempaggoCardResponse, BempaggoChargeResponse, BempaggoCustomerResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
-import { PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
+import { MathTypes, PaymentMethodTypes, PeriodicityTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BankSlipRenderingData } from "./BankSlipRenderinData";
+import { Util } from "./Util";
 import { LayersAddress, LayersBankSlipPaymentMethod, LayersCustomer, LayersCustomerPaymentMethod, LayersPixPaymentMethod, LayersTransaction, LayersTransactionPaymentMethod } from "./interfaces";
 import { LayersTransactionGroup } from "./transactionGroup";
-import { Util } from "./Util";
 
 // TODO esta classe eh uma desgraca, os objetos de (request e response) parecem ser a mesma coisa, mas nao sao.
 // Tem transactionGroup que parcece ser os objetos de request. sao??
@@ -130,15 +130,20 @@ class RequestsToBempaggo {
 			]
 		}
 	): BempaggoBankSlipPaymentRequest {
-		const desiredExpirationDate = new Date();
+		const fine = payment.bank_slip?.lateFee != null ? { amount: Util.percentToAbsolute(payment.bank_slip?.lateFee), days: 1, type: MathTypes.PERCENTAGE } : undefined;
+		const interest = payment.bank_slip?.lateInterestRate != null ?
+			{ amount: Util.percentToAbsolute(payment.bank_slip?.lateInterestRate), days: 1, type: MathTypes.PERCENTAGE, frequency: PeriodicityTypes.MONTHLY }
+			: undefined;
+		// TODO what is the frequency from interest?
+		const dueDate = payment.bank_slip!.dueDays != null ? Util.createCurrentDateAddingDays(payment.bank_slip!.dueDays).getTime() : new Date().getTime();
 		return {
 			paymentMethod: PaymentMethodTypes.BOLETO,
 			amount: payment.total.amount,
 			splits: this.toSplits(payment.recipients),
-			dueDate: payment.bank_slip!.dueDays!,
-			paymentLimitDate: payment.bank_slip!.dueDays!,
-			fine: undefined,
-			interest: undefined,
+			dueDate: dueDate,
+			paymentLimitDate: Util.createCurrentDateAddingDays(payment.bank_slip!.dueDays!).getTime(),
+			fine: fine,
+			interest: interest,
 			ourNumber: undefined,
 		};
 	};
@@ -216,6 +221,7 @@ class ResponsesFromBempaggo {
 		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
 			const transaction: BempaggoBankSlipTransactionResponse = bempaggoCharge.transactions[0];
 			return {
+				
 				bank_account: transaction.bank.account,
 				bank_agency: transaction.bank.agency,
 				bank_code: transaction.bank.code,
@@ -235,7 +241,8 @@ class ResponsesFromBempaggo {
 					kind: "?????TODO let me know ",
 					name: " TODO let me know "
 				},
-				total_value: transaction.value.toString()
+				total_value: transaction.value.toString(),
+				bar_code: transaction.barCode
 
 			}
 		} else {
@@ -256,7 +263,7 @@ class ResponsesFromBempaggo {
 						card_id: transaction.card?.token ? transaction.card.token : "",
 						operation_type: 'auth_only',
 						installments: transaction.installments,
-						statement_descriptor: "?need setup in gateway?"
+						statement_descriptor: "?needs setup in gateway?"
 					},
 					refunded_value: transaction.refundValue ? transaction.refundValue : 0,
 					status: transaction.status,
@@ -345,7 +352,6 @@ class ResponsesFromBempaggo {
 			brand: card.brand,
 			document: card.holder.document,
 			token: card.token
-
 		};
 	}
 	from(customer: BempaggoCustomerResponse): LayersCustomer {

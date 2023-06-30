@@ -273,6 +273,21 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 		}
 	}
 
+		/**
+	 * Cancels a pix transaction, if it can be cancelled
+	 * @param {LayersTransaction} transaction
+	 */
+		async cancelPixTransaction(transaction: LayersTransaction): Promise<void> {
+			const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
+			const bempaggoCharge: BempaggoChargeResponse = await pix.findChargeById(Number(transaction.referenceId));
+			if (bempaggoCharge.transactions.length==1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.PIX) {
+				await pix.cancelPix(bempaggoCharge.id);
+			} else {
+				throw new Error("paymentMethod <> PaymentMethodTypes.PIX");
+			}
+		}
+	
+
 	/**
 	 * Just an example
 	 * We need this static attribute, to map BemPaggo's name to our names

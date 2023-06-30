@@ -20,7 +20,6 @@ describe("Customer", () => {
 
       assert.equal(7, Object.keys(customer).length);
       assert.equal(3, Object.keys(customer.phone!).length);
-
       assert.equal(1, customer.id);
       assert.equal("55", customer.phone!.countryCode);
       assert.equal("11", customer.phone!.areaCode);

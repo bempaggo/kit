@@ -1,5 +1,5 @@
-import { Util } from "../app/modules/layers/Util";
 import assert from "assert";
+import { Util } from "../app/modules/layers/Util";
 
 describe("Math types", () => {
   describe("Create flat values from floating points ", () => {

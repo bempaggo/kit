@@ -24,7 +24,6 @@ describe("Customer", () => {
         email: "tony.stark@bempaggo.com",
       };
 
-
       assert.equal(6, Object.keys(customer).length);
       assert.equal(7, Object.keys(customer!.address as {}).length);
       assert.equal(3, Object.keys(customer!.phone as {}).length);

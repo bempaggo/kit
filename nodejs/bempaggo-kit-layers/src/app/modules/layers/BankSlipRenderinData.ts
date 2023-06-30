@@ -20,6 +20,7 @@ export type BankSlipRenderingData =
       customer_address_1: string
       customer_address_2: string
       digitable_line: string
+      bar_code: string // TODO bempaggo adding 
       source: {
         kind: string
         name: string

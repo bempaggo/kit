@@ -41,7 +41,7 @@ describe("Card Entity", () => {
       assert.equal(3, Object.keys(card).length);
       assert.equal(2, Object.keys(card.holder).length);
       assert.equal(2, Object.keys(card.expiration).length);
-      
+
       assert.equal("5448280000000007", card.cardNumber);
       assert.equal("Tony Stark", card.holder.name);
       assert.equal("51190844001", card.holder.document);
