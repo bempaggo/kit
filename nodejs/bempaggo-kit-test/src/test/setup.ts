@@ -1,4 +1,4 @@
 //lembrar de atualizar o token, ele expira a cada 24 horas;
 //rodar a classe OneTimeV2EredeSantilanaServiceTest para gerar um token novo;
 
-export const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODc4MTMzNTIsImV4cCI6MTY4Nzg3MzM1Mn0.SY1F578RD-VUEz2v6uvjcLKlWs6XufgNFI_NVKzpQ2GaisyECRIAIJkp4R4umj76gVsBHGmJ4byUh2WHPfCWRw"
+export const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODgxMjY5MDIsImV4cCI6MTY4ODE4NjkwMn0.kW1m-iNPgpKvr3HRRQPG0uQkdmBuZRbXIfa14xKVirYU4uLZQCLnKxga5utfTo6iflpkvYGriu3K84n6YRjwgQ"

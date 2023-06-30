@@ -14,3 +14,9 @@ npm ci
 npm run build
 npm run test
 cd ..
+cd bempaggo-kit-test
+npm i
+npm ci
+npm run build
+npm run test
+cd ..
