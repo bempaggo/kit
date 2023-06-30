@@ -242,7 +242,7 @@ class ResponsesFromBempaggo {
 					name: " TODO let me know "
 				},
 				total_value: transaction.value.toString(),
-				bar_code: transaction.barCode
+				bar_code: "TODO ADD transaction.barCode"
 
 			}
 		} else {

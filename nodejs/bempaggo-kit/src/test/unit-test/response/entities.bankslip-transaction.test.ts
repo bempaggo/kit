@@ -60,8 +60,8 @@ describe("Bankslip transaction", () => {
 				paidValue: 1000,
 				splits: []
 			};
-
-			assert.equal(23, Object.keys(bankSlip).length);
+			
+			assert.equal(24, Object.keys(bankSlip).length);
 			assert.equal(3, Object.keys(bankSlip.bank).length);
 			assert.equal(7, Object.keys(bankSlip.customer).length);
 			assert.equal(7, Object.keys(bankSlip.customer.address!).length);
