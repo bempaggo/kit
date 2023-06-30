@@ -1,5 +1,5 @@
-import { Util } from "../app/modules/layers/Util";
 import assert from "assert";
+import { Util } from "../app/modules/layers/Util";
 
 describe("Math types", () => {
   describe("Create flat values from floating points ", () => {
@@ -22,22 +22,22 @@ describe("Math types", () => {
 
 
     test('multiply by 1,00000 and convert to flat number', () => {
-      assert.equal(50000, Util.percentToAbsolut(halfPercent));
-      assert.equal(100000, Util.percentToAbsolut(onePercent));
-      assert.equal(150000, Util.percentToAbsolut(onePointFive));
-      assert.equal(500000, Util.percentToAbsolut(fivePercent));
-      assert.equal(1000000, Util.percentToAbsolut(tenPercent));
-      assert.equal(1098000, Util.percentToAbsolut(tenPointNineEight));
-      assert.equal(1098700, Util.percentToAbsolut(tenPointNineEightSeven));
+      assert.equal(50000, Util.percentToAbsolute(halfPercent));
+      assert.equal(100000, Util.percentToAbsolute(onePercent));
+      assert.equal(150000, Util.percentToAbsolute(onePointFive));
+      assert.equal(500000, Util.percentToAbsolute(fivePercent));
+      assert.equal(1000000, Util.percentToAbsolute(tenPercent));
+      assert.equal(1098000, Util.percentToAbsolute(tenPointNineEight));
+      assert.equal(1098700, Util.percentToAbsolute(tenPointNineEightSeven));
 
-      assert.equal(1098700, Util.percentToAbsolut(tenPointNineEightSevenZero));
-      assert.equal(1098709, Util.percentToAbsolut(tenPointNineEightSevenZeroNine));
-      assert.equal(1098709, Util.percentToAbsolut(tenPointNineEightSevenZeroNineNine));
-      assert.equal(33333, Util.percentToAbsolut(umTerco));
-      assert.equal(62500, Util.percentToAbsolut(cincoOitavos));
-      assert.equal(150000, Util.percentToAbsolut(tresMeios));
-      assert.equal(1000000, Util.percentToAbsolut(ten));
-      assert.equal(0, Util.percentToAbsolut(zero));
+      assert.equal(1098700, Util.percentToAbsolute(tenPointNineEightSevenZero));
+      assert.equal(1098709, Util.percentToAbsolute(tenPointNineEightSevenZeroNine));
+      assert.equal(1098709, Util.percentToAbsolute(tenPointNineEightSevenZeroNineNine));
+      assert.equal(33333, Util.percentToAbsolute(umTerco));
+      assert.equal(62500, Util.percentToAbsolute(cincoOitavos));
+      assert.equal(150000, Util.percentToAbsolute(tresMeios));
+      assert.equal(1000000, Util.percentToAbsolute(ten));
+      assert.equal(0, Util.percentToAbsolute(zero));
 
     });
   });

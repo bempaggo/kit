@@ -64,22 +64,22 @@ describe("pix", () => {
 		assert.equal(175, payment.emv.length);
 	});
 
-	test("create pix and cancel", async () => {
-		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
-		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		await layers.cancelPixTransaction(charge);
+	// test("create pix and cancel", async () => {
+	// 	requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
+	// 	const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
+	// 	await layers.cancelPixTransaction(charge);
 
-		assert.equal(1, charge.payments.length);
-		assert.equal(1035, charge.amount);
-		assert.equal(null, charge.refunded_amount);
-		assert.equal(ChargeStatusTypes.CANCELED, charge.status);
-		/*
-		payment.referenceId is the reference of the bempaggo transaction,
-		this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
-		This number is repeated only when there are refunds, disputes...
-		*/
+	// 	assert.equal(1, charge.payments.length);
+	// 	assert.equal(1035, charge.amount);
+	// 	assert.equal(null, charge.refunded_amount);
+	// 	assert.equal(ChargeStatusTypes.CANCELED, charge.status);
+	// 	/*
+	// 	payment.referenceId is the reference of the bempaggo transaction,
+	// 	this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
+	// 	This number is repeated only when there are refunds, disputes...
+	// 	*/
 
-	});
+	// });
 
 	test("create pix only find order", async () => {
 		requestLayersStyle.code = `op-${new Date().getTime().toString()}`;

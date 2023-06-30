@@ -20,7 +20,7 @@ const requestLayersStyle: LayersTransactionGroup = {
 		total: { amount: 10035, currency: "BRL" },
 		card: undefined,
 		bank_slip: {
-			dueDays: new Date().getTime(),
+			dueDays: 1,
 			lateFee: 1, // TODO ignoring
 			lateInterestRate: 1, // TODO ignoring
 			url: "not used?"

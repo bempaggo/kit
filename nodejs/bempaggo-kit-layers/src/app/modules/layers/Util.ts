@@ -10,7 +10,7 @@ export class Util {
 		}
 	}
 
-  static percentToAbsolut(number: number) {
+  static percentToAbsolute(number: number) {
     const multipliedNumber = number * 100000;
     return Math.floor(multipliedNumber);
   }
