@@ -7,7 +7,7 @@ class BempaggoChargeFinderV2 implements ChargeFindable {
 
 	constructor(protected http: BempaggoHttp) {
 	}
-	
+
 	async findChargesByOrderReferenceId(orderReferenceId: string): Promise<BempaggoChargeResponse[]> {
 		const response: Response = await this.http.httpGetBy(`/v2/charges`, [{ name: "orderReference", value: orderReferenceId }]); //OK
 		await assertNotError(response);
