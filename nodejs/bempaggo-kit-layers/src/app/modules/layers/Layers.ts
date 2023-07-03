@@ -132,7 +132,7 @@ class RequestsToBempaggo {
 	): BempaggoBankSlipPaymentRequest {
 		const fine = payment.bank_slip?.lateFee != null ? { amount: Util.percentToAbsolute(payment.bank_slip?.lateFee), days: 1, type: MathTypes.PERCENTAGE } : undefined;
 		const interest = payment.bank_slip?.lateInterestRate != null ?
-			{ amount: Util.percentToAbsolute(payment.bank_slip?.lateInterestRate), days: 1, type: MathTypes.PERCENTAGE, frequency: PeriodicityTypes.MONTHLY }
+			{ amount: Util.percentToAbsolute(payment.bank_slip?.lateInterestRate), days: 1, type: MathTypes.PERCENTAGE, frequency: PeriodicityTypes.DAILY }
 			: undefined;
 		// TODO what is the frequency from interest?
 		const dueDate = payment.bank_slip!.dueDays != null ? Util.createCurrentDateAddingDays(payment.bank_slip!.dueDays).getTime() : new Date().getTime();
