@@ -42,11 +42,9 @@
 import fetch, { Headers } from "node-fetch";
 import BemPaggoSdk from "../app/modules/layers/BemPaggoSDK";
 
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDI1IiwidGVuYW50IjoiYmVtcGFnZ29fbGF5ZXJzbHRkYV8iLCJpYXQiOjE2ODgwNzM5MzEsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.Mw41cNwT0QViz6Vb6NDi01CHTfqFPjiH0qd1NiIVzCvCVsJPfmdRebc73p6GyLrUxHHusee2_IhH_tDeIrth6A";
-// local const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDI1IiwidGVuYW50IjoiYmVtcGFnZ29fbGF5ZXJzbHRkYV8iLCJpYXQiOjE2ODgwNjM1MDEsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.PNIRaWLagdyN0I51XFin_D4z6v6J0BzWf8GVfmi8pxIZn0B3PyfzqZF7ElB3VRunboXtq0hW4kO53gvCLSYyXA";
-//const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODgwNTk0NDYsImV4cCI6MTY4ODExOTQ0Nn0.04NadljeJyvnEoyuOdV969keHR4qBrDnvfNzaIIk-SgCxr1i_bQWmtD9S1U_A_rxDPVGj8oraWJVvgN9VntGIA";
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODgxMzUzODAsImV4cCI6MTY4ODE5NTM4MH0.qwFW8HGOm2IfjWj5oLn5pgJNzocX0Q3epKAHKMPkn5uhv3Ah-aezLxqvSF2MzBIjWsmkGiI3MVQRVqIDUav3ow";
 // It is necessary to generate a token in portal
-const urlSetup = "https://api-sandbox.bempaggo.io/api"
+const urlSetup = "http://localhost:5000/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(urlSetup, tokenLayers);
 
 const simulation = async (chargeId: number): Promise<void> => {

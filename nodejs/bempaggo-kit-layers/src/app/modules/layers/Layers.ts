@@ -221,7 +221,7 @@ class ResponsesFromBempaggo {
 		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
 			const transaction: BempaggoBankSlipTransactionResponse = bempaggoCharge.transactions[0];
 			return {
-				
+
 				bank_account: transaction.bank.account,
 				bank_agency: transaction.bank.agency,
 				bank_code: transaction.bank.code,
@@ -242,7 +242,7 @@ class ResponsesFromBempaggo {
 					name: " TODO let me know "
 				},
 				total_value: transaction.value.toString(),
-				bar_code: transaction.barCode
+				bar_code: "TODO ADD transaction.barCode"
 
 			}
 		} else {

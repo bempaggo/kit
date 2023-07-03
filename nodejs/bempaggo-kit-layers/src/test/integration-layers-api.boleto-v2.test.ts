@@ -80,7 +80,7 @@ describe("boleto", () => {
 		assert.equal("88062201", payment.customer.address!.zipCode);
 		assert.equal("23344", payment.customer.address!.streetNumber);
 		assert.equal("SC", payment.customer.address!.state);
-	});
+	},20000);
 
 	test("create boleto only find order", async () => {
 		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;

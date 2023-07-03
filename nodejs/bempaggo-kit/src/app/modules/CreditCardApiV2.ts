@@ -15,7 +15,7 @@ class CreditCardApiV2 extends BempaggoChargeFinderV2 implements CreditCardOperab
 	}
 
 	async captureCreditCardCharge(chargeId: number): Promise<BempaggoChargeResponse> {
-		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit-card/capture`, {}); 
+		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/credit-card/capture`, {});
 		return await getByUrlResponse(response, this.http); //v2/charges/${chargeId}
 	}
 

@@ -133,7 +133,7 @@ describe("credit card functions", () => {
 		});
 		test("create a card", async () => {
 			const cardResponse: BempaggoCardResponse = await bempaggoFactory
-.createCustomerPaymentMethod(document, paymentMethod);
+				.createCustomerPaymentMethod(document, paymentMethod);
 			//TODO: o response que vem é na verdade o response do CardV2Response e não do BempaggoCardResponse. Id, year e month diferem. 
 			assert.equal(7, Object.keys(cardResponse).length);
 			assert.equal(2, Object.keys(cardResponse.holder).length);
@@ -150,13 +150,13 @@ describe("credit card functions", () => {
 
 		test("find order not found", async () => {
 			const charge: BempaggoChargeResponse[] = await bempaggoFactory
-.getChargeService().getChargeFinder().findChargesByOrderReferenceId("not-found");
+				.getChargeService().getChargeFinder().findChargesByOrderReferenceId("not-found");
 
 			assert.deepEqual([], charge);
 		});
 		test("tokenize a card", async () => {
 			const cardResponse: BempaggoCardResponse = await bempaggoFactory
-.tokenizeCard(card, "no");
+				.tokenizeCard(card, "no");
 			//TODO: o tokenizeCard devolve um cardResponse sem id. Seria o certo devolver so o token? Ou fazer igual o createCustomerPaymentMethod e devolver um CardResponse completo?
 			assert.equal(7, Object.keys(cardResponse).length);
 			assert.equal(2, Object.keys(cardResponse.holder).length);
@@ -175,14 +175,14 @@ describe("credit card functions", () => {
 		// TODO: response do back retorna atributos a mais que nao possui na nossa interface BempaggoChargeResponse
 		test("create and authorize a card", async () => {
 			const customerResponse: BempaggoCustomerResponse = await bempaggoFactory
-.createCustomer(customer);
+				.createCustomer(customer);
 			const cardResponse: BempaggoCardResponse = await bempaggoFactory
-.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
+				.createCustomerPaymentMethod(customerResponse.document!, paymentMethod);
 			const payment: BempaggoCreditCardPaymentRequest = order.payments[0] as BempaggoCreditCardPaymentRequest
 			payment.cardToken.token = cardResponse.token!;
 			order.orderReference = `o-${new Date().getTime().toString()}`
 			const authorizedCard: BempaggoChargeResponse = await bempaggoFactory
-.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
+				.getChargeService().getCreditCardServiceable().createCreditCardCharge(1, order);
 			const transaction = authorizedCard.transactions[0] as BempaggoCreditCardTransactionResponse;
 
 			assert.equal(8, Object.keys(authorizedCard).length);
@@ -360,7 +360,7 @@ describe("credit card functions", () => {
 			assert.equal(1, refundedCharge.order.affiliate?.id);
 			assert.equal("Up Negócios", refundedCharge.order.affiliate?.name);
 			assert.equal("Up Negócios LTDA.", refundedCharge.order.affiliate?.businessName);
-		},10000);
+		}, 10000);
 
 		// TODO: response do back retorna atributos a mais que nao possui na nossa interface BempaggoChargeResponse
 		test("create unauthorized", async () => {

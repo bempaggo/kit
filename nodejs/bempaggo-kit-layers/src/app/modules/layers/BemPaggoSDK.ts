@@ -266,27 +266,27 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	async cancelBankSlipTransaction(transaction: LayersTransaction): Promise<void> {
 		const bankSlip: BankSlipOperable = this.bempaggo!.getChargeService().getBankSlipServiceable();
 		const bempaggoCharge: BempaggoChargeResponse = await bankSlip.findChargeById(Number(transaction.referenceId));
-		if (bempaggoCharge.transactions.length==1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
+		if (bempaggoCharge.transactions.length == 1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
 			await bankSlip.cancelBankSlip(bempaggoCharge.id);
 		} else {
 			throw new Error("paymentMethod <> PaymentMethodTypes.BOLETO");
 		}
 	}
 
-		/**
-	 * Cancels a pix transaction, if it can be cancelled
-	 * @param {LayersTransaction} transaction
-	 */
-		async cancelPixTransaction(transaction: LayersTransaction): Promise<void> {
-			const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
-			const bempaggoCharge: BempaggoChargeResponse = await pix.findChargeById(Number(transaction.referenceId));
-			if (bempaggoCharge.transactions.length==1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.PIX) {
-				await pix.cancelPix(bempaggoCharge.id);
-			} else {
-				throw new Error("paymentMethod <> PaymentMethodTypes.PIX");
-			}
+	/**
+ * Cancels a pix transaction, if it can be cancelled
+ * @param {LayersTransaction} transaction
+ */
+	async cancelPixTransaction(transaction: LayersTransaction): Promise<void> {
+		const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
+		const bempaggoCharge: BempaggoChargeResponse = await pix.findChargeById(Number(transaction.referenceId));
+		if (bempaggoCharge.transactions.length == 1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.PIX) {
+			await pix.cancelPix(bempaggoCharge.id);
+		} else {
+			throw new Error("paymentMethod <> PaymentMethodTypes.PIX");
 		}
-	
+	}
+
 
 	/**
 	 * Just an example

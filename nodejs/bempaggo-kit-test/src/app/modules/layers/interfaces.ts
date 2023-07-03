@@ -36,7 +36,7 @@ export interface LayersCreditCardPaymentMethod {
 	refunded_value: number; // --Bempaggo adding this field; in cents such as 1000 = R$ 10,00
 	status?: TransactionStatusTypes; // --Bempaggo adding this field; "PAY"
 	reference_id: string; // --Bempaggo adding this field
-	
+
 
 }
 
@@ -64,7 +64,7 @@ export interface LayersBankSlipPaymentMethod {
 	amount: number;// --Bempaggo adding this field
 	paid_amount: number;// --Bempaggo adding this field
 	customer: BempaggoCustomerResponse;// --Bempaggo adding this field
-	
+
 }
 
 export interface LayersCustomer {
@@ -104,5 +104,5 @@ export interface LayersCustomerPaymentMethod {
 	number: string
 	brand: string,
 	document?: string, // --Bempaggo adding this field
-	token?:string // --Bempaggo adding this field
+	token?: string // --Bempaggo adding this field
 }
