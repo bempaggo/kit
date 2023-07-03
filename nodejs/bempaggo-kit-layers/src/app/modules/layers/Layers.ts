@@ -221,7 +221,7 @@ class ResponsesFromBempaggo {
 		if (bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.BOLETO) {
 			const transaction: BempaggoBankSlipTransactionResponse = bempaggoCharge.transactions[0];
 			return {
-				
+
 				bank_account: transaction.bank.account,
 				bank_agency: transaction.bank.agency,
 				bank_code: transaction.bank.code,

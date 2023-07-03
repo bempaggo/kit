@@ -14,7 +14,7 @@ class BankSlipApiV2 extends BempaggoChargeFinderV2 implements BankSlipOperable {
 		const response = await this.http.httpPost(`/v2/sellers/${sellerId}/orders/boleto`, order);
 		return await getByUrlResponse(response, this.http);// /v2/charges/${chargeId} //OK
 	}
-	
+
 	async cancelBankSlip(chargeId: number): Promise<BempaggoChargeResponse> {
 		const response: Response = await this.http.httpPost(`/v2/charges/${chargeId}/boleto/cancel`, {});
 		return await getByUrlResponse(response, this.http); // /v2/charges/${chargeId} //OK
