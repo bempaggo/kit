@@ -115,6 +115,13 @@ app.post('/charges/:id/credit-card/refund', (req: Request, res: Response) => {
 		.catch((e) => errorHandler(e, res));
 });
 
+app.post('/charges/:id/pix/return', (req: Request, res: Response) => {
+	const id = req.params.id;
+	pix(req).returnPix(Number(id))
+		.then(value => send(value, res))
+		.catch((e) => errorHandler(e, res));
+});
+
 app.post('/orders/:chargeId/credit-card/capture', (req: Request, res: Response) => {
 	const chargeId = req.params.chargeId;
 	cardService(req).captureCreditCardCharge(Number(chargeId))

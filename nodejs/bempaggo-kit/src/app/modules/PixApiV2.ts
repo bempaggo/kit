@@ -30,6 +30,11 @@ class PixApiV2 extends BempaggoChargeFinderV2 implements PixOperable {
 		return response;
 	}
 
+	async returnPix(chargeId: number): Promise<Response> {
+		const response: Response = await this.http.httpGet(`${this.http.getUrl()}/v2/charges/${chargeId}/pix/return`);
+		return response;
+	}
+
 }
 
 export { PixApiV2 };
