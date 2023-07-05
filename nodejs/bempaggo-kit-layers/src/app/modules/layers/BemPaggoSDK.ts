@@ -204,9 +204,16 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 	 * @returns { Promise<LayersTransaction> }
 	 */
 	async refundTransaction(transactionId: string): Promise<LayersTransaction> {
-		const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
-		const response: BempaggoChargeResponse = await creditCardService.refundCreditCardCharge(Number(transactionId));
-		return this.layers.response.fromCharge(response);
+		const charge: LayersTransaction = await this.findChargeById(Number(transactionId));
+		if (charge.payments[0].payment_method == "credit_card") {
+			const creditCardService: CreditCardOperable = this.bempaggo!.getChargeService().getCreditCardServiceable();
+			const response: BempaggoChargeResponse = await creditCardService.refundCreditCardCharge(Number(transactionId));
+			return this.layers.response.fromCharge(response);
+		} else if (charge.payments[0].payment_method == "pix") {
+			return await this.returnPixTransaction(charge);
+		} else {
+			throw new Error("Only pix and credit_card types are refundable");
+		}
 	}
 	/**
 	 * Tokenize the card data.
@@ -282,6 +289,21 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
 		const bempaggoCharge: BempaggoChargeResponse = await pix.findChargeById(Number(transaction.referenceId));
 		if (bempaggoCharge.transactions.length == 1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.PIX) {
 			await pix.cancelPix(bempaggoCharge.id);
+		} else {
+			throw new Error("paymentMethod <> PaymentMethodTypes.PIX");
+		}
+	}
+
+	/**
+	 * Return a pix transaction, if it was paid and can be returned
+	 * @param {LayersTransaction} transaction
+	 */
+	async returnPixTransaction(transaction: LayersTransaction): Promise<LayersTransaction> {
+		const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
+		const bempaggoCharge: BempaggoChargeResponse = await pix.findChargeById(Number(transaction.referenceId));
+		if (bempaggoCharge.transactions.length == 1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.PIX) {
+			const response = await pix.returnPix(bempaggoCharge.id);
+			return this.layers.response.fromCharge(response);
 		} else {
 			throw new Error("paymentMethod <> PaymentMethodTypes.PIX");
 		}
