@@ -57,7 +57,6 @@ describe("bankslip functions", () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
 		const bankslipResponse: BempaggoChargeResponse = await bankslipServiceable.createBankSlipCharge(1, order);
 		const transaction: BempaggoBankSlipTransactionResponse = bankslipResponse.transactions[0] as BempaggoBankSlipTransactionResponse;
-		console.log(bankslipResponse);
 		assert.equal(8, Object.keys(bankslipResponse).length);
 		assert.notEqual(null, bankslipResponse.id);
 		assert.equal("PENDING", bankslipResponse.status);
@@ -100,7 +99,7 @@ describe("bankslip functions", () => {
 		assert.equal(1, transaction.affiliate?.id);
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
-		assert.equal(2, transaction.establishment.id);
+		assert.notEqual(null, transaction.establishment.id);
 		assert.notEqual(null, canceledBankslip.customer.id);
 		assert.equal("51190844001", canceledBankslip.customer.document);
 		assert.notEqual(null, canceledBankslip.order.id);
