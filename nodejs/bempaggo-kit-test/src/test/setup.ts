@@ -3,7 +3,7 @@
 import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { Environments } from "bempaggo-kit/lib/app/modules/entity/Enum";
 
-export const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODg1ODcyMDMsImV4cCI6MTY4ODY0NzIwM30.o2W4TShfijHl20xsL3cCreJS4XvCvNeqHUnftp4Sszjl5eJibuKdOp6tEmAToi-X_6T2LZ_H_OaQLZpNrTexUA"
+export const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODg1ODk3ODksImV4cCI6MTY4ODY0OTc4OX0.cipCgWcJhrmc6S_ynuJfuclLEi15FQ42QTeC7OuL8TBmj0b9YeOCf5_QacYkafcFhtukVl-59D0IZmPEcAn8fA"
 export const bempaggoFactory = new BempaggoFactory().create(Environments.DEVELOPMENT, token);
 const urlSetup = "http://localhost:5000/api"
 
