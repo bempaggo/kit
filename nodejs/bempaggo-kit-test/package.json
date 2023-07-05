@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.6.11",
-    "bempaggo-kit": "12.0.143"
+    "bempaggo-kit": "file:../bempaggo-kit"
   },
   "devDependencies": {
     "@types/node": "20.3.1",

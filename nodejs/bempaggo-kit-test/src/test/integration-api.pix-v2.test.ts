@@ -4,7 +4,7 @@ import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse, BempaggoPi
 import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 
 import assert from "assert";
-import { bempaggoFactory, token } from "./setup";
+import { bempaggoFactory, simulation, token } from "./setup";
 
 const pixServiceable = bempaggoFactory.getChargeService().getPixServiceable();
 
@@ -80,43 +80,70 @@ describe("pix functions", () => {
 		const canceledPix: BempaggoChargeResponse = await pixServiceable.cancelPix(pixResponse.id);
 		const transaction: BempaggoBankSlipTransactionResponse = canceledPix.transactions[0] as BempaggoBankSlipTransactionResponse;
 		assert.equal(8, Object.keys(canceledPix).length);
-
-
 		assert.notEqual(null, canceledPix.id);
-
 		assert.equal("CANCELED", canceledPix.status);
 		assert.equal(1000, canceledPix.value);
-
-
 		assert.equal(null, canceledPix.refundedAmount);
-
 		assert.equal("BOLETO", transaction.paymentMethod);
-
-
 		assert.notEqual(null, transaction.id);
-
 		assert.equal(1000, transaction.value);
-
-
 		assert.equal(null, transaction.paidValue);
-
 		assert.equal("LOOSE", transaction.type);
 		assert.equal("CANCELED", transaction.status);
-
-
 		assert.notEqual(null, transaction.transactionDate);
-
 		assert.equal(1, transaction.affiliate?.id);
 		assert.equal("Up Negócios", transaction.affiliate?.name);
 		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
 		assert.notEqual(null, transaction.establishment.id);
 		assert.notEqual(null, canceledPix.customer.id);
-
 		assert.equal("51190844001", canceledPix.customer.document);
-
-
 		assert.notEqual(null, canceledPix.order.id);
 		assert.notEqual(null, canceledPix.order.orderReference);
+
+	});
+
+	test("create pix and return", async () => {
+		order.orderReference = `o-${new Date().getTime().toString()}`;
+		const pixResponse: BempaggoChargeResponse = await pixServiceable.createPixCharge(1, order);
+		await simulation(pixResponse.id);
+		const paidCharge = await pixServiceable.findChargeById(pixResponse.id);
+		const returnedPix: BempaggoChargeResponse = await pixServiceable.returnPix(paidCharge.id);
+		const refundTransaction: BempaggoBankSlipTransactionResponse = returnedPix.transactions[0] as BempaggoBankSlipTransactionResponse;
+		const transaction: BempaggoBankSlipTransactionResponse = returnedPix.transactions[1] as BempaggoBankSlipTransactionResponse;
+		assert.equal(2, returnedPix.transactions.length);
+		assert.equal(8, Object.keys(returnedPix).length);
+		assert.notEqual(null, returnedPix.id);
+		assert.equal("PAY", returnedPix.status);
+		assert.equal(1000, returnedPix.value);
+		assert.equal(1000, returnedPix.refundedAmount);
+		assert.equal("PIX", refundTransaction.paymentMethod);
+		assert.notEqual(null, refundTransaction.id);
+		assert.equal(-1000, refundTransaction.value);
+		assert.equal(1000, refundTransaction.paidValue);
+		assert.equal("REFUND", refundTransaction.type);
+		assert.equal("NOT_AUTHORIZED", refundTransaction.status);
+		assert.notEqual(null, refundTransaction.transactionDate);
+		assert.equal(1, refundTransaction.affiliate?.id);
+		assert.equal("Up Negócios", refundTransaction.affiliate?.name);
+		assert.equal("Up Negócios LTDA.", refundTransaction.affiliate?.businessName);
+		assert.notEqual(null, refundTransaction.establishment.id);
+
+		assert.equal("PIX", transaction.paymentMethod);
+		assert.notEqual(null, transaction.id);
+		assert.equal(1000, transaction.value);
+		assert.equal(null, transaction.paidValue);
+		assert.equal("LOOSE", transaction.type);
+		assert.equal("APPROVED", transaction.status);
+		assert.notEqual(null, transaction.transactionDate);
+		assert.equal(1, transaction.affiliate?.id);
+		assert.equal("Up Negócios", transaction.affiliate?.name);
+		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
+		assert.notEqual(null, transaction.establishment.id);
+
+		assert.notEqual(null, returnedPix.customer.id);
+		assert.equal("51190844001", returnedPix.customer.document);
+		assert.notEqual(null, returnedPix.order.id);
+		assert.notEqual(null, returnedPix.order.orderReference);
 
 	});
 

@@ -146,4 +146,15 @@ describe("boleto", () => {
 		const chargeGet: BankSlipRenderingData = await layers.getBankSlipRenderingData(charge.referenceId);
 		assert.equal(47, chargeGet.digitable_line.length);
 	});
+
+	test("create boleto and refund", async () => {
+		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
+		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
+		try {
+			await layers.refundTransaction(charge.referenceId);
+			fail("error");
+		} catch (error: any) {
+			assert.equal("Only pix and credit_card types are refundable", error.message);
+		}
+	});
 });
