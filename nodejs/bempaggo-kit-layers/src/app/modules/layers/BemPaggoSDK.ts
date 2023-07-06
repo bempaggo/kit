@@ -284,11 +284,12 @@ class BemPaggoSdk extends BaseSdk<LayersCustomer, LayersTransaction, LayersCusto
  * Cancels a pix transaction, if it can be cancelled
  * @param {LayersTransaction} transaction
  */
-	async cancelPixTransaction(transaction: LayersTransaction): Promise<void> {
+	async cancelPixTransaction(transaction: LayersTransaction): Promise<LayersTransaction> {
 		const pix: PixOperable = this.bempaggo!.getChargeService().getPixServiceable();
 		const bempaggoCharge: BempaggoChargeResponse = await pix.findChargeById(Number(transaction.referenceId));
 		if (bempaggoCharge.transactions.length == 1 && bempaggoCharge.transactions[0].paymentMethod == PaymentMethodTypes.PIX) {
-			await pix.cancelPix(bempaggoCharge.id);
+			const response = await pix.cancelPix(bempaggoCharge.id);
+			return this.layers.response.fromCharge(response);
 		} else {
 			throw new Error("paymentMethod <> PaymentMethodTypes.PIX");
 		}

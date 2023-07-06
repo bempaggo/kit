@@ -1,6 +1,6 @@
 import { BempaggoFactory } from "bempaggo-kit/lib/app/modules/Bempaggo";
 import { BempaggoOrderRequest, BempaggoPixPaymentRequest } from "bempaggo-kit/lib/app/modules/entity/BempaggoRequest";
-import { BempaggoBankSlipTransactionResponse, BempaggoChargeResponse, BempaggoPixTransactionResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
+import { BempaggoChargeResponse, BempaggoPixTransactionResponse } from "bempaggo-kit/lib/app/modules/entity/BempaggoResponse";
 import { Environments, PaymentMethodTypes } from "bempaggo-kit/lib/app/modules/entity/Enum";
 
 import assert from "assert";
@@ -78,13 +78,13 @@ describe("pix functions", () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
 		const pixResponse: BempaggoChargeResponse = await pixServiceable.createPixCharge(1, order);
 		const canceledPix: BempaggoChargeResponse = await pixServiceable.cancelPix(pixResponse.id);
-		const transaction: BempaggoBankSlipTransactionResponse = canceledPix.transactions[0] as BempaggoBankSlipTransactionResponse;
+		const transaction: BempaggoPixTransactionResponse = canceledPix.transactions[0] as BempaggoPixTransactionResponse;
 		assert.equal(8, Object.keys(canceledPix).length);
 		assert.notEqual(null, canceledPix.id);
 		assert.equal("CANCELED", canceledPix.status);
 		assert.equal(1000, canceledPix.value);
 		assert.equal(null, canceledPix.refundedAmount);
-		assert.equal("BOLETO", transaction.paymentMethod);
+		assert.equal("PIX", transaction.paymentMethod);
 		assert.notEqual(null, transaction.id);
 		assert.equal(1000, transaction.value);
 		assert.equal(null, transaction.paidValue);
@@ -108,8 +108,8 @@ describe("pix functions", () => {
 		await simulation(pixResponse.id);
 		const paidCharge = await pixServiceable.findChargeById(pixResponse.id);
 		const returnedPix: BempaggoChargeResponse = await pixServiceable.returnPix(paidCharge.id);
-		const refundTransaction: BempaggoBankSlipTransactionResponse = returnedPix.transactions[0] as BempaggoBankSlipTransactionResponse;
-		const transaction: BempaggoBankSlipTransactionResponse = returnedPix.transactions[1] as BempaggoBankSlipTransactionResponse;
+		const refundTransaction: BempaggoPixTransactionResponse = returnedPix.transactions[0] as BempaggoPixTransactionResponse;
+		const transaction: BempaggoPixTransactionResponse = returnedPix.transactions[1] as BempaggoPixTransactionResponse;
 		assert.equal(2, returnedPix.transactions.length);
 		assert.equal(8, Object.keys(returnedPix).length);
 		assert.notEqual(null, returnedPix.id);
