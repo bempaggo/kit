@@ -1,4 +1,6 @@
 export class Util {
+  static readonly ABSOLUTE_CONVERSION = 100000;
+  
   static getDateAsString(data: Date): string | undefined {
     if (data) {
       const year = data.getFullYear().toString();
@@ -11,7 +13,7 @@ export class Util {
   }
 
   static percentToAbsolute(number: number) {
-    const multipliedNumber = number * 100000;
+    const multipliedNumber = number * Util.ABSOLUTE_CONVERSION;
     return Math.floor(multipliedNumber);
   }
 
