@@ -5,6 +5,7 @@ import { Environments } from "bempaggo-kit/lib/app/modules/entity/Enum";
 import { BempaggoError } from "bempaggo-kit/lib/app/modules/entity/Exceptions";
 import bodyParser from 'body-parser';
 import express, { Express, Request, Response } from "express";
+
 const factory: BempaggoFactory = new BempaggoFactory();
 const app: Express = express();
 app.use(bodyParser.json());
@@ -181,7 +182,6 @@ app.post('/tokens', (req: Request, res: Response) => {
 		.then(value => send(value, res))
 		.catch((e) => errorHandler(e, res));
 });
-
 
 app.listen(3000, () => {
 	console.log('Server is running on port 3000');

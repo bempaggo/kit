@@ -42,7 +42,7 @@
 import fetch, { Headers } from "node-fetch";
 import BemPaggoSdk from "../app/modules/layers/BemPaggoSDK";
 
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODg1ODk3ODksImV4cCI6MTY4ODY0OTc4OX0.cipCgWcJhrmc6S_ynuJfuclLEi15FQ42QTeC7OuL8TBmj0b9YeOCf5_QacYkafcFhtukVl-59D0IZmPEcAn8fA";
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODg2NDU5MjYsImV4cCI6MTY4ODcwNTkyNn0.mnsPLd3B-5SMuQu9Bkv7BZJHCxmwPdzX8ohW_tNLwHcL_oxwwh36e2-8x-leOfXdYC7FbXr1_dWkDIW-T6jaqA";
 // It is necessary to generate a token in portal
 const urlSetup = "http://localhost:5000/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(urlSetup, tokenLayers);

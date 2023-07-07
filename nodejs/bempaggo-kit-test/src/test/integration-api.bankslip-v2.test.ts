@@ -106,6 +106,36 @@ describe("bankslip functions", () => {
 		assert.notEqual(null, canceledBankslip.order.orderReference);
 	});
 
+	test("create bankslip without fine and interest ", async () => {
+
+		const payments = (order.payments[0] as BempaggoBankSlipPaymentRequest);
+		payments.fine = undefined;
+		payments.interest = undefined;
+		order.orderReference = `o-${new Date().getTime().toString()}`;
+		const bankslipResponse: BempaggoChargeResponse = await bankslipServiceable.createBankSlipCharge(1, order);
+		const transaction: BempaggoBankSlipTransactionResponse = bankslipResponse.transactions[0] as BempaggoBankSlipTransactionResponse;
+		assert.equal(8, Object.keys(bankslipResponse).length);
+		assert.notEqual(null, bankslipResponse.id);
+		assert.equal("PENDING", bankslipResponse.status);
+		assert.equal(1000, bankslipResponse.value);
+		assert.equal(null, bankslipResponse.refundedAmount);
+		assert.equal("BOLETO", transaction.paymentMethod);
+		assert.notEqual(null, transaction.id);
+		assert.equal(1000, transaction.value);
+		assert.equal(null, transaction.paidValue);
+		assert.equal("LOOSE", transaction.type);
+		assert.equal("AWAITING_PAYMENT", transaction.status);
+		assert.notEqual(null, transaction.transactionDate);
+		assert.equal(1, transaction.affiliate?.id);
+		assert.equal("Up Negócios", transaction.affiliate?.name);
+		assert.equal("Up Negócios LTDA.", transaction.affiliate?.businessName);
+		assert.notEqual(null, transaction.establishment.id);
+		assert.notEqual(null, bankslipResponse.customer.id);
+		assert.equal("51190844001", bankslipResponse.customer.document);
+		assert.notEqual(null, bankslipResponse.order.id);
+		assert.notEqual(null, bankslipResponse.order.orderReference);
+	});
+
 	test("create bankslip without address", async () => {
 		order.orderReference = `o-${new Date().getTime().toString()}`;
 		order.customer.address = undefined;

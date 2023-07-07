@@ -5,7 +5,7 @@ import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/
 import { BankSlipRenderingData } from "../app/modules/layers/BankSlipRenderinData";
 import { LayersTransactionGroup } from "../app/modules/layers/transactionGroup";
 import { layers } from "./setup";
-// with ❤️ feeling the bad smell on the air
+
 const sellerId: number = 1;
 const requestLayersStyle: LayersTransactionGroup = {
 	code: "",
@@ -80,7 +80,36 @@ describe("boleto", () => {
 		assert.equal("88062201", payment.customer.address!.zipCode);
 		assert.equal("23344", payment.customer.address!.streetNumber);
 		assert.equal("SC", payment.customer.address!.state);
-	},20000);
+	});
+	test("create boleto without lateFee and interest", async () => {
+		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
+		requestLayersStyle.paymentMethods[0].bank_slip!.lateFee = null;
+		requestLayersStyle.paymentMethods[0].bank_slip!.lateInterestRate = null;
+		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
+		const payment: LayersBankSlipPaymentMethod = charge.payments[0] as LayersBankSlipPaymentMethod;
+		assert.equal(1, charge.payments.length);
+		assert.equal(10035, charge.amount);
+		assert.equal(null, charge.refunded_amount);
+		assert.equal(ChargeStatusTypes.PENDING, charge.status);
+		assert.equal("06219385993", charge.customer_id);
+		assert.equal(10035, payment.amount);
+		assert.equal(0, payment.paid_amount);
+		assert.equal(TransactionStatusTypes.AWAITING_PAYMENT, payment.status);
+		assert.equal('boleto', payment.payment_method);
+		assert.equal(sellerId.toString(), payment.recipient_id);
+		assert.equal("Douglas Hiuara Longo Customer", payment.customer.name);
+		assert.equal("douglas@bempaggo.com.br", payment.customer.email);
+		assert.equal("06219385993", payment.customer.document);
+		assert.equal("55", payment.customer.phone!.countryCode);
+		assert.equal("988657196", payment.customer.phone!.number);
+		assert.equal("48", payment.customer.phone!.areaCode);
+		assert.equal("Rua Laurindo Januario", payment.customer.address!.street);
+		assert.equal("APt01", payment.customer.address!.lineTwo);
+		assert.equal("Florianopolis", payment.customer.address!.city);
+		assert.equal("88062201", payment.customer.address!.zipCode);
+		assert.equal("23344", payment.customer.address!.streetNumber);
+		assert.equal("SC", payment.customer.address!.state);
+	});
 
 	test("create boleto only find order", async () => {
 		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;

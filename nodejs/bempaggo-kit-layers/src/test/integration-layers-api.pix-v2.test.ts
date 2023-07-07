@@ -4,9 +4,8 @@ import { ChargeStatusTypes, TransactionStatusTypes } from "bempaggo-kit/lib/app/
 import fetch, { Headers } from "node-fetch";
 import { LayersPixPaymentMethod, LayersTransaction } from "../app/modules//layers/interfaces";
 import { LayersTransactionGroup } from "../app/modules//layers/transactionGroup";
-
 import { layers, simulation, tokenLayers, urlSetup } from "./setup";
-// with ❤️ feeling the bad smell on the air
+
 const sellerId: number = 1;
 const requestLayersStyle: LayersTransactionGroup = {
 	code: "",
@@ -67,12 +66,21 @@ describe("pix", () => {
 	test("create pix and cancel", async () => {
 		requestLayersStyle.code = `o-${new Date().getTime().toString()}`;
 		const charge: LayersTransaction = await layers.createTransaction(requestLayersStyle);
-		await layers.cancelPixTransaction(charge);
+		const canceledPix: LayersTransaction = await layers.cancelPixTransaction(charge);
+		const canceledPixPayments = canceledPix.payments[0] as LayersPixPaymentMethod;
 
-		assert.equal(1, charge.payments.length);
-		assert.equal(1035, charge.amount);
-		assert.equal(null, charge.refunded_amount);
-		assert.equal(ChargeStatusTypes.CANCELED, charge.status);
+		assert.equal(1, canceledPix.payments.length);
+		assert.notEqual(null, canceledPix.customer_id);
+		assert.equal('pix', canceledPixPayments.payment_method);
+		assert.equal(1035, canceledPixPayments.amount);
+		assert.equal('CANCELED', canceledPixPayments.status);
+		assert.notEqual(null, canceledPixPayments.reference_id);
+		assert.notEqual(null, canceledPixPayments.emv);
+		assert.notEqual(null, canceledPixPayments.pix);
+		assert.equal(1035, canceledPix.amount);
+		assert.equal(null, canceledPix.refunded_amount);
+		assert.equal(ChargeStatusTypes.CANCELED, canceledPix.status);
+
 		/*
 		payment.referenceId is the reference of the bempaggo transaction,
 		this value is the same sent to the acquirer (rede, cielo) and used for reconciliation;
