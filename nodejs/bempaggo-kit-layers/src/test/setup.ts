@@ -42,9 +42,9 @@
 import fetch, { Headers } from "node-fetch";
 import BemPaggoSdk from "../app/modules/layers/BemPaggoSDK";
 
-const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwidGVuYW50IjoiYmVtcGFnZ29fdXBjcm0iLCJpYXQiOjE2ODg2NDU5MjYsImV4cCI6MTY4ODcwNTkyNn0.mnsPLd3B-5SMuQu9Bkv7BZJHCxmwPdzX8ohW_tNLwHcL_oxwwh36e2-8x-leOfXdYC7FbXr1_dWkDIW-T6jaqA";
+const tokenLayers = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMDI1IiwidGVuYW50IjoiYmVtcGFnZ29fbGF5ZXJzbHRkYV8iLCJpYXQiOjE2ODgwNzM5MzEsImV4cCI6NDEwMjM1ODM5OSwiaXNNYXN0ZXIiOnRydWV9.Mw41cNwT0QViz6Vb6NDi01CHTfqFPjiH0qd1NiIVzCvCVsJPfmdRebc73p6GyLrUxHHusee2_IhH_tDeIrth6A";
 // It is necessary to generate a token in portal
-const urlSetup = "http://localhost:5000/api"
+const urlSetup = "https://api-sandbox.bempaggo.io/api"
 const layers: BemPaggoSdk = new BemPaggoSdk(urlSetup, tokenLayers);
 
 const simulation = async (chargeId: number): Promise<void> => {
